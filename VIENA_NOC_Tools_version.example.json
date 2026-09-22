@@ -1,0 +1,12 @@
+{
+  "latest": "1.3.16",
+  "minimum": "1.3.16",
+  "mandatory": false,
+  "download_url": "",
+  "notes": [
+    "Infraestructura de seguridad y canal manual de actualizaciones.",
+    "CSP reforzada y RELEASE sin selftests/herramientas DEV.",
+    "El popup comprueba version.json y avisa cuando hay una versión nueva."
+  ],
+  "sha256": "4974fa82d36842a323e41f8faef1605aeb0a51ed9e899e711241a3cdcb14f861"
+}
