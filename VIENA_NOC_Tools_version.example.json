@@ -8,5 +8,5 @@
     "CSP reforzada y RELEASE sin selftests/herramientas DEV.",
     "El popup comprueba version.json y avisa cuando hay una versión nueva."
   ],
-  "sha256": "4974fa82d36842a323e41f8faef1605aeb0a51ed9e899e711241a3cdcb14f861"
+  "sha256": "285d6f2cd6cd3eb0c46907511e784188c9c8906a60aa24d8f8f4ad5d84a77b71"
 }
