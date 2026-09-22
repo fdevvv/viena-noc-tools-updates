@@ -2,11 +2,12 @@
   "latest": "1.3.17",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "",
+  "download_url": "https://drive.google.com/uc?export=download&id=1jmwh6_Re9WGuGPp0pqE9KgVwM0csx-i3",
   "notes": [
-    "Infraestructura de seguridad y canal manual de actualizaciones.",
-    "CSP reforzada y RELEASE sin selftests/herramientas DEV.",
-    "El popup comprueba version.json y avisa cuando hay una versión nueva."
+    "Descarga de actualizaciones desde Google Drive.",
+    "Buscar actualización fuerza lectura fresca del canal.",
+    "Textarea de plantillas personales más compacto y redimensionable.",
+    "Se conserva el fix de mini-zoom y la persistencia de configuraciones."
   ],
-  "sha256": "14cf2cc7a7b61e7c0673f9a2b1cf5de9d8f6f9261001310d30764322d09a8752"
+  "sha256": "16c2374d5798f0cc2fb89d8fde85dc6e2b9d7c635f2a75f077519758f4def7c3"
 }
