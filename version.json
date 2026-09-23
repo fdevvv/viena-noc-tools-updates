@@ -1,13 +1,14 @@
 {
-  "latest": "1.3.17",
+  "latest": "1.3.18",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "https://drive.google.com/uc?export=download&id=1jmwh6_Re9WGuGPp0pqE9KgVwM0csx-i3",
+  "download_url": "https://drive.google.com/uc?export=download&id=1948R0eK2boPrRtlqYDXf8sKDdEz1tHSO",
   "notes": [
-    "Descarga de actualizaciones desde Google Drive.",
-    "Buscar actualización fuerza lectura fresca del canal.",
-    "Textarea de plantillas personales más compacto y redimensionable.",
-    "Se conserva el fix de mini-zoom y la persistencia de configuraciones."
+    "Nuevo panel de estado de la extensión con runtime, build y estado de plataformas.",
+    "Configuración personal de Usuario VIENA y Apellido para asignación.",
+    "Avisos ON, TAB, RLD y UPD para instalación y actualización.",
+    "Correcciones validadas en Asignar Multiple, Asignar e Iniciar y MOICA2.",
+    "Mejoras de estabilidad, integridad y seguridad de la RELEASE."
   ],
-  "sha256": "16c2374d5798f0cc2fb89d8fde85dc6e2b9d7c635f2a75f077519758f4def7c3"
+  "sha256": "d1fbf1776295febacf2f81958a74b295cec0da48f9c12364b5adc8b769983804"
 }
