@@ -1,14 +1,12 @@
 {
-  "latest": "1.3.18",
+  "latest": "1.3.19",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "https://drive.google.com/uc?export=download&id=1948R0eK2boPrRtlqYDXf8sKDdEz1tHSO",
+  "download_url": "https://drive.google.com/uc?export=download&id=1TbnbUh5pTSZNRiUMn7_v0vs8S2KFMslI",
   "notes": [
-    "Nuevo panel de estado de la extensión con runtime, build y estado de plataformas.",
-    "Configuración personal de Usuario VIENA y Apellido para asignación.",
-    "Avisos ON, TAB, RLD y UPD para instalación y actualización.",
-    "Correcciones validadas en Asignar Multiple, Asignar e Iniciar y MOICA2.",
-    "Mejoras de estabilidad, integridad y seguridad de la RELEASE."
+    "Mejoras generales de estabilidad y mantenimiento interno.",
+    "Se preservan los flujos de VIENA, MIRA5, GPON, Fuentes, MOICA2, Grafana y Métricas.",
+    "Se mantienen las correcciones validadas en Asignar Multiple y Asignar e Iniciar."
   ],
-  "sha256": "d1fbf1776295febacf2f81958a74b295cec0da48f9c12364b5adc8b769983804"
+  "sha256": "8f822b3df4c9ed21b4ec21dd394ae992fd2ac9764236f0f08759555035cbbf96"
 }
