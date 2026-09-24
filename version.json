@@ -1,15 +1,12 @@
 {
-  "latest": "1.3.23",
+  "latest": "1.3.24",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "https://drive.google.com/uc?export=download&id=1L-CSA-1uwr6OgeKH-UFwOi_eyUs3w6tB",
+  "download_url": "https://drive.google.com/uc?export=download&id=19WYyih7Y02ZjhExFZQJyFvuJgneud2J-",
   "notes": [
-    "Podés vincular una vez la carpeta de instalación para que las próximas RELEASES se actualicen directamente desde el popup, con confirmación previa.",
-    "Después de una actualización, la extensión recarga automáticamente las pestañas operativas primarias que estén abiertas.",
-    "MIRA Estadísticas y MIRA Listado de CMs ahora se gestionan como pestañas operativas independientes.",
-    "El popup permite abrir herramientas cerradas o recargar la pestaña primaria cuando corresponde.",
-    "Métricas vuelve automáticamente a Estadísticas después de una recarga.",
-    "Se mejoró la estabilidad visual de los botones de acceso."
+    "La carpeta de instalación sigue figurando como Vinculada aunque Chrome vuelva a requerir permiso de escritura.",
+    "La autorización de escritura se solicita recién cuando tocás Actualizar y sólo si Chrome la necesita.",
+    "Cambiar carpeta vuelve a usarse únicamente para seleccionar otra carpeta de instalación."
   ],
-  "sha256": "5ba1c108cef256d833093474b13e882683b447db4ec66decf98d99b6afda15fc"
+  "sha256": "a05d3671f9eece82d5a4494776b6a69a054d6a9cb52d4dc1fbd654f6cda961c3"
 }
