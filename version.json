@@ -1,12 +1,15 @@
 {
-  "latest": "1.3.22",
+  "latest": "1.3.23",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "https://drive.google.com/uc?export=download&id=1kTdEUPFzeYnEqzJVnfBELV0dvs7h77Lv",
+  "download_url": "https://drive.google.com/uc?export=download&id=1L-CSA-1uwr6OgeKH-UFwOi_eyUs3w6tB",
   "notes": [
-    "La extensión puede recargarse automáticamente después de reemplazar los archivos por una versión nueva, con doble verificación antes del reinicio.",
-    "El popup explica qué significan ON, TAB, RLD y UPD y qué acción corresponde en cada caso.",
-    "Se agregó un historial de versiones con los cambios relevantes para el operador."
+    "Podés vincular una vez la carpeta de instalación para que las próximas RELEASES se actualicen directamente desde el popup, con confirmación previa.",
+    "Después de una actualización, la extensión recarga automáticamente las pestañas operativas primarias que estén abiertas.",
+    "MIRA Estadísticas y MIRA Listado de CMs ahora se gestionan como pestañas operativas independientes.",
+    "El popup permite abrir herramientas cerradas o recargar la pestaña primaria cuando corresponde.",
+    "Métricas vuelve automáticamente a Estadísticas después de una recarga.",
+    "Se mejoró la estabilidad visual de los botones de acceso."
   ],
-  "sha256": "b55f5b07db3e69fdc5bdcf1c19ec9c7238b76b1695d8eca68e9472adbe097866"
+  "sha256": "5ba1c108cef256d833093474b13e882683b447db4ec66decf98d99b6afda15fc"
 }
