@@ -8,5 +8,7 @@
     "La autorización de escritura se solicita recién cuando tocás Actualizar y sólo si Chrome la necesita.",
     "Cambiar carpeta vuelve a usarse únicamente para seleccionar otra carpeta de instalación."
   ],
-  "sha256": "a05d3671f9eece82d5a4494776b6a69a054d6a9cb52d4dc1fbd654f6cda961c3"
+  "sha256": "a05d3671f9eece82d5a4494776b6a69a054d6a9cb52d4dc1fbd654f6cda961c3",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.24-package.json",
+  "package_sha256": "ddd709597d7c212dc3ba3feda014e4c593508aba7098ef285e6d734517436cee"
 }
