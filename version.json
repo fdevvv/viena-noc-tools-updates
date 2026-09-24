@@ -1,12 +1,12 @@
 {
-  "latest": "1.3.21",
+  "latest": "1.3.22",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "https://drive.google.com/uc?export=download&id=1vFrhX_1cxXnGLYAPUHllrAtfN9-y4B7u",
+  "download_url": "https://drive.google.com/uc?export=download&id=1kTdEUPFzeYnEqzJVnfBELV0dvs7h77Lv",
   "notes": [
-    "Mejoras en el uso de plataformas cuando hay varias pestañas abiertas: la automatización actúa sobre una sola pestaña.",
-    "Chequeo de actualizaciones más frecuente y búsqueda manual reforzada.",
-    "Las versiones anteriores saltan directamente a la última RELEASE disponible."
+    "La extensión puede recargarse automáticamente después de reemplazar los archivos por una versión nueva, con doble verificación antes del reinicio.",
+    "El popup explica qué significan ON, TAB, RLD y UPD y qué acción corresponde en cada caso.",
+    "Se agregó un historial de versiones con los cambios relevantes para el operador."
   ],
-  "sha256": "3f1cd4edf3bd0a9263f11f93862460769e313cf1ac3e467e5c0ed40cf0e2b2dd"
+  "sha256": "b55f5b07db3e69fdc5bdcf1c19ec9c7238b76b1695d8eca68e9472adbe097866"
 }
