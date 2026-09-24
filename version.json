@@ -1,12 +1,12 @@
 {
-  "latest": "1.3.20",
+  "latest": "1.3.21",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "https://drive.google.com/uc?export=download&id=15i0oV_5xrW7hkMUkgrTGQn79fkgRRBZt",
+  "download_url": "https://drive.google.com/uc?export=download&id=1vFrhX_1cxXnGLYAPUHllrAtfN9-y4B7u",
   "notes": [
-    "Corrección del panel de estado para evitar que quede indefinidamente en Comprobando.",
-    "Mejoras en la detección de pestañas operativas y tiempos de respuesta del estado.",
-    "Se preservan los flujos de VIENA, MIRA5, GPON, Fuentes, MOICA2, Grafana y Métricas."
+    "Mejoras en el uso de plataformas cuando hay varias pestañas abiertas: la automatización actúa sobre una sola pestaña.",
+    "Chequeo de actualizaciones más frecuente y búsqueda manual reforzada.",
+    "Las versiones anteriores saltan directamente a la última RELEASE disponible."
   ],
-  "sha256": "25daef8785f6625e2de37caa4c66c7175ce04107811a51e2db3985d9ee9b73fe"
+  "sha256": "3f1cd4edf3bd0a9263f11f93862460769e313cf1ac3e467e5c0ed40cf0e2b2dd"
 }
