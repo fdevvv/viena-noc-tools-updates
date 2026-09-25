@@ -59,13 +59,27 @@ A user must not need to install every intermediate release unless an explicitly 
 
 ## 4. DEV reachability requirement
 
-DEV has the same rule.
+DEV has the same rule, with **DEV fix13 as the current compatibility floor**.
+
+The fix13 updater requires these root files in a FULL DEV package:
+- manifest.json
+- build.json
+- background.js
+- popup.html
+- popup.js
+- icon128.png
+- integrity-manifest.json
+- updater.html
+- updater.js
+
+Therefore, while fix13 remains a supported possible installed DEV build, future DEV packages must continue carrying updater.html and updater.js as compatibility artifacts even though the new runtime no longer depends on them.
 
 Before moving dev/self-update.json, validate:
-- currently published DEV build -> candidate DEV
-- any known DEV bootstrap contract that is still installed -> candidate DEV
+- DEV fix13 updater -> candidate DEV;
+- currently published DEV build -> candidate DEV;
+- every other known DEV updater contract that may still be installed -> candidate DEV.
 
-Never publish a DEV package that the previous DEV updater cannot parse. A DEV pointer is not valid merely because the new package is internally correct.
+Never publish a DEV package that an older supported DEV updater cannot parse. A DEV pointer is not valid merely because the new package is internally correct.
 
 ## 5. Immutable artifacts
 
