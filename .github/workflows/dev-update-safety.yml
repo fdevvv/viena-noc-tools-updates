@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate DEV pointer and exact fix13 updater compatibility
+      - name: Validate DEV pointer and exact historical updater matrix
         run: python3 tools/validate_dev_matrix.py
 
       - name: Assert updater safety mechanisms
