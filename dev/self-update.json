@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-asignaciones-overlap-state-fix6",
+  "build": "1.3.26-dev-progress-mira-runtime-fix8",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "b378da72bbc197001c35ff1d657b6622a77cea10a12ec3fad78ccbff13b60835",
+  "package_sha256": "ebe05aa95590ab77c9f074e5531a901f5d334d41bcbfdf534d3319c92c121d86",
   "notes": [
-    "Distingue visualmente plantillas activadas explícitamente de plantillas completas por solapamiento de tipificaciones.",
-    "✓ identifica sólo la plantilla aplicada por el operador; ↳ Incluida indica que una plantilla quedó 100% cubierta por otra; los estados parciales siguen mostrando X/Y.",
-    "No cambia el motor de selección de VIENA ni la lógica de plantillas; es una capa visual sobre el estado real.",
-    "Conserva load-gate fix5, motor genérico de Asignaciones, motivos contextuales, toast validado, registry-fix1 y manager3.",
+    "Asignaciones muestra progreso de carga del catálogo y sólo queda lista al completar la paginación real.",
+    "Corrige el caso CIERRE 6/7 por ejecución antes de finalizar la carga.",
+    "Sincroniza todos los BUILD_ID internos para evitar que Ir a MIRA 5 recargue Estadísticas antes de filtrar por detectar falsamente un runtime viejo.",
+    "Conserva estados visuales de plantillas superpuestas, motor genérico, motivos contextuales, toast validado y registry.",
     "RELEASE permanece sin cambios."
   ]
 }
