@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import base64, hashlib, json, pathlib, subprocess, sys, tempfile
+import argparse, base64, hashlib, json, pathlib, subprocess, sys, tempfile
 import validate_release_compat as release_validator
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -24,6 +24,9 @@ def extract_file(pkg, path):
         die(f"invalid base64 in {path}: {e}")
 
 def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--public", action="store_true")
+    args=ap.parse_args()
     cfg = load(ROOT/"release/bootstrap.json")
     pkg_path = ROOT/str(cfg["package_path"])
     if not pkg_path.exists():
@@ -75,6 +78,13 @@ def main():
     print(f"PASS bootstrap: exact 1.3.24 updater -> {cfg['package_path']}")
     print(f"PASS bootstrap SHA: {got}")
     print("PASS bootstrap switches RELEASE checks to release/latest.json")
+
+    if args.public:
+        public=load(ROOT/"version.json")
+        for key in ["latest","minimum","mandatory","package_url","package_sha256","notes"]:
+            if public.get(key) != cfg.get(key):
+                die(f"version.json is not the frozen bootstrap mirror: {key}")
+        print("PASS version.json is frozen to release/bootstrap.json")
 
 if __name__ == "__main__":
     main()
