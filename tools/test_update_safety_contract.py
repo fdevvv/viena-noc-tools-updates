@@ -14,16 +14,20 @@ def resolve_pointer(path):
     pointer=load(ROOT/path)
     url=str(pointer.get("package_url",""))
     marker="/main/"
-    if marker not in url: die(f"{path}: invalid package_url")
+    if marker not in url:
+        die(f"{path}: invalid package_url")
     rel=url.split(marker,1)[1]
     pkg=load(ROOT/rel)
     return pointer,rel,pkg
 
 def text_file(pkg,path):
     item=next((x for x in pkg.get("files",[]) if x.get("path")==path),None)
-    if not item: die(f"{pkg.get('build')}: missing {path}")
-    try: return base64.b64decode(item["content_base64"],validate=True).decode("utf-8")
-    except Exception as e: die(f"{pkg.get('build')}: cannot decode {path}: {e}")
+    if not item:
+        die(f"{pkg.get('build')}: missing {path}")
+    try:
+        return base64.b64decode(item["content_base64"],validate=True).decode("utf-8")
+    except Exception as e:
+        die(f"{pkg.get('build')}: cannot decode {path}: {e}")
 
 def paths(pkg):
     return {str(x.get("path","")) for x in pkg.get("files",[])}
@@ -45,13 +49,14 @@ def assert_hardened(label,pkg,dev=False):
       "rollbackTouchedFiles",
       "failed_rolled_back_verified",
       "rollback_incomplete",
-      "Se bloqueó un downgrade",
+      "Se bloque",
       "resumePendingUpdate",
       "awaiting_reload",
       "verifyDirectoryAgainstIntegrity"
     ]
     for token in updater_tokens:
-        if token not in updater: die(f"{label}: updater safety token missing: {token}")
+        if token not in updater:
+            die(f"{label}: updater safety token missing: {token}")
 
     bg_tokens=[
       "reconcileUpdateJournalAfterRuntimeStart",
@@ -61,18 +66,35 @@ def assert_hardened(label,pkg,dev=False):
       "viena_local_update_lock_v1"
     ]
     for token in bg_tokens:
-        if token not in background: die(f"{label}: background health token missing: {token}")
+        if token not in background:
+            die(f"{label}: background health token missing: {token}")
 
     if "recoverInterruptedLocalUpdate" not in popup:
         die(f"{label}: popup recovery missing")
 
     p=paths(pkg)
     if dev:
-        for req in ["updater.html","updater.js"]:
-            if req not in p: die(f"{label}: DEV fix13 compatibility artifact missing: {req}")
+        if str(pkg.get("profile","")) != "portable-replay-safe-v1":
+            die(f"{label}: DEV candidate is not portable-replay-safe-v1")
+        if str(pkg.get("mode","")) != "dev-delta":
+            die(f"{label}: portable DEV candidate must use dev-delta")
+        if {"updater.html","updater.js"} & p:
+            die(f"{label}: portable DEV package contains fork-incompatible updater root artifacts")
+        if pkg.get("patches") or pkg.get("remove"):
+            die(f"{label}: portable DEV package must be replay-safe (no patches/remove)")
+        for token in [
+            "OPTIONAL_COMPAT_PACKAGE_FILES",
+            "'updater.html'",
+            "'updater.js'",
+            "replaySafeDevDelta",
+            "portable replay-safe"
+        ]:
+            if token not in updater:
+                die(f"{label}: portable updater token missing: {token}")
     else:
         forbidden={"updater.html","updater.js"} & p
-        if forbidden: die(f"{label}: modern RELEASE contains legacy-incompatible root artifacts: {sorted(forbidden)}")
+        if forbidden:
+            die(f"{label}: RELEASE contains legacy-incompatible root artifacts: {sorted(forbidden)}")
 
     print(f"PASS update safety contract: {label} ({pkg.get('build')})")
 
