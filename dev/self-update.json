@@ -1,14 +1,13 @@
 {
   "schema": 1,
-  "version": "1.3.25",
-  "build": "1.3.25-dev-popup-live-userlock-target",
+  "version": "1.3.26",
+  "build": "1.3.26-dev-auto-dev-update",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "bd8fd743a995d4b572148aa1f9436bf17db49f59c34aa769f2043610cc00586d",
+  "package_sha256": "4321ad2f70a7362cd1eb67d355d453039b23f9941c5fa9446d413f9f136bb4be",
   "notes": [
-    "Prueba DEV: Abrir y Recargar desde el popup mantienen el popup abierto.",
-    "Los estados de las pestañas operativas se refrescan automáticamente mientras el popup está visible.",
-    "Usuario VIENA auto-detectado queda bloqueado; el ingreso manual queda disponible sólo cuando no hay detección automática.",
-    "No modifica version.json ni el canal RELEASE."
+    "El canal DEV ahora se actualiza directamente desde el popup.",
+    "Desde v1.3.26, Buscar actualización DEV compara también el build y permite instalar la DEV publicada sin descargar ZIP.",
+    "La transición desde v1.3.25 puede hacerse una sola vez con Probar actualización local DEV; luego las siguientes DEV usan el flujo normal."
   ]
 }
