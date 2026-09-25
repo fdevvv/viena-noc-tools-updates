@@ -7,6 +7,7 @@ on:
       - "release/**"
       - "tools/validate_release_compat.py"
       - "tools/validate_update_matrix.py"
+      - "tools/validate_bootstrap.py"
       - "tools/run_updater_validate.mjs"
       - "tools/test_release_validator.py"
       - "UPDATE_SAFETY.md"
@@ -17,6 +18,7 @@ on:
       - "release/**"
       - "tools/validate_release_compat.py"
       - "tools/validate_update_matrix.py"
+      - "tools/validate_bootstrap.py"
       - "tools/run_updater_validate.mjs"
       - "tools/test_release_validator.py"
       - "UPDATE_SAFETY.md"
@@ -28,21 +30,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate published pointer and 1.3.24 floor
-        run: python3 tools/validate_release_compat.py --pointer
+      - name: Validate frozen 1.3.24 bootstrap and public mirror
+        run: python3 tools/validate_bootstrap.py --public
 
-      - name: Run adversarial validator tests
-        run: python3 tools/test_release_validator.py
+      - name: Validate modern RELEASE pointer/package
+        run: python3 tools/validate_release_compat.py --pointer --pointer-file release/latest.json
 
-      - name: Execute exact historical updater matrix
-        run: python3 tools/validate_update_matrix.py
+      - name: Run adversarial validator tests on modern channel
+        run: python3 tools/test_release_validator.py --pointer-file release/latest.json
 
-      - name: Decode candidate and check JavaScript syntax
+      - name: Execute exact historical updater matrix for modern channel
+        run: python3 tools/validate_update_matrix.py --pointer-file release/latest.json
+
+      - name: Decode modern candidate and check JavaScript syntax
         shell: python
         run: |
           import base64, json, pathlib, subprocess, tempfile
           root=pathlib.Path(".")
-          pointer=json.loads((root/"version.json").read_text())
+          pointer=json.loads((root/"release/latest.json").read_text())
           rel=pointer["package_url"].split("/main/",1)[1]
           pkg=json.loads((root/rel).read_text())
           with tempfile.TemporaryDirectory() as td:
@@ -53,14 +58,14 @@ jobs:
                   out=td/item["path"].replace("/","__")
                   out.write_bytes(base64.b64decode(item["content_base64"], validate=True))
                   subprocess.run(["node","--check",str(out)],check=True)
-          print("PASS JS syntax")
+          print("PASS modern RELEASE JS syntax")
 
-      - name: Reject destructive RELEASE operations
+      - name: Reject destructive modern RELEASE operations
         shell: python
         run: |
           import base64, json, pathlib, re
           root=pathlib.Path(".")
-          pointer=json.loads((root/"version.json").read_text())
+          pointer=json.loads((root/"release/latest.json").read_text())
           rel=pointer["package_url"].split("/main/",1)[1]
           pkg=json.loads((root/rel).read_text())
           assert not pkg.get("remove"), "RELEASE package must not remove files"
