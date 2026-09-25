@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-asignaciones-manager2",
+  "build": "1.3.26-dev-asignaciones-manager3",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "35a28e00f5b55b3d13e02a7e7f0e4f01e27534de63b2cc4dcbc88e4f2acb4bf8",
+  "package_sha256": "b4654869f32fb350ec16bbb845bbc1d715ff4ecb6a8175a1fb9e3ac115244528",
   "notes": [
-    "Corrige el estado de carga de Asignaciones para que no quede bloqueado indefinidamente.",
-    "Mantiene espera adaptativa por código y cola automática mientras VIENA termina de cargar.",
-    "Publica un paquete FULL de convergencia para evitar fallos al actualizar desde builds DEV previos con archivos distintos.",
+    "Corrige plantillas creadas desde selección actual cuando algunas tipificaciones no están en cache y VIENA tarda más de 1.3 s en resolverlas.",
+    "La búsqueda ahora usa un camino rápido para cache y una espera sostenida para códigos lentos, sin limpiar/reiniciar el filtro durante la consulta.",
+    "Mantiene creación/edición de plantillas, cola de carga y selección adaptativa.",
     "RELEASE permanece sin cambios."
   ]
 }
