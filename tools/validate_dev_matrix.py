@@ -42,7 +42,7 @@ def main():
     }
     paths=[str(x.get("path","")) for x in target.get("files",[])]
     missing=sorted(required-set(paths))
-    invalid=sorted(p for p in paths if p not in required and not (p.startswith("js/") and p.endswith(".js") and "\" not in p and ".." not in p))
+    invalid=sorted(p for p in paths if p not in required and not (p.startswith("js/") and p.endswith(".js") and "\\" not in p and ".." not in p))
     if missing: die(f"DEV candidate incompatible with fix13, missing: {missing}")
     if invalid: die(f"DEV candidate has paths fix13 rejects: {invalid}")
 
