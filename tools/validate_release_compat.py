@@ -71,10 +71,11 @@ def main():
     ap.add_argument("--repo-root", default=".")
     ap.add_argument("--package")
     ap.add_argument("--pointer", action="store_true")
+    ap.add_argument("--pointer-file", default="version.json")
     args = ap.parse_args()
     root = pathlib.Path(args.repo_root)
     if args.pointer:
-        vpath = root/"version.json"
+        vpath = root/args.pointer_file
         v = load_json(vpath)
         url = str(v.get("package_url",""))
         marker = "/main/"
@@ -84,7 +85,7 @@ def main():
         got = validate_package(p)
         want = str(v.get("package_sha256","")).lower()
         if got != want: die(f"version.json package_sha256 no coincide: {got} != {want}")
-        print(f"PASS version.json -> {rel}: SHA correcto")
+        print(f"PASS {args.pointer_file} -> {rel}: SHA correcto")
     if args.package:
         validate_package(root/args.package)
     if not args.pointer and not args.package:
