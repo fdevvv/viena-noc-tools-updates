@@ -3,11 +3,10 @@
   "minimum": "1.3.16",
   "mandatory": false,
   "notes": [
-    "Nueva RELEASE 1.3.25 con Asignaciones en Tareas Internas y plantillas editables.",
-    "Completar Tarea soporta múltiples motivos por tipificación/contexto y motivos conocidos.",
-    "Correcciones validadas en MIRA 5, GPON, MOICA2, Fuentes/RPHY/VCCAP y toasts.",
-    "Actualizador compatible hacia atrás desde RELEASE 1.3.24."
+    "Bootstrap permanente para instalaciones RELEASE 1.3.24.",
+    "Instala el updater moderno y luego continúa por el canal release/latest.json.",
+    "Preserva configuración local y evita depender de archivos raíz que 1.3.24 no reconoce."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.25-bridge-1.3.24-v2-package.json",
-  "package_sha256": "d92477ab9fc4dd765ccb4540a22a5aa3759c5c0d8c3c2c1d8db086268c8a524f"
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.25-bootstrap-v3-package.json",
+  "package_sha256": "c1ecc7dbf7f5deca115ee6a05e1dce598aca9c1b94e940ce7691e444152a65f5"
 }
