@@ -12,8 +12,8 @@ def die(msg):
     print("ERROR:", msg, file=sys.stderr)
     raise SystemExit(1)
 
-def pointer_package(root):
-    pointer = json.loads((root/"version.json").read_text(encoding="utf-8"))
+def pointer_package(root, pointer_file):
+    pointer = json.loads((root/pointer_file).read_text(encoding="utf-8"))
     url = str(pointer.get("package_url",""))
     marker = "/main/"
     if marker not in url:
@@ -37,10 +37,11 @@ def updater_from_package(package_path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo-root", default=".")
+    ap.add_argument("--pointer-file", default="release/latest.json")
     args = ap.parse_args()
     root = pathlib.Path(args.repo_root)
     history = json.loads((root/"release/public-history.json").read_text(encoding="utf-8"))
-    pointer, target_rel, target_path, target = pointer_package(root)
+    pointer, target_rel, target_path, target = pointer_package(root, args.pointer_file)
     tv = semver(target.get("version"))
     if tv == (-1,-1,-1):
         die("target version inválida")
@@ -52,6 +53,8 @@ def main():
         td = pathlib.Path(td)
         for idx, src in enumerate(history.get("contracts", [])):
             if not src.get("must_support_future_upgrade", False):
+                continue
+            if src.get("route") == "bootstrap_only":
                 continue
             sv = semver(src.get("version"))
             if sv >= tv:
