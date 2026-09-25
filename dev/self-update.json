@@ -1,14 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-update-compat-floor-fix14",
+  "build": "1.3.26-dev-update-bootstrap-fix15",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "287ff668ea9cbeb8c3a966d45d1a130a919eab741b41a953784a936a506debfa",
+  "package_sha256": "d34299d2f94619647cd1b0e3143d97c259f92603cbe261d5deed612e8a02d869",
   "notes": [
-    "Compatibilidad permanente con updater RELEASE 1.3.24.",
-    "Las builds futuras dejan de depender de updater.html/updater.js y reutilizan popup.html para vincular la carpeta.",
-    "Los packages quedan restringidos a rutas aceptadas por 1.3.24.",
-    "No modifica la lógica validada de Asignaciones, MIRA, GPON, MOICA, Fuentes/RPHY/VCCAP, motivos ni toasts."
+    "Bootstrap seguro desde DEV fix13: conserva updater.html/updater.js sólo para que el updater anterior pueda aceptar esta transición.",
+    "Instala el nuevo contrato de compatibilidad que deja de depender de esos archivos para builds futuras.",
+    "No modifica la lógica funcional ya validada de Asignaciones, MIRA, GPON, MOICA, Fuentes/RPHY/VCCAP, motivos ni toasts."
   ]
 }
