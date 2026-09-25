@@ -7,7 +7,8 @@
       "version": "1.3.24",
       "package": "release/v1.3.24-package.json",
       "must_support_future_upgrade": true,
-      "notes": "Public compatibility floor."
+      "notes": "Public legacy floor. Must always reach release/bootstrap.json, not modern releases directly.",
+      "route": "bootstrap_only"
     },
     {
       "id": "release-1.3.25-legacy-bridge-v1",
@@ -15,14 +16,28 @@
       "package": "release/v1.3.25-package.json",
       "must_support_future_upgrade": true,
       "quarantine": true,
-      "notes": "Legacy 1.3.25 updater contract that may have been installed before bridge v2. Future RELEASE publication must remain blocked until this population is proven absent or remediated."
+      "notes": "Historical incompatible 1.3.25 contract. Blocks future modern promotion until all such installations are remediated.",
+      "route": "legacy_quarantine"
     },
     {
       "id": "release-1.3.25-bridge-v2",
       "version": "1.3.25",
       "package": "release/v1.3.25-bridge-1.3.24-v2-package.json",
       "must_support_future_upgrade": true,
-      "notes": "Current 1.3.24-compatible immutable bridge."
+      "notes": "Short-lived bridge v2. Treat any 1.3.25-release build without updater_contract metadata as quarantine until remediated.",
+      "route": "legacy_quarantine",
+      "quarantine": true
+    },
+    {
+      "id": "release-1.3.25-bootstrap-v3",
+      "version": "1.3.25",
+      "package": "release/v1.3.25-bootstrap-v3-package.json",
+      "must_support_future_upgrade": true,
+      "route": "modern",
+      "notes": "Permanent 1.3.24 bootstrap. Uses release/latest.json after installation and updater contract >=2."
     }
-  ]
+  ],
+  "modern_pointer": "release/latest.json",
+  "legacy_bootstrap_pointer": "version.json",
+  "legacy_bootstrap_config": "release/bootstrap.json"
 }
