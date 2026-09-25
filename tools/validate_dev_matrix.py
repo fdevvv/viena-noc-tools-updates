@@ -10,61 +10,154 @@ def die(msg):
 def sha256(b):
     return hashlib.sha256(b).hexdigest()
 
+def load(path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
 def pointer():
-    p=json.loads((ROOT/"dev/self-update.json").read_text(encoding="utf-8"))
+    p=load(ROOT/"dev/self-update.json")
     url=str(p.get("package_url",""))
     marker="/main/"
-    if marker not in url: die("DEV package_url no apunta a main")
+    if marker not in url:
+        die("DEV package_url no apunta a main")
     rel=url.split(marker,1)[1]
     path=ROOT/rel
-    if not path.exists(): die(f"DEV package no existe: {rel}")
+    if not path.exists():
+        die(f"DEV package no existe: {rel}")
     raw=path.read_bytes()
     if sha256(raw)!=str(p.get("package_sha256","")).lower():
         die("DEV pointer SHA no coincide con package")
-    return p,rel,path,json.loads(raw.decode("utf-8"))
+    pkg=json.loads(raw.decode("utf-8"))
+    if str(pkg.get("version","")) != str(p.get("version","")):
+        die("DEV pointer/package version mismatch")
+    if str(pkg.get("build","")) != str(p.get("build","")):
+        die("DEV pointer/package build mismatch")
+    if str(pkg.get("channel","")).upper() != "DEV":
+        die("DEV candidate channel must be DEV")
+    return p,rel,path,pkg
 
 def updater_bytes(package_path):
-    pkg=json.loads(package_path.read_text(encoding="utf-8"))
+    pkg=load(package_path)
     item=next((f for f in pkg.get("files",[]) if f.get("path")=="js/95-local-updater.js"),None)
-    if not item: die(f"{package_path}: sin updater")
-    b=base64.b64decode(item["content_base64"],validate=True)
-    if sha256(b)!=str(item.get("sha256","")).lower(): die("historical updater SHA interno inválido")
-    return b
+    if not item:
+        die(f"{package_path}: sin updater")
+    try:
+        b=base64.b64decode(item["content_base64"],validate=True)
+    except Exception as e:
+        die(f"{package_path}: updater base64 invalido: {e}")
+    if sha256(b)!=str(item.get("sha256","")).lower():
+        die(f"{package_path}: historical updater SHA interno invalido")
+    return b, pkg
+
+def validate_portable_profile(hist,target):
+    profile=hist.get("portable_profile") or {}
+    if not profile:
+        return
+    if str(target.get("profile","")) != str(profile.get("id","")):
+        die(f"DEV candidate must use portable profile {profile.get('id')}")
+    if str(target.get("mode","")) != str(profile.get("mode","")):
+        die(f"DEV portable candidate mode must be {profile.get('mode')}")
+    if target.get("patches"):
+        die("DEV portable candidate must not contain patches")
+    if target.get("remove"):
+        die("DEV portable candidate must not remove files")
+
+    paths=[str(x.get("path","")) for x in target.get("files",[])]
+    if len(paths) != len(set(paths)):
+        die("DEV portable candidate contains duplicate paths")
+
+    forbidden=set(map(str,profile.get("forbidden_package_paths",[])))
+    bad=sorted(forbidden & set(paths))
+    if bad:
+        die(f"DEV portable candidate contains forked legacy paths: {bad}")
+
+    required=set(map(str,profile.get("required_root_files",[])))
+    missing=sorted(required-set(paths))
+    if missing:
+        die(f"DEV portable candidate missing required portable files: {missing}")
+
+    invalid=sorted(
+        p for p in paths
+        if p not in required and not (p.startswith("js/") and p.endswith(".js") and "\\" not in p and ".." not in p)
+    )
+    if invalid:
+        die(f"DEV portable candidate has unauthorized paths: {invalid}")
+
+    file_map={str(x.get("path","")):x for x in target.get("files",[])}
+    integrity_item=file_map.get("integrity-manifest.json")
+    if not integrity_item:
+        die("DEV portable candidate missing integrity-manifest.json")
+    try:
+        integrity=json.loads(base64.b64decode(integrity_item["content_base64"],validate=True).decode("utf-8"))
+    except Exception as e:
+        die(f"DEV portable integrity manifest invalid: {e}")
+
+    inventory=integrity.get("files")
+    if not isinstance(inventory,dict) or not inventory:
+        die("DEV portable integrity inventory invalid")
+    expected=set(paths)-{"integrity-manifest.json"}
+    if set(inventory)!=expected:
+        missing_inv=sorted(expected-set(inventory))
+        extra_inv=sorted(set(inventory)-expected)
+        die(f"DEV portable integrity inventory mismatch missing={missing_inv} extra={extra_inv}")
+    for path,expected_hash in inventory.items():
+        if str(file_map[path].get("sha256","")).lower()!=str(expected_hash).lower():
+            die(f"DEV portable integrity hash mismatch for {path}")
 
 def main():
-    hist=json.loads((ROOT/"dev/history.json").read_text(encoding="utf-8"))
+    hist=load(ROOT/"dev/history.json")
     ptr,rel,target_path,target=pointer()
+    validate_portable_profile(hist,target)
 
-    # DEV fix13 package contract: 9 mandatory root files + js/*.js.
-    required={
-      "manifest.json","build.json","background.js","popup.html","popup.js",
-      "icon128.png","integrity-manifest.json","updater.html","updater.js"
-    }
-    paths=[str(x.get("path","")) for x in target.get("files",[])]
-    missing=sorted(required-set(paths))
-    invalid=sorted(p for p in paths if p not in required and not (p.startswith("js/") and p.endswith(".js") and "\\" not in p and ".." not in p))
-    if missing: die(f"DEV candidate incompatible with fix13, missing: {missing}")
-    if invalid: die(f"DEV candidate has paths fix13 rejects: {invalid}")
+    contracts=hist.get("contracts")
+    if not contracts:
+        floor=hist.get("compatibility_floor") or {}
+        contracts=[{
+            "id": floor.get("id","dev-floor"),
+            "package": floor.get("updater_package"),
+            "updater_sha256": floor.get("updater_sha256"),
+            "must_support_future_upgrade": True,
+        }]
 
-    floor=hist["compatibility_floor"]
-    source=ROOT/floor["updater_package"]
-    ub=updater_bytes(source)
-    if sha256(ub)!=floor["updater_sha256"]:
-        die("DEV floor updater fingerprint changed")
-
+    harness=ROOT/"tools/run_updater_validate.mjs"
+    tested=0
     with tempfile.TemporaryDirectory() as td:
         td=pathlib.Path(td)
-        up=td/"legacy-updater.js"; up.write_bytes(ub)
-        cmd=[
-          "node",str(ROOT/"tools/run_updater_validate.mjs"),str(up),str(target_path),
-          str(target.get("version","")),str(target.get("build","")),str(target.get("channel",""))
-        ]
-        proc=subprocess.run(cmd,text=True,capture_output=True)
-        if proc.returncode:
-            die(f"DEV fix13 -> candidate FAILED\nstdout:{proc.stdout}\nstderr:{proc.stderr}")
+        for idx,contract in enumerate(contracts):
+            if not contract.get("must_support_future_upgrade",False):
+                continue
+            source_rel=str(contract.get("package",""))
+            if not source_rel:
+                die(f"{contract.get('id')}: historical package missing from history")
+            source=ROOT/source_rel
+            if not source.exists():
+                die(f"{contract.get('id')}: historical source package missing: {source_rel}")
+            ub,source_pkg=updater_bytes(source)
+            fingerprint=str(contract.get("updater_sha256","")).lower()
+            if not fingerprint or sha256(ub)!=fingerprint:
+                die(f"{contract.get('id')}: historical updater fingerprint changed")
+            if str(source_pkg.get("build","")) == str(target.get("build","")):
+                continue
 
-    print(f"PASS DEV exact updater matrix: fix13 -> {rel}")
+            up=td/f"historical-{idx}.js"
+            up.write_bytes(ub)
+            cmd=[
+                "node",str(harness),str(up),str(target_path),
+                str(target.get("version","")),str(target.get("build","")),str(target.get("channel",""))
+            ]
+            proc=subprocess.run(cmd,text=True,capture_output=True)
+            if proc.returncode:
+                die(
+                    f"{contract.get('id')} ({source_pkg.get('build')}) -> {target.get('build')} FAILED\n"
+                    f"stdout:{proc.stdout}\nstderr:{proc.stderr}"
+                )
+            print(f"PASS exact DEV updater: {contract.get('id')} -> {rel}")
+            tested += 1
+
+    if tested < 2:
+        die(f"DEV updater matrix too small: tested={tested}; expected historical fork coverage")
+    print(f"PASS DEV exact updater matrix: tested={tested}, target={rel}")
     print(f"PASS DEV pointer SHA: {ptr.get('package_sha256')}")
+    print(f"PASS DEV profile: {target.get('profile') or target.get('mode')}")
 
 if __name__=="__main__":
     main()
