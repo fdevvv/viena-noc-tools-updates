@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "compatibility_floor": "1.3.24",
+  "contracts": [
+    {
+      "id": "release-1.3.24",
+      "version": "1.3.24",
+      "package": "release/v1.3.24-package.json",
+      "must_support_future_upgrade": true,
+      "notes": "Public compatibility floor."
+    },
+    {
+      "id": "release-1.3.25-legacy-bridge-v1",
+      "version": "1.3.25",
+      "package": "release/v1.3.25-package.json",
+      "must_support_future_upgrade": true,
+      "quarantine": true,
+      "notes": "Legacy 1.3.25 updater contract that may have been installed before bridge v2. Future RELEASE publication must remain blocked until this population is proven absent or remediated."
+    },
+    {
+      "id": "release-1.3.25-bridge-v2",
+      "version": "1.3.25",
+      "package": "release/v1.3.25-bridge-1.3.24-v2-package.json",
+      "must_support_future_upgrade": true,
+      "notes": "Current 1.3.24-compatible immutable bridge."
+    }
+  ]
+}
