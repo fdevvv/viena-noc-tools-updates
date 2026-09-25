@@ -75,27 +75,35 @@ Historical 1.3.25-release variants that predate the bootstrap architecture are q
 
 ## 4. DEV reachability requirement
 
-DEV has the same rule, with **DEV fix13 as the current compatibility floor**.
+DEV has its own historical contract matrix. The oldest supported DEV updater remains **fix13**, but fix15 created a real contract fork:
 
-The fix13 updater requires these root files in a FULL DEV package:
-- manifest.json
-- build.json
-- background.js
-- popup.html
-- popup.js
-- icon128.png
-- integrity-manifest.json
-- updater.html
-- updater.js
+- DEV fix13 FULL packages require updater.html and updater.js.
+- DEV fix15/fix16 reject updater.html and updater.js as unauthorized root paths.
+- therefore no single FULL package can be consumed by both branches.
 
-Therefore, while fix13 remains a supported possible installed DEV build, future DEV packages must continue carrying updater.html and updater.js as compatibility artifacts even though the new runtime no longer depends on them.
+The permanent DEV compatibility profile while any of those builds may still exist is **portable-replay-safe-v1**:
 
-Before moving dev/self-update.json, validate:
-- DEV fix13 updater -> candidate DEV;
-- currently published DEV build -> candidate DEV;
-- every other known DEV updater contract that may still be installed -> candidate DEV.
+- package mode: dev-delta;
+- payload uses only the common portable subset:
+  - manifest.json
+  - build.json
+  - background.js
+  - popup.html
+  - popup.js
+  - icon128.png
+  - integrity-manifest.json
+  - js/*.js
+- updater.html/updater.js are not included in the portable payload;
+- no patches;
+- no remove entries;
+- integrity inventory covers every payload file except integrity-manifest.json itself;
+- the exact historical updater code from fix13, fix15 and every other still-supported DEV contract must accept the candidate before dev/self-update.json can move.
 
-Never publish a DEV package that an older supported DEV updater cannot parse. A DEV pointer is not valid merely because the new package is internally correct.
+The updater installed by portable-replay-safe-v1 must be monotonic: updater.html/updater.js are accepted as optional compatibility paths, never mandatory. This prevents recreating the fork.
+
+A replay-safe DEV delta may be re-applied during journal recovery only when it has no patches/remove operations and its integrity inventory exactly covers the explicit payload. Ordinary partial/patch deltas are not recovery-safe.
+
+Never publish a DEV pointer merely because the candidate validates with the newest updater. Every historical DEV contract still in support must be executed against the exact candidate.
 
 ## 5. Immutable artifacts
 
