@@ -36,6 +36,12 @@ concurrency:
 jobs:
   validate-and-promote:
     runs-on: ubuntu-latest
+    env:
+      CANDIDATE_PATH: ${{ inputs.candidate_path }}
+      PROMOTE_CONFIRMATION: ${{ inputs.confirmation }}
+      RELEASE_NOTES: ${{ inputs.notes }}
+      MINIMUM_VERSION: ${{ inputs.minimum }}
+      MANDATORY_UPDATE: ${{ inputs.mandatory }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,12 +49,12 @@ jobs:
 
       - name: Require explicit authorization
         run: |
-          test "${{ inputs.confirmation }}" = "PROMOTE" || { echo "Explicit PROMOTE confirmation missing"; exit 1; }
+          test "$PROMOTE_CONFIRMATION" = "PROMOTE" || { echo "Explicit PROMOTE confirmation missing"; exit 1; }
 
       - name: Prepare staged modern pointer
         run: |
-          args=(--candidate "${{ inputs.candidate_path }}" --minimum "${{ inputs.minimum }}" --notes "${{ inputs.notes }}")
-          if [ "${{ inputs.mandatory }}" = "true" ]; then args+=(--mandatory); fi
+          args=(--candidate "$CANDIDATE_PATH" --minimum "$MINIMUM_VERSION" --notes "$RELEASE_NOTES")
+          if [ "$MANDATORY_UPDATE" = "true" ]; then args+=(--mandatory); fi
           python3 tools/prepare_release_pointer.py "${args[@]}"
 
       - name: Validate frozen legacy bootstrap
@@ -62,6 +68,9 @@ jobs:
 
       - name: Historical updater matrix
         run: python3 tools/validate_update_matrix.py --pointer-file release/latest.json
+
+      - name: Assert updater safety mechanisms
+        run: python3 tools/test_update_safety_contract.py
 
       - name: Check candidate JavaScript syntax and destructive operations
         shell: python
@@ -88,12 +97,11 @@ jobs:
 
       - name: Verify immutable artifact from remote main
         run: |
-          candidate="${{ inputs.candidate_path }}"
           tmp="$(mktemp)"
-          curl --fail --silent --show-error --location "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/${candidate}?_=$(date +%s)" -o "${tmp}"
-          local_sha="$(sha256sum "${candidate}" | awk '{print $1}')"
-          remote_sha="$(sha256sum "${tmp}" | awk '{print $1}')"
-          test "${local_sha}" = "${remote_sha}" || { echo "Remote artifact SHA mismatch"; exit 1; }
+          curl --fail --silent --show-error --location "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/${CANDIDATE_PATH}?_=$(date +%s)" -o "$tmp"
+          local_sha="$(sha256sum "$CANDIDATE_PATH" | awk '{print $1}')"
+          remote_sha="$(sha256sum "$tmp" | awk '{print $1}')"
+          test "$local_sha" = "$remote_sha" || { echo "Remote artifact SHA mismatch"; exit 1; }
 
       - name: Ensure bootstrap was not modified
         run: |
@@ -105,5 +113,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add release/latest.json
           git diff --cached --quiet && { echo "No pointer change to publish"; exit 1; }
-          git commit -m "release: promote modern ${{ inputs.candidate_path }}"
+          git commit -m "release: promote modern $CANDIDATE_PATH"
           git push origin HEAD:main
