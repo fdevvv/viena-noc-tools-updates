@@ -1,0 +1,44 @@
+name: DEV update safety
+
+on:
+  push:
+    paths:
+      - "dev/**"
+      - "tools/validate_dev_matrix.py"
+      - "tools/run_updater_validate.mjs"
+      - "UPDATE_SAFETY.md"
+      - ".github/workflows/dev-update-safety.yml"
+  pull_request:
+    paths:
+      - "dev/**"
+      - "tools/validate_dev_matrix.py"
+      - "tools/run_updater_validate.mjs"
+      - "UPDATE_SAFETY.md"
+      - ".github/workflows/dev-update-safety.yml"
+
+jobs:
+  dev-update-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate DEV pointer and exact fix13 updater compatibility
+        run: python3 tools/validate_dev_matrix.py
+
+      - name: Check candidate JavaScript syntax
+        shell: python
+        run: |
+          import base64,json,pathlib,subprocess,tempfile
+          root=pathlib.Path(".")
+          p=json.loads((root/"dev/self-update.json").read_text())
+          rel=p["package_url"].split("/main/",1)[1]
+          pkg=json.loads((root/rel).read_text())
+          with tempfile.TemporaryDirectory() as td:
+              td=pathlib.Path(td)
+              for item in pkg["files"]:
+                  if not item["path"].endswith(".js"):
+                      continue
+                  f=td/item["path"].replace("/","__")
+                  f.write_bytes(base64.b64decode(item["content_base64"],validate=True))
+                  subprocess.run(["node","--check",str(f)],check=True)
+          print("PASS DEV JS syntax")
