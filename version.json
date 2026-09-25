@@ -1,14 +1,16 @@
 {
-  "latest": "1.3.24",
+  "latest": "1.3.25",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "https://drive.google.com/uc?export=download&id=19WYyih7Y02ZjhExFZQJyFvuJgneud2J-",
+  "download_url": "https://drive.google.com/uc?export=download&id=1CBpErc0uhfwvNSHQHKlrYHiUgiSoXeTb",
   "notes": [
-    "REPARACIÓN RELEASE 1.3.24: el paquete de actualización ahora incluye todo el runtime necesario de la extensión.",
-    "Se mantiene la misma versión 1.3.24 y el mismo ZIP público validado.",
-    "Si Chrome ya muestra que falta js/01-page-helper-main.js, esa copia local está incompleta y debe reinstalarse desde el ZIP completo."
+    "Nueva RELEASE 1.3.25 con Asignaciones en Tareas Internas y plantillas editables.",
+    "Completar Tarea soporta múltiples motivos por tipificación/contexto y motivos conocidos.",
+    "Correcciones validadas en MIRA 5, GPON, MOICA2, Fuentes/RPHY/VCCAP y toasts.",
+    "Actualizador reforzado con package FULL, integridad, runtime sincronizado y estado visible durante la aplicación.",
+    "Incluye registro técnico de instalaciones y conserva la funcionalidad estable de 1.3.24."
   ],
-  "sha256": "a05d3671f9eece82d5a4494776b6a69a054d6a9cb52d4dc1fbd654f6cda961c3",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.24-package.json",
-  "package_sha256": "785bad45de0e21505a78281735ab9137676940b0935759b7af15605d69018118"
+  "sha256": "d07295ec93149d3cf9dc272cea68c75ef9cb1c16155c18a49628641a1ab33eed",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.25-package.json",
+  "package_sha256": "1a9df3a6944037929dfb3ddd215510d728ca5a6422e1070f74b8824ca2425251"
 }
