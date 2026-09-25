@@ -1,16 +1,14 @@
 {
-  "latest": "1.3.25",
+  "latest": "1.3.26",
   "minimum": "1.3.16",
   "mandatory": false,
-  "download_url": "https://drive.google.com/uc?export=download&id=1CBpErc0uhfwvNSHQHKlrYHiUgiSoXeTb",
   "notes": [
-    "Nueva RELEASE 1.3.25 con Asignaciones en Tareas Internas y plantillas editables.",
+    "Nueva RELEASE 1.3.26 con Asignaciones en Tareas Internas y plantillas editables.",
     "Completar Tarea soporta múltiples motivos por tipificación/contexto y motivos conocidos.",
     "Correcciones validadas en MIRA 5, GPON, MOICA2, Fuentes/RPHY/VCCAP y toasts.",
     "Actualizador reforzado con package FULL, integridad, runtime sincronizado y estado visible durante la aplicación.",
-    "Incluye registro técnico de instalaciones y conserva la funcionalidad estable de 1.3.24."
+    "Se preservan las configuraciones locales y la funcionalidad estable de la versión anterior."
   ],
-  "sha256": "d07295ec93149d3cf9dc272cea68c75ef9cb1c16155c18a49628641a1ab33eed",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.25-package.json",
-  "package_sha256": "1a9df3a6944037929dfb3ddd215510d728ca5a6422e1070f74b8824ca2425251"
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.26-package.json",
+  "package_sha256": "822cea46e3612ea47ad18ef9f6a694a053810cd1795a053bd3eb249fe1539328"
 }
