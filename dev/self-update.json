@@ -1,15 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-registry-fix1",
+  "build": "1.3.26-dev-toast-focus-fix1",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "4e45d0823786e673e22f80e233a22c7b2ffb43b9b9c7c1bd9a23f4a3129b0648",
+  "package_sha256": "c12d6546c39e7f26f112ef73a15ffd16a37a454a08199dc19c01fa8f529133b6",
   "notes": [
-    "Refuerza la detección automática del Usuario VIENA con reintentos durante la carga dinámica de la página.",
-    "Cada apertura de VIENA fuerza un registro técnico y el popup vuelve a intentarlo al abrirse.",
-    "El popup muestra el estado del último registro y permite probarlo manualmente.",
-    "El registro guarda diagnóstico de usuario, versión, build y motivo del último envío exitoso.",
+    "Corrige el mini-zoom/salto visual al cerrar toasts dentro de tickets VIENA.",
+    "Los botones de cierre de todos los toasts propios de la extensión ya no toman foco ni propagan eventos al focus-trap de Vuetify.",
+    "La corrección se aplica a toasts de Plantillas, acciones corporativas y datos de edificio.",
     "RELEASE permanece sin cambios."
   ]
 }
