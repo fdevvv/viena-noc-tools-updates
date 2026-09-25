@@ -1,14 +1,15 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-asignaciones-manager3",
+  "build": "1.3.26-dev-registry-fix1",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "b4654869f32fb350ec16bbb845bbc1d715ff4ecb6a8175a1fb9e3ac115244528",
+  "package_sha256": "4e45d0823786e673e22f80e233a22c7b2ffb43b9b9c7c1bd9a23f4a3129b0648",
   "notes": [
-    "Corrige plantillas creadas desde selección actual cuando algunas tipificaciones no están en cache y VIENA tarda más de 1.3 s en resolverlas.",
-    "La búsqueda ahora usa un camino rápido para cache y una espera sostenida para códigos lentos, sin limpiar/reiniciar el filtro durante la consulta.",
-    "Mantiene creación/edición de plantillas, cola de carga y selección adaptativa.",
+    "Refuerza la detección automática del Usuario VIENA con reintentos durante la carga dinámica de la página.",
+    "Cada apertura de VIENA fuerza un registro técnico y el popup vuelve a intentarlo al abrirse.",
+    "El popup muestra el estado del último registro y permite probarlo manualmente.",
+    "El registro guarda diagnóstico de usuario, versión, build y motivo del último envío exitoso.",
     "RELEASE permanece sin cambios."
   ]
 }
