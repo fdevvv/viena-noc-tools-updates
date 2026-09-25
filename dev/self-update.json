@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-progress-mira-runtime-fix8",
+  "build": "1.3.26-dev-assignments-mira-recovery-fix9",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "ebe05aa95590ab77c9f074e5531a901f5d334d41bcbfdf534d3319c92c121d86",
+  "package_sha256": "3d1520ab7a24a331dc84292f6d26c23dd3d03ea7e50f89313c97e29e67f7a18d",
   "notes": [
-    "Asignaciones muestra progreso de carga del catálogo y sólo queda lista al completar la paginación real.",
-    "Corrige el caso CIERRE 6/7 por ejecución antes de finalizar la carga.",
-    "Sincroniza todos los BUILD_ID internos para evitar que Ir a MIRA 5 recargue Estadísticas antes de filtrar por detectar falsamente un runtime viejo.",
-    "Conserva estados visuales de plantillas superpuestas, motor genérico, motivos contextuales, toast validado y registry.",
+    "Recupera Asignaciones: muestra Cargando 1/17 ... 17/17 usando también el progreso real que VIENA informa en consola y no libera plantillas por timeout.",
+    "Las plantillas en cola se ejecutan al completar la página 17; se conserva el motor genérico y los estados de solapamiento.",
+    "Recupera List CMs, Cliente, Edificio y Nodo M5: abrir/reutilizar y filtrar ya no se bloquea por el chequeo previo de disponibilidad.",
+    "MIRA Estadísticas no se recarga preventivamente; sólo hay un reload de recuperación si una pestaña existente no responde al comando.",
     "RELEASE permanece sin cambios."
   ]
 }
