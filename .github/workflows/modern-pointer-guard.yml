@@ -2,6 +2,8 @@ name: Modern pointer guard
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "release/latest.json"
 
