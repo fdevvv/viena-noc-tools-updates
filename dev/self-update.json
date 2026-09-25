@@ -1,15 +1,17 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-asignaciones-cierre-fix2",
+  "build": "1.3.26-dev-asignaciones-generic-engine-fix4",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "abf2728f3c9d4d453c5ea179bf020a12009cb4cd153ec4d1efbc1d8a8b0f682e",
+  "package_sha256": "33ab40d91a115b9facfa8d5d104962fdb6d6553146882254e9db406ffb558a89",
   "notes": [
-    "Corrige CIERRE en Asignaciones: al quitar una plantilla, las tipificaciones ya seleccionadas se eliminan primero desde sus chips de Vuetify, sin depender de que el autocomplete vuelva a ofrecer el código.",
-    "Resuelve el caso ACI/ACE observado en el tracer, que quedaba en 2/7 seleccionadas.",
-    "Diagnos Caídas conserva su flujo actual; el autocomplete queda como fallback.",
-    "Se mantienen motivos por plantilla+tipificación, carga automática de Asignaciones, toast validado, registry-fix1 y manager3.",
+    "Asignaciones usa un motor genérico basado en el comportamiento real observado en los tracers 8 y 9.",
+    "Durante la aplicación abre temporalmente Filtros de tabla para evitar operar sobre el autocomplete oculto 0x0.",
+    "Intenta primero una búsqueda grupal por nombre/término común y hace clicks reales sobre las opciones Vuetify, replicando el flujo manual correcto de CIERRE.",
+    "Si una plantilla no admite búsqueda grupal, usa fallback individual con código y etiqueta conocida del catálogo.",
+    "Las plantillas creadas por el operador siguen siendo selección actual + guardar; no requieren hardcode ni tracer por plantilla.",
+    "Incluye también editor de motivos múltiples, carga automática de Asignaciones, toast validado, registry-fix1 y manager3.",
     "RELEASE permanece sin cambios."
   ]
 }
