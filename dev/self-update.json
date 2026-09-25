@@ -1,13 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-fo-rphy-visibility-fix13",
+  "build": "1.3.26-dev-update-compat-floor-fix14",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "88f530ca7f487912e0a8845b6919e45197ea4aa068ab7aa374fcc5ba79de2a8d",
+  "package_sha256": "287ff668ea9cbeb8c3a966d45d1a130a919eab741b41a953784a936a506debfa",
   "notes": [
-    "Regla FO por tecnología: VCCAP no muestra Fuentes/RPHY; RPHY muestra RPHY de forma explícita.",
-    "Se preservan los fixes de GPON, MOICA, EE/FUENTE, Asignaciones y MIRA 5.",
-    "RELEASE permanece sin cambios."
+    "Compatibilidad permanente con updater RELEASE 1.3.24.",
+    "Las builds futuras dejan de depender de updater.html/updater.js y reutilizan popup.html para vincular la carpeta.",
+    "Los packages quedan restringidos a rutas aceptadas por 1.3.24.",
+    "No modifica la lógica validada de Asignaciones, MIRA, GPON, MOICA, Fuentes/RPHY/VCCAP, motivos ni toasts."
   ]
 }
