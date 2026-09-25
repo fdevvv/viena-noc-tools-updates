@@ -1,14 +1,16 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-mira-stable-restore-fix10",
+  "build": "1.3.26-dev-final-regression-fix11",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "e9043f820b8330476c212681e282a0d49bcf3e44ebc60cae54c882a7abf3274a",
+  "package_sha256": "2462300d8145cf06b7ec3fc0110a3b2a19ff604ef2a1bd14719c4453ade39600",
   "notes": [
-    "Restaura exactamente el flujo estable anterior de MIRA 5 para List CMs, Cliente, Edificio y Nodo, manteniendo sincronizados los BUILD_ID.",
-    "Las acciones secundarias vuelven a abrir/reutilizar la pestaña correspondiente, esperar el receptor real y ejecutar el filtrado nativo.",
-    "Se conserva el progreso/gate de Asignaciones, plantillas superpuestas, motivos contextuales, toast validado y registry.",
+    "Tickets FO con nodo RPHY recuperan Fuentes y RPHY sin alterar otras tecnologías.",
+    "Monitoreo GPON limpia Nodo, IdCliente e IdEdificio antes de cargar y filtrar el dato del botón pulsado.",
+    "Asignaciones cierra el autocomplete al terminar y muestra ASIGNACIONES - CARGANDO X/17 hasta completar 17/17.",
+    "El popup mantiene Aplicando actualización hasta la recarga real del runtime.",
+    "MIRA 5 conserva exactamente el flujo del fix10 validado por el operador.",
     "RELEASE permanece sin cambios."
   ]
 }
