@@ -1,0 +1,38 @@
+name: Legacy bootstrap pointer guard
+
+on:
+  push:
+    paths:
+      - "version.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: legacy-bootstrap-pointer-guard
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Verify frozen bootstrap mirror
+        id: validate
+        continue-on-error: true
+        run: python3 tools/validate_bootstrap.py --public
+
+      - name: Restore frozen pointer on failure
+        if: steps.validate.outcome == 'failure'
+        run: |
+          git show HEAD^:version.json > version.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add version.json
+          git commit -m "safety: auto-revert legacy bootstrap pointer"
+          git push origin HEAD:main
+          echo "Legacy bootstrap pointer was automatically restored."
+          exit 1
