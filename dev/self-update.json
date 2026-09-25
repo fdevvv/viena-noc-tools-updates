@@ -1,15 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-toast-dialog-fix2",
+  "build": "1.3.26-dev-motivos-asignaciones-fix1",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "d9a47cdb2b91a199ca1af9242ec6ff6baf3d1f19f42ca50151eee37cf544d77f",
+  "package_sha256": "fb4a514f1ec183c7d5a37f7838ee9e0a8efa51bf891b45879b1773ab273f8569",
   "notes": [
-    "Corrige definitivamente el mini-zoom/salto de Vuetify al hacer click sobre toasts de VIENA NOC Tools.",
-    "Los toasts se montan dentro del diálogo persistente activo de mayor z-index en lugar de document.body.",
-    "La X no toma foco y el click del toast no se propaga a controles del ticket.",
-    "La corrección aplica a toasts de Plantillas, acciones corporativas y Datos de edificio.",
+    "Asignaciones inicia automáticamente la carga de Tipificaciones de tarea al entrar a Tareas Internas, sin requerir abrir manualmente Filtros de tabla.",
+    "Completar Tarea recuerda el motivo por plantilla y tipificación/contexto, admite múltiples motivos válidos y sólo pregunta cuando la elección es realmente ambigua.",
+    "Se conserva el fix de toast ya validado, registry-fix1, manager3 y el resto de funciones DEV existentes.",
     "RELEASE permanece sin cambios."
   ]
 }
