@@ -1,0 +1,109 @@
+name: Promote modern RELEASE
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_path:
+        description: "Immutable candidate package under release/"
+        required: true
+        type: string
+      confirmation:
+        description: "Type PROMOTE to authorize publication"
+        required: true
+        type: string
+      notes:
+        description: "Release notes, one per line"
+        required: false
+        type: string
+      minimum:
+        description: "Minimum supported modern version"
+        required: true
+        default: "1.3.25"
+        type: string
+      mandatory:
+        description: "Mandatory update"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: promote-modern-release
+  cancel-in-progress: false
+
+jobs:
+  validate-and-promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Require explicit authorization
+        run: |
+          test "${{ inputs.confirmation }}" = "PROMOTE" || { echo "Explicit PROMOTE confirmation missing"; exit 1; }
+
+      - name: Prepare staged modern pointer
+        run: |
+          args=(--candidate "${{ inputs.candidate_path }}" --minimum "${{ inputs.minimum }}" --notes "${{ inputs.notes }}")
+          if [ "${{ inputs.mandatory }}" = "true" ]; then args+=(--mandatory); fi
+          python3 tools/prepare_release_pointer.py "${args[@]}"
+
+      - name: Validate frozen legacy bootstrap
+        run: python3 tools/validate_bootstrap.py --public
+
+      - name: Validate modern candidate/pointer
+        run: python3 tools/validate_release_compat.py --pointer --pointer-file release/latest.json
+
+      - name: Adversarial validation
+        run: python3 tools/test_release_validator.py --pointer-file release/latest.json
+
+      - name: Historical updater matrix
+        run: python3 tools/validate_update_matrix.py --pointer-file release/latest.json
+
+      - name: Check candidate JavaScript syntax and destructive operations
+        shell: python
+        run: |
+          import base64,json,pathlib,re,subprocess,tempfile
+          root=pathlib.Path(".")
+          pointer=json.loads((root/"release/latest.json").read_text())
+          rel=pointer["package_url"].split("/main/",1)[1]
+          pkg=json.loads((root/rel).read_text())
+          assert not pkg.get("remove")
+          assert not pkg.get("patches")
+          dangerous=[re.compile(rb"chrome\.storage\.local\.clear\s*\("),re.compile(rb"indexedDB\.deleteDatabase\s*\(")]
+          with tempfile.TemporaryDirectory() as td:
+              td=pathlib.Path(td)
+              for item in pkg["files"]:
+                  if not item["path"].endswith(".js"): continue
+                  raw=base64.b64decode(item["content_base64"],validate=True)
+                  for pattern in dangerous:
+                      assert not pattern.search(raw), f"destructive storage operation in {item['path']}"
+                  out=td/item["path"].replace("/","__")
+                  out.write_bytes(raw)
+                  subprocess.run(["node","--check",str(out)],check=True)
+          print("PASS candidate JS/destructive scan")
+
+      - name: Verify immutable artifact from remote main
+        run: |
+          candidate="${{ inputs.candidate_path }}"
+          tmp="$(mktemp)"
+          curl --fail --silent --show-error --location "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/${candidate}?_=$(date +%s)" -o "${tmp}"
+          local_sha="$(sha256sum "${candidate}" | awk '{print $1}')"
+          remote_sha="$(sha256sum "${tmp}" | awk '{print $1}')"
+          test "${local_sha}" = "${remote_sha}" || { echo "Remote artifact SHA mismatch"; exit 1; }
+
+      - name: Ensure bootstrap was not modified
+        run: |
+          git diff --exit-code -- version.json release/bootstrap.json
+
+      - name: Commit pointer only after every gate passed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add release/latest.json
+          git diff --cached --quiet && { echo "No pointer change to publish"; exit 1; }
+          git commit -m "release: promote modern ${{ inputs.candidate_path }}"
+          git push origin HEAD:main
