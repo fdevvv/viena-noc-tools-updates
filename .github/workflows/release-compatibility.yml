@@ -10,6 +10,7 @@ on:
       - "tools/validate_bootstrap.py"
       - "tools/run_updater_validate.mjs"
       - "tools/test_release_validator.py"
+      - "tools/test_update_safety_contract.py"
       - "UPDATE_SAFETY.md"
       - ".github/workflows/release-compatibility.yml"
   pull_request:
@@ -41,6 +42,9 @@ jobs:
 
       - name: Execute exact historical updater matrix for modern channel
         run: python3 tools/validate_update_matrix.py --pointer-file release/latest.json
+
+      - name: Assert updater safety mechanisms
+        run: python3 tools/test_update_safety_contract.py
 
       - name: Decode modern candidate and check JavaScript syntax
         shell: python
