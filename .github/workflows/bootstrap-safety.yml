@@ -1,0 +1,43 @@
+name: Legacy bootstrap safety
+
+on:
+  push:
+    paths:
+      - "release/bootstrap.json"
+      - "release/v1.3.25-bootstrap-v3-package.json"
+      - "tools/validate_bootstrap.py"
+      - "tools/run_updater_validate.mjs"
+      - "tools/validate_release_compat.py"
+      - ".github/workflows/bootstrap-safety.yml"
+  pull_request:
+    paths:
+      - "release/bootstrap.json"
+      - "release/v1.3.25-bootstrap-v3-package.json"
+      - "tools/validate_bootstrap.py"
+      - "tools/run_updater_validate.mjs"
+      - "tools/validate_release_compat.py"
+      - ".github/workflows/bootstrap-safety.yml"
+
+jobs:
+  bootstrap-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate bootstrap using exact 1.3.24 updater
+        run: python3 tools/validate_bootstrap.py
+      - name: Check bootstrap JavaScript syntax
+        shell: python
+        run: |
+          import base64,json,pathlib,subprocess,tempfile
+          root=pathlib.Path(".")
+          cfg=json.loads((root/"release/bootstrap.json").read_text())
+          pkg=json.loads((root/cfg["package_path"]).read_text())
+          with tempfile.TemporaryDirectory() as td:
+              td=pathlib.Path(td)
+              for item in pkg["files"]:
+                  if not item["path"].endswith(".js"):
+                      continue
+                  out=td/item["path"].replace("/","__")
+                  out.write_bytes(base64.b64decode(item["content_base64"],validate=True))
+                  subprocess.run(["node","--check",str(out)],check=True)
+          print("PASS bootstrap JS syntax")
