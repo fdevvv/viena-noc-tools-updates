@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-import base64, copy, json, pathlib, tempfile
+import argparse, base64, copy, json, pathlib, tempfile
 import validate_release_compat as v
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-def pointer_package():
-    p = json.loads((ROOT/"version.json").read_text(encoding="utf-8"))
+def pointer_package(pointer_file):
+    p = json.loads((ROOT/pointer_file).read_text(encoding="utf-8"))
     rel = p["package_url"].split("/main/",1)[1]
     return json.loads((ROOT/rel).read_text(encoding="utf-8"))
 
@@ -24,7 +24,10 @@ def expect_reject(name, pkg):
         path.unlink(missing_ok=True)
 
 def main():
-    base = pointer_package()
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--pointer-file", default="release/latest.json")
+    args=ap.parse_args()
+    base = pointer_package(args.pointer_file)
 
     x=copy.deepcopy(base); x["channel"]="DEV"; expect_reject("wrong channel",x)
     x=copy.deepcopy(base); x["mode"]="dev-delta"; expect_reject("release delta mode",x)
