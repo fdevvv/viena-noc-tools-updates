@@ -1,4 +1,4 @@
-name: Release compatibility floor
+name: Release update safety
 
 on:
   push:
@@ -6,18 +6,73 @@ on:
       - "version.json"
       - "release/**"
       - "tools/validate_release_compat.py"
+      - "tools/validate_update_matrix.py"
+      - "tools/run_updater_validate.mjs"
+      - "tools/test_release_validator.py"
+      - "UPDATE_SAFETY.md"
       - ".github/workflows/release-compatibility.yml"
   pull_request:
     paths:
       - "version.json"
       - "release/**"
       - "tools/validate_release_compat.py"
+      - "tools/validate_update_matrix.py"
+      - "tools/run_updater_validate.mjs"
+      - "tools/test_release_validator.py"
+      - "UPDATE_SAFETY.md"
       - ".github/workflows/release-compatibility.yml"
 
 jobs:
-  updater-1-3-24-compat:
+  release-update-safety:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate published pointer against 1.3.24 updater contract
+
+      - name: Validate published pointer and 1.3.24 floor
         run: python3 tools/validate_release_compat.py --pointer
+
+      - name: Run adversarial validator tests
+        run: python3 tools/test_release_validator.py
+
+      - name: Execute exact historical updater matrix
+        run: python3 tools/validate_update_matrix.py
+
+      - name: Decode candidate and check JavaScript syntax
+        shell: python
+        run: |
+          import base64, json, pathlib, subprocess, tempfile
+          root=pathlib.Path(".")
+          pointer=json.loads((root/"version.json").read_text())
+          rel=pointer["package_url"].split("/main/",1)[1]
+          pkg=json.loads((root/rel).read_text())
+          with tempfile.TemporaryDirectory() as td:
+              td=pathlib.Path(td)
+              for item in pkg["files"]:
+                  if not item["path"].endswith(".js"):
+                      continue
+                  out=td/item["path"].replace("/","__")
+                  out.write_bytes(base64.b64decode(item["content_base64"], validate=True))
+                  subprocess.run(["node","--check",str(out)],check=True)
+          print("PASS JS syntax")
+
+      - name: Reject destructive RELEASE operations
+        shell: python
+        run: |
+          import base64, json, pathlib, re
+          root=pathlib.Path(".")
+          pointer=json.loads((root/"version.json").read_text())
+          rel=pointer["package_url"].split("/main/",1)[1]
+          pkg=json.loads((root/rel).read_text())
+          assert not pkg.get("remove"), "RELEASE package must not remove files"
+          assert not pkg.get("patches"), "RELEASE package must not contain text patches"
+          dangerous=[
+              re.compile(rb"chrome\.storage\.local\.clear\s*\("),
+              re.compile(rb"indexedDB\.deleteDatabase\s*\(")
+          ]
+          for item in pkg["files"]:
+              if not item["path"].endswith(".js"):
+                  continue
+              raw=base64.b64decode(item["content_base64"], validate=True)
+              for pattern in dangerous:
+                  assert not pattern.search(raw), f"destructive storage operation in {item['path']}"
+          print("PASS destructive-operation scan")
