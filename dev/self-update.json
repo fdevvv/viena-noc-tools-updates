@@ -1,15 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-asignaciones-1",
+  "build": "1.3.26-dev-asignaciones-fix1",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "9bbd4e76976c3573bbddc1d52a8cd43047935857e917ed2adbdf244131edd6be",
+  "package_sha256": "2bf0f4797263fc75c69b3cfef1423641ba3b5b0613bdb5c232069ec08e4a81a5",
   "notes": [
-    "Agrega el botón Asignaciones centrado en el header de Tareas Internas.",
-    "Primera plantilla: Diagnos Caídas con 13 tipificaciones.",
-    "La plantilla alterna selección/desselección usando los clicks reales de Vuetify y valida cada cambio contra el estado interno de VIENA.",
-    "Evita secuencias de Backspace sobre el autocomplete y no fuerza estados visuales.",
+    "Corrige avisos de actualización DEV: background, badge UPD, banner y notificación comparan por build.",
+    "Corrige Asignaciones: el autocomplete se opera desde el input real de VIENA y busca cada código exacto sin Backspace.",
+    "Diagnos Caídas mantiene 13 tipificaciones y valida cada cambio contra el estado interno de VIENA.",
     "RELEASE permanece sin cambios."
   ]
 }
