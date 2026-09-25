@@ -4,11 +4,11 @@
   "mandatory": false,
   "download_url": "https://drive.google.com/uc?export=download&id=19WYyih7Y02ZjhExFZQJyFvuJgneud2J-",
   "notes": [
-    "La carpeta de instalación sigue figurando como Vinculada aunque Chrome vuelva a requerir permiso de escritura.",
-    "La autorización de escritura se solicita recién cuando tocás Actualizar y sólo si Chrome la necesita.",
-    "Cambiar carpeta vuelve a usarse únicamente para seleccionar otra carpeta de instalación."
+    "REPARACIÓN RELEASE 1.3.24: el paquete de actualización ahora incluye todo el runtime necesario de la extensión.",
+    "Se mantiene la misma versión 1.3.24 y el mismo ZIP público validado.",
+    "Si Chrome ya muestra que falta js/01-page-helper-main.js, esa copia local está incompleta y debe reinstalarse desde el ZIP completo."
   ],
   "sha256": "a05d3671f9eece82d5a4494776b6a69a054d6a9cb52d4dc1fbd654f6cda961c3",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.24-package.json",
-  "package_sha256": "ddd709597d7c212dc3ba3feda014e4c593508aba7098ef285e6d734517436cee"
+  "package_sha256": "785bad45de0e21505a78281735ab9137676940b0935759b7af15605d69018118"
 }
