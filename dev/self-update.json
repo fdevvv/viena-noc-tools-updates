@@ -1,17 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-asignaciones-generic-engine-fix4",
+  "build": "1.3.26-dev-asignaciones-load-gate-fix5",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update-package.json",
-  "package_sha256": "33ab40d91a115b9facfa8d5d104962fdb6d6553146882254e9db406ffb558a89",
+  "package_sha256": "8b105fa00f7f66d9e648cd690e9e67be48e83c94f7e0a01e958d55fdf7bcf814",
   "notes": [
-    "Asignaciones usa un motor genérico basado en el comportamiento real observado en los tracers 8 y 9.",
-    "Durante la aplicación abre temporalmente Filtros de tabla para evitar operar sobre el autocomplete oculto 0x0.",
-    "Intenta primero una búsqueda grupal por nombre/término común y hace clicks reales sobre las opciones Vuetify, replicando el flujo manual correcto de CIERRE.",
-    "Si una plantilla no admite búsqueda grupal, usa fallback individual con código y etiqueta conocida del catálogo.",
-    "Las plantillas creadas por el operador siguen siendo selección actual + guardar; no requieren hardcode ni tracer por plantilla.",
-    "Incluye también editor de motivos múltiples, carga automática de Asignaciones, toast validado, registry-fix1 y manager3.",
+    "Corrige la condición de carrera detectada en UI_TRACE (10): Asignaciones ya no se marca lista por silencio entre páginas ni por timeout una vez iniciada la paginación.",
+    "Desde el primer evento de progreso, sólo hasMorePages=false o done=true habilita las plantillas y ejecuta cualquier acción en cola.",
+    "Se conserva el motor genérico de selección grupal por nombre/término común y fallback individual.",
     "RELEASE permanece sin cambios."
   ]
 }
