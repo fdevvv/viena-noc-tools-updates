@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+import base64, json, pathlib, sys
+
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+
+def die(msg):
+    print("ERROR:",msg,file=sys.stderr)
+    raise SystemExit(1)
+
+def load(path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def resolve_pointer(path):
+    pointer=load(ROOT/path)
+    url=str(pointer.get("package_url",""))
+    marker="/main/"
+    if marker not in url: die(f"{path}: invalid package_url")
+    rel=url.split(marker,1)[1]
+    pkg=load(ROOT/rel)
+    return pointer,rel,pkg
+
+def text_file(pkg,path):
+    item=next((x for x in pkg.get("files",[]) if x.get("path")==path),None)
+    if not item: die(f"{pkg.get('build')}: missing {path}")
+    try: return base64.b64decode(item["content_base64"],validate=True).decode("utf-8")
+    except Exception as e: die(f"{pkg.get('build')}: cannot decode {path}: {e}")
+
+def paths(pkg):
+    return {str(x.get("path","")) for x in pkg.get("files",[])}
+
+def assert_hardened(label,pkg,dev=False):
+    build=json.loads(text_file(pkg,"build.json"))
+    if int(build.get("updater_contract",0)) < 2:
+        die(f"{label}: updater_contract < 2")
+
+    updater=text_file(pkg,"js/95-local-updater.js")
+    background=text_file(pkg,"background.js")
+    popup=text_file(pkg,"popup.js")
+
+    updater_tokens=[
+      "viena_local_update_lock_v1",
+      "viena_local_update_journal_v1",
+      "viena_local_update_last_result_v1",
+      "navigator?.locks?.request",
+      "rollbackTouchedFiles",
+      "failed_rolled_back_verified",
+      "rollback_incomplete",
+      "Se bloqueó un downgrade",
+      "resumePendingUpdate",
+      "awaiting_reload",
+      "verifyDirectoryAgainstIntegrity"
+    ]
+    for token in updater_tokens:
+        if token not in updater: die(f"{label}: updater safety token missing: {token}")
+
+    bg_tokens=[
+      "reconcileUpdateJournalAfterRuntimeStart",
+      "post_reload_verified",
+      "post_reload_integrity_failed",
+      "viena_local_update_journal_v1",
+      "viena_local_update_lock_v1"
+    ]
+    for token in bg_tokens:
+        if token not in background: die(f"{label}: background health token missing: {token}")
+
+    if "recoverInterruptedLocalUpdate" not in popup:
+        die(f"{label}: popup recovery missing")
+
+    p=paths(pkg)
+    if dev:
+        for req in ["updater.html","updater.js"]:
+            if req not in p: die(f"{label}: DEV fix13 compatibility artifact missing: {req}")
+    else:
+        forbidden={"updater.html","updater.js"} & p
+        if forbidden: die(f"{label}: modern RELEASE contains legacy-incompatible root artifacts: {sorted(forbidden)}")
+
+    print(f"PASS update safety contract: {label} ({pkg.get('build')})")
+
+def main():
+    _,_,devpkg=resolve_pointer("dev/self-update.json")
+    _,_,modern=resolve_pointer("release/latest.json")
+    bootstrap_cfg=load(ROOT/"release/bootstrap.json")
+    bootstrap=load(ROOT/bootstrap_cfg["package_path"])
+
+    assert_hardened("DEV",devpkg,dev=True)
+    assert_hardened("modern RELEASE",modern,dev=False)
+    assert_hardened("legacy bootstrap",bootstrap,dev=False)
+
+if __name__=="__main__":
+    main()
