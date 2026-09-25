@@ -6,6 +6,7 @@ on:
       - "dev/**"
       - "tools/validate_dev_matrix.py"
       - "tools/run_updater_validate.mjs"
+      - "tools/test_update_safety_contract.py"
       - "UPDATE_SAFETY.md"
       - ".github/workflows/dev-update-safety.yml"
   pull_request:
@@ -13,6 +14,7 @@ on:
       - "dev/**"
       - "tools/validate_dev_matrix.py"
       - "tools/run_updater_validate.mjs"
+      - "tools/test_update_safety_contract.py"
       - "UPDATE_SAFETY.md"
       - ".github/workflows/dev-update-safety.yml"
 
@@ -24,6 +26,9 @@ jobs:
 
       - name: Validate DEV pointer and exact fix13 updater compatibility
         run: python3 tools/validate_dev_matrix.py
+
+      - name: Assert updater safety mechanisms
+        run: python3 tools/test_update_safety_contract.py
 
       - name: Check candidate JavaScript syntax
         shell: python
