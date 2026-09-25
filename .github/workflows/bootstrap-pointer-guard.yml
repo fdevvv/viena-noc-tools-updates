@@ -2,6 +2,8 @@ name: Legacy bootstrap pointer guard
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "version.json"
 
