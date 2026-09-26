@@ -90,8 +90,19 @@ Before `release/latest.json` can move, the workflow must:
 8. run the historical updater/rescue matrix;
 9. run update-safety, JS and destructive-storage checks;
 10. verify the immutable artifact already exists remotely with the same SHA;
-11. only then commit/push `release/latest.json`.
+11. only then commit `release/latest.json` to a dedicated `release/promote-*` branch and open a pointer-only PR;
+12. require the always-on `Main protection gate` check to pass;
+13. publish only by merging that protected PR into `main`.
 
 The two historical 1.3.25 quarantine entries were retired on 2026-09-26 only after the installation registry confirmed that no active `1.3.25-release` build remained. The retirement evidence is recorded in `release/public-history.json`; future quarantine entries must follow the same evidence-first rule.
 
 If any compatibility/rescue test is uncertain or fails, do not publish.
+
+
+## Repository merge gate
+
+Every pull request targeting `main` runs `.github/workflows/main-protection-gate.yml` with the job name `Main protection gate`. This is the single check intended to be required at repository level because it has no path filter and aggregates the critical bootstrap, DEV and RELEASE safety contracts.
+
+Do not configure the path-filtered DEV/RELEASE/bootstrap workflows as globally required checks. GitHub leaves skipped required workflows pending, which can deadlock unrelated pull requests.
+
+`version.json` is frozen and rejected by the main gate. A change to `release/latest.json` is accepted only in a pointer-only PR created from a `release/promote-*` branch.
