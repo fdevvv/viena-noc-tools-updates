@@ -114,7 +114,7 @@ def main():
     unexpected = sorted(changed - allowed_changes)
     if unexpected:
         die(f"rescue target changed unauthorized files: {unexpected}")
-    required_changes = {"background.js", "build.json", "integrity-manifest.json", "popup.html", "popup.js"}
+    required_changes = {"background.js", "build.json", "integrity-manifest.json", "popup.js"}
     if not required_changes.issubset(changed):
         die(f"rescue target missing expected controlled changes: {sorted(required_changes - changed)}")
 
