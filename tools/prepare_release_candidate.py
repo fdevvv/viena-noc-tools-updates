@@ -169,6 +169,12 @@ def promote(dev_pkg, release_version, release_build, generated_at, current_relea
         popup_html,
         count=1,
     )
+    # RELEASE must not retain DEV-only branding, even for UI rows that are
+    # removed at runtime. Keep the hidden test row structurally intact so
+    # fix32's RELEASE cleanup contract remains verifiable.
+    popup_html = popup_html.replace("Probar aviso en VIENA DEV", "Probar aviso en VIENA")
+    if "Probar aviso en VIENA DEV" in popup_html:
+        die("DEV popup branding leaked into RELEASE")
     set_text(files, "popup.html", popup_html)
 
     popup = text(files, "popup.js")
