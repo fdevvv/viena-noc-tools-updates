@@ -73,10 +73,7 @@ A modern RELEASE promotion must additionally pass:
 python3 tools/validate_legacy_rescue.py --require-retired
 ```
 
-The two historical contracts remain `quarantine: true` in
-`release/public-history.json` until the installation registry confirms that
-all active legacy 1.3.25 installations have been remediated. Only then should
-that quarantine flag be retired. Do not disable the gate merely to publish.
+The two historical contracts were retired from quarantine on 2026-09-26 after the installation registry confirmed that no active `1.3.25-release` build remained. The evidence is recorded in `release/public-history.json`. Any future quarantine retirement must likewise be backed by registry evidence; never disable the gate merely to publish.
 
 
 ## Repair for installations that already received rescue v4

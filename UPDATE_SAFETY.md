@@ -358,4 +358,4 @@ The rescue:
 
 `tools/validate_legacy_rescue.py` proves the historical contracts and expected validator behavior. `tools/test_legacy_rescue.py` executes the PowerShell rescue against both historical packages and negative tamper cases.
 
-Both entries remain `quarantine: true` until installation-registry evidence confirms all active historical 1.3.25 installations have been remediated. The manual promotion workflow explicitly fails while that quarantine remains active; do not remove the flag merely to publish.
+Both historical quarantine entries were retired on 2026-09-26 only after installation-registry evidence confirmed that no active `1.3.25-release` build remained. That evidence is recorded in `release/public-history.json`. The manual promotion workflow still fails whenever any applicable legacy quarantine is active; never remove a quarantine flag merely to publish.

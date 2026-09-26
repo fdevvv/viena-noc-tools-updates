@@ -66,7 +66,7 @@ subsequent RELEASE updates use `release/latest.json`.
 Before any modern RELEASE publication, prove:
 
 1. `1.3.24 -> bootstrap-v3` with the exact 1.3.24 updater.
-2. each historical `1.3.25-release` contract -> audited rescue -> bootstrap-v3.
+2. each historical `1.3.25-release` contract -> audited rescue -> `1.3.25-bootstrap-release-v5-runtime-coherence-fix`.
 3. `bootstrap-v3 -> candidate` with the exact bootstrap updater.
 4. every other supported modern updater -> candidate.
 5. previous modern RELEASE -> candidate.
@@ -92,8 +92,6 @@ Before `release/latest.json` can move, the workflow must:
 10. verify the immutable artifact already exists remotely with the same SHA;
 11. only then commit/push `release/latest.json`.
 
-The two historical 1.3.25 entries remain `quarantine: true` in
-`release/public-history.json` until registry evidence confirms they have been
-remediated. Do not clear that flag merely to unblock a publication.
+The two historical 1.3.25 quarantine entries were retired on 2026-09-26 only after the installation registry confirmed that no active `1.3.25-release` build remained. The retirement evidence is recorded in `release/public-history.json`; future quarantine entries must follow the same evidence-first rule.
 
 If any compatibility/rescue test is uncertain or fails, do not publish.
