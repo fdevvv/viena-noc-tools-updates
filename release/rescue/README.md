@@ -34,14 +34,16 @@ The audited source fingerprints, frozen public bootstrap base, and rescue-only t
 
 1. verifies source version/build/channel;
 2. verifies `js/95-local-updater.js` against one of the two audited historical SHA-256 fingerprints;
-3. downloads the immutable rescue bootstrap v4 package derived from public bootstrap-v3, or accepts `-PackagePath` only for controlled CI/integration testing;
+3. downloads the immutable rescue bootstrap v5 package derived from public bootstrap-v3, or accepts `-PackagePath` only for controlled CI/integration testing;
 4. validates package SHA, schema/app identity, mode, paths, sizes, per-file SHA and integrity inventory;
 5. verifies updater contract >= 2, compatibility floor 1.3.24 and `release/latest.json` as the next channel;
 6. creates a full sibling backup of the installation directory;
 7. writes non-identity files first and `manifest.json`, `integrity-manifest.json`, `build.json` last;
 8. verifies every written file and the final identity;
 9. restores the backup on a caught write/verification failure.
-10. verifies the popup channel label is dynamic so RELEASE cannot render as DEV.
+10. verifies the popup channel label is dynamic so RELEASE cannot render as DEV;
+11. verifies runtime/content-script build identity is coherent, preventing permanent false `TAB` states;
+12. is stored with a UTF-8 BOM so the downloaded script parses correctly in Windows PowerShell 5.1.
 
 The script does not clear or migrate Chrome storage. The same unpacked extension
 folder is preserved, so the extension ID/storage association remains intact.
@@ -53,7 +55,7 @@ pwsh -NoProfile -File .\release\rescue\rescue-legacy-1.3.25.ps1 -InstallPath "C:
 ```
 
 After `RESCATE OK`, reload the unpacked extension from `chrome://extensions`.
-The installed build becomes `1.3.25-bootstrap-release-v4-channel-fix`; all later RELEASE
+The installed build becomes `1.3.25-bootstrap-release-v5-runtime-coherence-fix`; all later RELEASE
 checks use `release/latest.json`.
 
 ## CI and promotion gate

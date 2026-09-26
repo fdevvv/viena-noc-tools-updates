@@ -1,4 +1,4 @@
-param(
+﻿param(
   [Parameter(Mandatory=$true)]
   [string]$InstallPath,
 
@@ -8,8 +8,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$PackageUrl = "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/rescue/v1.3.25-bootstrap-release-v4-channel-fix-package.json"
-$PackageSha256 = "60847e341df9eb514ec2fef3f1210bccea824d8af0272172d2016200d88b71f6"
+$PackageUrl = "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/rescue/v1.3.25-bootstrap-release-v5-runtime-coherence-fix-package.json"
+$PackageSha256 = "05eee4b9942eda3e98cc123f14bde0a16494c7f4bbffd9736044e2cc4c29ece2"
 $ExpectedSourceVersion = "1.3.25"
 $ExpectedSourceBuild = "1.3.25-release"
 $ExpectedSourceChannel = "RELEASE"
@@ -18,7 +18,7 @@ $AllowedSourceUpdaterSha256 = @(
   "a83d37f077e466ac9591eee48cf52dcdacb62fe264be3476eba65616763d61f4"
 )
 $ExpectedTargetVersion = "1.3.25"
-$ExpectedTargetBuild = "1.3.25-bootstrap-release-v4-channel-fix"
+$ExpectedTargetBuild = "1.3.25-bootstrap-release-v5-runtime-coherence-fix"
 $ExpectedTargetChannel = "RELEASE"
 $ExpectedModernPointer = "release/latest.json"
 
@@ -162,7 +162,7 @@ try {
     $declaredHashes[$p] = $want
   }
 
-  foreach ($required in @("manifest.json","build.json","background.js","popup.html","popup.js","icon128.png","integrity-manifest.json")) {
+  foreach ($required in @("manifest.json","build.json","background.js","popup.html","popup.js","icon128.png","integrity-manifest.json","js/80-update-banner.js","js/90-runtime-status.js")) {
     if (-not $decoded.ContainsKey($required)) {
       throw "Falta archivo requerido: $required"
     }
@@ -206,6 +206,15 @@ try {
   }
   if ($popupText -notlike "*const channelLabel = isDevRuntime() ? 'DEV' : 'RELEASE'*") {
     throw "El bootstrap objetivo no contiene el render dinámico DEV/RELEASE del encabezado."
+  }
+
+  $runtimeStatusText = [System.Text.Encoding]::UTF8.GetString($decoded["js/90-runtime-status.js"])
+  $updateBannerText = [System.Text.Encoding]::UTF8.GetString($decoded["js/80-update-banner.js"])
+  if ($runtimeStatusText -notlike "*const BUILD_ID = '$ExpectedTargetBuild'*") {
+    throw "El content script de estado no coincide con el build objetivo."
+  }
+  if ($updateBannerText -notlike "*const CONTENT_BUILD_ID='$ExpectedTargetBuild'*") {
+    throw "El content script de avisos no coincide con el build objetivo."
   }
 
   if ($null -eq $targetIntegrity.files) {
