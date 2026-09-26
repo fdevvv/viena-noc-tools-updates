@@ -166,6 +166,21 @@ def assert_hardened(label,pkg,dev=False):
         if "updateTargetChannel = 'RELEASE'" not in popup:
             die(f"{label}: fix27 popup RELEASE identity propagation missing")
 
+        assignments=text_file(pkg,"js/40-templates.js")
+        for token in [
+            "name: 'CIERRE'",
+            "codes: ['ACL','ACK','ACJ','ACI','ACG','ACM','ACE']",
+            "name: 'IPLAN'",
+            "codes: ['DCI','EIP','CII','DPI']",
+            "name: 'REFERIDOS'",
+            "codes: ['DDR','DCR']",
+            "name: 'DEGRADACION (DIR + RET)'",
+            "migrateLegacySharedAssignments",
+            "LEGACY_SHARED_ASSIGNMENT_IDS"
+        ]:
+            if token not in assignments:
+                die(f"{label}: fix28 shared Assignments/migration token missing: {token}")
+
     p=paths(pkg)
     if dev:
         if str(pkg.get("profile","")) != "portable-replay-safe-v1":
