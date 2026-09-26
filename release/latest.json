@@ -1,17 +1,16 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.28",
+  "latest": "1.3.29",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Se corrige la vinculación y revinculación de la carpeta de VIENA NOC Tools desde una pestaña dedicada.",
-    "La pantalla de vinculación queda centrada y guía al operador para seleccionar la carpeta raíz correcta.",
-    "El aviso de actualización consulta el estado desde el service worker, evitando bloqueos CORS y estados inválidos.",
-    "Se conserva la actualización en segundo plano, el overlay de progreso y las funciones de Asignaciones."
+    "Asignaciones incorpora el catálogo compartido y mantiene disponibles las asignaciones ya definidas.",
+    "Las asignaciones personalizadas existentes se migran automáticamente y se pueden seguir agregando nuevas.",
+    "Se refuerza la estabilidad del proceso de actualización y recuperación sin alterar la configuración del operador."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.28-folder-link-recovery-banner-ux-fix26-candidate2-package.json",
-  "package_sha256": "b3bd5f15ab067f7823247eb6ece7819f90ee29961fe3849417c6230958fc5633",
-  "source_package": "release/v1.3.28-folder-link-recovery-banner-ux-fix26-candidate2-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.29-registry-backoff-candidate3-package.json",
+  "package_sha256": "a7eac8023121e14729817b535a352a4b1cf510b0e53a83c550afc6a52fb8b5b1",
+  "source_package": "release/v1.3.29-registry-backoff-candidate3-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
