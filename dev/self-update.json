@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-folder-setup-ux-fix25",
+  "build": "1.3.26-dev-folder-setup-center-fix26",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-folder-setup-ux-fix25.json",
-  "package_sha256": "ee35a795053a0278308a90a27d66372adf89880624a6ed40cde36a73b736e140",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-folder-setup-center-fix26.json",
+  "package_sha256": "d08b3664da15a8fd68aedf6b353a4ae8cb6a3f4f011a91c6c2564885105bae1c",
   "notes": [
-    "Incluye fix22/fix23/fix24: revinculación segura, recuperación robusta y banner de actualización consultado desde el service worker.",
-    "La vinculación y el cambio de carpeta ahora usan una pantalla dedicada, simple y guiada, sin mostrar el popup completo en una pestaña.",
-    "Cancelar el selector ya no expone el error técnico de Chrome; permite volver a intentarlo sin alterar la instalación."
+    "Incluye fix22 a fix25 sin regresiones.",
+    "Centra correctamente la pantalla dedicada de vinculación/cambio de carpeta en toda la pestaña standalone.",
+    "Elimina la restricción visual de 410 px del elemento html sólo en modo standalone; el popup toolbar conserva su tamaño normal."
   ]
 }

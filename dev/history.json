@@ -83,6 +83,13 @@
       "updater_sha256": "b1706c0d6ff08200dbe89c2b9a6b254947861d6790699656277f45a7a98cb367",
       "must_support_future_upgrade": true,
       "notes": "Background-owned update-banner state build immediately before the dedicated standalone folder UX fix25."
+    },
+    {
+      "id": "dev-fix25",
+      "package": "dev/builds/1.3.26-dev-folder-setup-ux-fix25.json",
+      "updater_sha256": "b1706c0d6ff08200dbe89c2b9a6b254947861d6790699656277f45a7a98cb367",
+      "must_support_future_upgrade": true,
+      "notes": "Dedicated standalone folder-link UX build immediately before centering fix26."
     }
   ],
   "portable_profile": {
@@ -108,8 +115,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-folder-setup-ux-fix25",
-  "current_package": "dev/builds/1.3.26-dev-folder-setup-ux-fix25.json",
+  "current_build": "1.3.26-dev-folder-setup-center-fix26",
+  "current_package": "dev/builds/1.3.26-dev-folder-setup-center-fix26.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -122,6 +129,7 @@
     "fix22 authorizes extension-owned standalone tabs without authorizing web origins, performs folder picking in the standalone page, guards unlink during active updates, and recovers stale background-update state.",
     "fix23 retires only obsolete recovery journal/request/lock state when the running semantic version is already newer than the pending recovery target.",
     "fix24 moves DEV update-manifest reads out of the VIENA content script and uses the service worker state API, eliminating raw.githubusercontent.com CORS failures and invalidated-context polling.",
-    "fix25 keeps the hardened standalone-tab authorization path but presents a dedicated folder-link/relink screen, handles picker cancellation as a normal user action, and preserves the worker-safe updater required for the next RELEASE."
+    "fix25 keeps the hardened standalone-tab authorization path but presents a dedicated folder-link/relink screen, handles picker cancellation as a normal user action, and preserves the worker-safe updater required for the next RELEASE.",
+    "fix26 releases the root html width only in standalone folder mode so the dedicated setup card is centered in the full browser tab while preserving the normal 410px toolbar popup."
   ]
 }

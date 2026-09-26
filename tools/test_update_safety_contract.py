@@ -156,6 +156,9 @@ def assert_hardened(label,pkg,dev=False):
         if "const PAGE_WINDOW = typeof window !== 'undefined' ? window : null;" not in updater:
             die(f"{label}: updater is not safe to import from the service worker")
 
+        if "standalone-folder-root" not in popup_html or "document.documentElement.classList.add('standalone-folder-root')" not in popup:
+            die(f"{label}: fix26 standalone centering guard missing")
+
     p=paths(pkg)
     if dev:
         if str(pkg.get("profile","")) != "portable-replay-safe-v1":
