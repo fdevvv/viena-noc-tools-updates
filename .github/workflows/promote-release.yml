@@ -140,11 +140,7 @@ jobs:
             exit 1
           }
 
-          release_version="$(python3 - <<'PY'
-import json
-print(json.load(open("release/latest.json", encoding="utf-8"))["latest"])
-PY
-)"
+          release_version="$(python3 -c 'import json; print(json.load(open("release/latest.json", encoding="utf-8"))["latest"])')"
           branch="release/promote-${release_version}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
 
           git switch -c "$branch"

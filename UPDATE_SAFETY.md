@@ -390,3 +390,19 @@ The rescue:
 `tools/validate_legacy_rescue.py` proves the historical contracts and expected validator behavior. `tools/test_legacy_rescue.py` executes the PowerShell rescue against both historical packages and negative tamper cases.
 
 Both historical quarantine entries were retired on 2026-09-26 only after installation-registry evidence confirmed that no active `1.3.25-release` build remained. That evidence is recorded in `release/public-history.json`. The manual promotion workflow still fails whenever any applicable legacy quarantine is active; never remove a quarantine flag merely to publish.
+
+
+## 21. v1.3.26 pre-release blocker — point 6: runtime identity coherence
+
+Before v1.3.26 can be promoted, DEV must pass a real Chrome regression for the runtime-status panel.
+
+Observed on `1.3.26-dev-channel-branding-fix18`:
+- the extension runtime/background reports build `1.3.26-dev-channel-branding-fix18`;
+- `js/80-update-banner.js` and `js/90-runtime-status.js` still embed `1.3.26-dev-update-portable-bridge-fix17`;
+- therefore already-open operational pages can report the previous build and the popup classifies them as stale, showing `TAB / Recargar` for VIENA, MIRA, GPON, Fuentes and MOICA even though the installed DEV runtime is current.
+
+This is the same class of runtime-coherence defect that was corrected in the 1.3.25 RELEASE rescue line. It must be fixed and tested in DEV before authorizing the 1.3.26 RELEASE.
+
+Permanent rule for future builds: every build-producing path must synchronize the background runtime build ID and all content/runtime-status build IDs from one canonical build identity. A pre-release regression must reject any package containing a stale embedded build ID.
+
+The pre-candidate `release/v1.3.26-modern-fix18-candidate1-package.json` already normalizes these IDs for RELEASE packaging, but it must not be promoted until the source DEV itself is corrected and validated in Chrome.
