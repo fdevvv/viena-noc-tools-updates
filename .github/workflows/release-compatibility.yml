@@ -10,6 +10,8 @@ on:
       - "tools/validate_bootstrap.py"
       - "tools/validate_legacy_rescue.py"
       - "tools/test_legacy_rescue.py"
+      - "tools/validate_bootstrap_v4_repair.py"
+      - "tools/test_bootstrap_v4_repair.py"
       - "tools/run_updater_validate.mjs"
       - "tools/test_release_validator.py"
       - "tools/test_update_safety_contract.py"
@@ -24,6 +26,8 @@ on:
       - "tools/validate_bootstrap.py"
       - "tools/validate_legacy_rescue.py"
       - "tools/test_legacy_rescue.py"
+      - "tools/validate_bootstrap_v4_repair.py"
+      - "tools/test_bootstrap_v4_repair.py"
       - "tools/run_updater_validate.mjs"
       - "tools/test_release_validator.py"
       - "tools/test_update_safety_contract.py"
@@ -50,6 +54,12 @@ jobs:
 
       - name: Execute legacy 1.3.25 rescue integration
         run: python3 tools/test_legacy_rescue.py --require-pwsh
+
+      - name: Validate rescue v4 to v5 repair contract
+        run: python3 tools/validate_bootstrap_v4_repair.py
+
+      - name: Execute rescue v4 to v5 repair integration
+        run: python3 tools/test_bootstrap_v4_repair.py --require-pwsh
 
       - name: Assert updater safety mechanisms
         run: python3 tools/test_update_safety_contract.py

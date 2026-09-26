@@ -77,3 +77,26 @@ The two historical contracts remain `quarantine: true` in
 `release/public-history.json` until the installation registry confirms that
 all active legacy 1.3.25 installations have been remediated. Only then should
 that quarantine flag be retired. Do not disable the gate merely to publish.
+
+
+## Repair for installations that already received rescue v4
+
+The first real v4 rescue exposed a build-identity mismatch: the extension runtime
+reported `1.3.25-bootstrap-release-v4-channel-fix`, while
+`js/90-runtime-status.js` and `js/80-update-banner.js` still reported the
+public bootstrap-v3 build. That makes every open operational tab look permanently
+stale even after reload.
+
+Already-migrated v4 installations must not rerun the legacy rescue script.
+Use the audited one-time repair:
+
+`release/rescue/repair-bootstrap-v4-to-v5.ps1`
+
+Contract:
+
+`release/rescue/bootstrap-v4-to-v5.json`
+
+The repair verifies the complete v4 installation against the audited v4
+integrity manifest, verifies the immutable v5 package, creates a sibling backup,
+writes identity files last, verifies the final target, and rolls back on failure.
+It preserves Chrome storage and the unpacked installation directory.
