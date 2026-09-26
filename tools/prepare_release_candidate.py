@@ -169,7 +169,6 @@ def promote(dev_pkg, release_version, release_build, generated_at, current_relea
         popup_html,
         count=1,
     )
-    popup_html = popup_html.replace("Probar aviso en VIENA DEV", "Probar aviso en VIENA")
     set_text(files, "popup.html", popup_html)
 
     popup = text(files, "popup.js")
@@ -223,6 +222,10 @@ def promote(dev_pkg, release_version, release_build, generated_at, current_relea
     for token in ("standaloneFolderPage", "standaloneFolderSelect", "standalone-folder-root"):
         if token not in ph:
             die(f"standalone UI token missing: {token}")
+    if 'id="testUpdateNotificationRow" style="display:none"' not in ph:
+        die("DEV-only update test action is not hidden by default")
+    if "testUpdateNotificationRow?.remove();" not in pj:
+        die("RELEASE popup does not remove DEV-only update test action")
     for token in (
         "performStandaloneFolderLink",
         "closeStandaloneFolderPage",
