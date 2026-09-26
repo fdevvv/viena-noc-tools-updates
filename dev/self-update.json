@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-update-registry-hardening-fix27",
+  "build": "1.3.26-dev-shared-assignments-migration-fix28",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-registry-hardening-fix27.json",
-  "package_sha256": "b3635314655abbf5bd1776400ad9ee1093aeef9fa588ac700bd9633eea771313",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-shared-assignments-migration-fix28.json",
+  "package_sha256": "18de219378832fd58832013a7d42997e0ecd9e46742a769b59d51f54f7e53445",
   "notes": [
-    "Fix27 corrige la identidad de actualización RELEASE y mantiene compatibilidad cuando una RELEASE anterior no envía expectedBuild.",
-    "El registro de instalaciones reintenta automáticamente fallos transitorios y reajusta el heartbeat a 5 minutos.",
-    "Las RELEASE futuras pueden publicar build explícito para validación fuerte sin romper el salto desde versiones anteriores."
+    "Fix28 incorpora las plantillas de Asignaciones validadas como catálogo compartido para todos los operadores.",
+    "Migra las plantillas locales equivalentes al catálogo compartido sin duplicarlas y conserva personalizaciones mediante overrides locales.",
+    "Mantiene el fix27 de identidad de actualización RELEASE, heartbeat de 5 minutos y reintento automático del registro."
   ]
 }
