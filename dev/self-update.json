@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-registry-coldstart-fix29",
+  "build": "1.3.26-dev-registry-backoff-fix30",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-registry-coldstart-fix29.json",
-  "package_sha256": "16b034dc260a640c3b248282e7c3590b807127ce3b1ea73504df34fdb1187c6e",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-registry-backoff-fix30.json",
+  "package_sha256": "07f583ec03f64b485c3d64a4343971712b077507451873dc90b98445bb8a62bf",
   "notes": [
-    "Fix29 evita que abrir el popup fuerce un registro síncrono y muestre falsos errores por arranque en frío.",
-    "El registro automático tolera hasta 20 segundos de respuesta y mantiene retry automático.",
-    "Los timeouts transitorios se muestran como reintento automático, no como error definitivo."
+    "Fix30 agrega backoff progresivo del registro: 1, 5 y 15 minutos ante fallos consecutivos.",
+    "Un registro exitoso reinicia el backoff y limpia el estado de error.",
+    "Conserva fix29: popup no bloqueante, timeout tolerante a cold start y reintento automático."
   ]
 }

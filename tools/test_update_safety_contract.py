@@ -171,6 +171,9 @@ def assert_hardened(label,pkg,dev=False):
         if "await refreshRegistrySyncStatus(false);" not in popup or "reason:'popup_open'" not in popup:
             die(f"{label}: fix29 registry popup nonblocking guard missing")
 
+        if "INSTALL_REGISTRY_RETRY_DELAYS_MINUTES = [1,5,15]" not in background or "INSTALL_REGISTRY_RETRY_LEVEL_KEY" not in background:
+            die(f"{label}: fix30 registry backoff guard missing")
+
         assignments=text_file(pkg,"js/40-templates.js")
         for token in [
             "name: 'CIERRE'",
