@@ -129,8 +129,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-registry-coldstart-fix29",
-  "current_package": "dev/builds/1.3.26-dev-registry-coldstart-fix29.json",
+  "current_build": "1.3.26-dev-registry-backoff-fix30",
+  "current_package": "dev/builds/1.3.26-dev-registry-backoff-fix30.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -147,6 +147,7 @@
     "fix26 releases the root html width only in standalone folder mode so the dedicated setup card is centered in the full browser tab while preserving the normal 410px toolbar popup.",
     "fix27 hardens RELEASE update identity compatibility plus installation-registry retry and 5-minute heartbeat.",
     "fix28 promotes validated operator Assignments to the shared catalog and migrates equivalent local templates without data loss.",
-    "fix29 hardens installation-registry cold-start behavior and removes forced popup sync."
+    "fix29 hardens installation-registry cold-start behavior and removes forced popup sync.",
+    "fix30 adds progressive 1/5/15-minute installation-registry backoff and resets it after a successful heartbeat."
   ]
 }
