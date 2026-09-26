@@ -113,7 +113,7 @@ def package_text(target,path):
         die(f"DEV candidate cannot decode {path}: {e}")
 
 def const_value(source,name,path):
-    m=re.search(rf"\\bconst\\s+{re.escape(name)}\\s*=\\s*['\\\"]([^'\\\"]+)['\\\"]",source)
+    m=re.search(rf"\bconst\s+{re.escape(name)}\s*=\s*['\"]([^'\"]+)['\"]",source)
     if not m:
         die(f"DEV candidate missing {name} in {path}")
     return m.group(1)
