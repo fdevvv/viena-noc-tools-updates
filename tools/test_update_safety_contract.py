@@ -133,6 +133,8 @@ def assert_hardened(label,pkg,dev=False):
                 die(f"{label}: fix22 standalone/recovery token missing: {token}")
         if "async function pickAndLink({ requireRuntimeMatch = true } = {})" not in updater:
             die(f"{label}: recovery-aware folder relink contract missing")
+        if "Recuperación anterior descartada." not in background:
+            die(f"{label}: obsolete recovery journal retirement missing")
 
     p=paths(pkg)
     if dev:

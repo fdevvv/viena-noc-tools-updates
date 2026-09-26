@@ -62,6 +62,13 @@
       "updater_sha256": "ca4ed44b96282ee4bf994f01907f66c47b20dc47018185d7c338e93b8ade3b6c",
       "must_support_future_upgrade": true,
       "notes": "Validated real background-updater target immediately before standalone folder-link/recovery fix22."
+    },
+    {
+      "id": "dev-fix22",
+      "package": "dev/builds/1.3.26-dev-folder-link-recovery-fix22.json",
+      "updater_sha256": "b1706c0d6ff08200dbe89c2b9a6b254947861d6790699656277f45a7a98cb367",
+      "must_support_future_upgrade": true,
+      "notes": "Standalone folder-link/recovery fix. Must remain able to reach future DEV targets."
     }
   ],
   "portable_profile": {
@@ -87,8 +94,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-folder-link-recovery-fix22",
-  "current_package": "dev/builds/1.3.26-dev-folder-link-recovery-fix22.json",
+  "current_build": "1.3.26-dev-stale-journal-retirement-fix23",
+  "current_package": "dev/builds/1.3.26-dev-stale-journal-retirement-fix23.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -98,6 +105,7 @@
     "fix19 synchronizes background, update-banner and runtime-status build identity to eliminate false TAB/Recargar states.",
     "fix20 hands update execution from the toolbar popup to the service worker after folder authorization and adds a persistent VIENA progress overlay.",
     "fix21 is an intentionally minimal test target for the real fix20 background updater; functional code is unchanged apart from coherent build identity.",
-    "fix22 authorizes extension-owned standalone tabs without authorizing web origins, performs folder picking in the standalone page, guards unlink during active updates, and recovers stale background-update state."
+    "fix22 authorizes extension-owned standalone tabs without authorizing web origins, performs folder picking in the standalone page, guards unlink during active updates, and recovers stale background-update state.",
+    "fix23 retires only obsolete recovery journal/request/lock state when the running semantic version is already newer than the pending recovery target."
   ]
 }
