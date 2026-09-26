@@ -28,6 +28,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: promote-modern-release
@@ -122,11 +123,36 @@ jobs:
         run: |
           git diff --exit-code -- version.json release/bootstrap.json
 
-      - name: Commit pointer only after every gate passed
+      - name: Create protected pointer-only promotion PR
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add release/latest.json
           git diff --cached --quiet && { echo "No pointer change to publish"; exit 1; }
-          git commit -m "release: promote modern $CANDIDATE_PATH"
-          git push origin HEAD:main
+
+          staged_files="$(git diff --cached --name-only)"
+          test "$staged_files" = "release/latest.json" || {
+            echo "Promotion must stage release/latest.json only."
+            printf '%s\n' "$staged_files"
+            exit 1
+          }
+
+          release_version="$(python3 - <<'PY'
+import json
+print(json.load(open("release/latest.json", encoding="utf-8"))["latest"])
+PY
+)"
+          branch="release/promote-${release_version}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+          git switch -c "$branch"
+          git commit -m "release: promote modern ${release_version}"
+          git push origin "HEAD:$branch"
+
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "Release: promote ${release_version}" \
+            --body "Pointer-only RELEASE promotion created by the authorized Promote modern RELEASE workflow after all pre-publication gates passed. Merge only after the required Main protection gate is green."
