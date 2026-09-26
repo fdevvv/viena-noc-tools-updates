@@ -41,6 +41,13 @@
       "updater_sha256": "c4fb3f5d2e3991ec7f37e05ad8c550628ccb5422e7c31d040b09a31f278e8df3",
       "must_support_future_upgrade": true,
       "notes": "Channel-branding build with fix17 updater. Historical source for users upgrading to fix19 and later."
+    },
+    {
+      "id": "dev-fix19",
+      "package": "dev/builds/1.3.26-dev-runtime-coherence-fix19.json",
+      "updater_sha256": "c4fb3f5d2e3991ec7f37e05ad8c550628ccb5422e7c31d040b09a31f278e8df3",
+      "must_support_future_upgrade": true,
+      "notes": "Runtime-coherence build immediately before background-owned update flow."
     }
   ],
   "portable_profile": {
@@ -66,14 +73,15 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-runtime-coherence-fix19",
-  "current_package": "dev/builds/1.3.26-dev-runtime-coherence-fix19.json",
+  "current_build": "1.3.26-dev-background-update-overlay-fix20",
+  "current_package": "dev/builds/1.3.26-dev-background-update-overlay-fix20.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
     "While fix13/fix15/fix16/fix17 may still exist, DEV publication uses portable-replay-safe-v1 dev-delta packages over the common path subset.",
     "fix17 makes updater.html/updater.js optional and replay-safe recovery compatible.",
     "fix18 removes hardcoded DEV branding from popup.js so the same UI source renders DEV or RELEASE from the runtime channel.",
-    "fix19 synchronizes background, update-banner and runtime-status build identity to eliminate false TAB/Recargar states."
+    "fix19 synchronizes background, update-banner and runtime-status build identity to eliminate false TAB/Recargar states.",
+    "fix20 hands update execution from the toolbar popup to the service worker after folder authorization and adds a persistent VIENA progress overlay."
   ]
 }

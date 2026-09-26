@@ -72,6 +72,47 @@ def assert_hardened(label,pkg,dev=False):
     if "recoverInterruptedLocalUpdate" not in popup:
         die(f"{label}: popup recovery missing")
 
+    if dev:
+        runtime_status=text_file(pkg,"js/90-runtime-status.js")
+        popup_html=text_file(pkg,"popup.html")
+        feature_tokens={
+          "background.js":[
+            "VIENA_BACKGROUND_UPDATE_START",
+            "BACKGROUND_UPDATE_STATE_KEY",
+            "importScripts('js/95-local-updater.js')",
+            "resumeDetachedUpdateIfNeeded"
+          ],
+          "popup.js":[
+            "VIENA_BACKGROUND_UPDATE_START",
+            "refreshBackgroundUpdateState"
+          ],
+          "popup.html":[
+            "backgroundUpdatePanel",
+            "La actualización continúa aunque cierres este popup"
+          ],
+          "js/90-runtime-status.js":[
+            "VIENA_BACKGROUND_UPDATE_PROGRESS",
+            "Actualizando VIENA NOC Tools",
+            "Podés seguir usando el resto del navegador"
+          ],
+          "js/95-local-updater.js":[
+            "backgroundSupported",
+            "globalThis.VienaLocalUpdater = api",
+            "onProgress"
+          ]
+        }
+        sources={
+          "background.js":background,
+          "popup.js":popup,
+          "popup.html":popup_html,
+          "js/90-runtime-status.js":runtime_status,
+          "js/95-local-updater.js":updater
+        }
+        for path,tokens in feature_tokens.items():
+            for token in tokens:
+                if token not in sources[path]:
+                    die(f"{label}: background-update feature token missing in {path}: {token}")
+
     p=paths(pkg)
     if dev:
         if str(pkg.get("profile","")) != "portable-replay-safe-v1":
