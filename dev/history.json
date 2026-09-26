@@ -27,12 +27,22 @@
       "updater_sha256": "3db7723145d5f567da7601b54bfd55fb4599a73a2ee0f269c09e60ef5bcd7878",
       "must_support_future_upgrade": true,
       "notes": "Hardened updater before portable-profile fix. Rejects updater.html/updater.js."
+    },
+    {
+      "id": "dev-fix17",
+      "package": "dev/builds/1.3.26-dev-update-portable-bridge-fix17.json",
+      "updater_sha256": "c4fb3f5d2e3991ec7f37e05ad8c550628ccb5422e7c31d040b09a31f278e8df3",
+      "must_support_future_upgrade": true,
+      "notes": "Portable replay-safe updater before the channel-branding fix. Must remain able to reach future DEV builds."
     }
   ],
   "portable_profile": {
     "id": "portable-replay-safe-v1",
     "mode": "dev-delta",
-    "forbidden_package_paths": ["updater.html", "updater.js"],
+    "forbidden_package_paths": [
+      "updater.html",
+      "updater.js"
+    ],
     "required_root_files": [
       "manifest.json",
       "build.json",
@@ -49,12 +59,13 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-update-portable-bridge-fix17",
-  "current_package": "dev/builds/1.3.26-dev-update-portable-bridge-fix17.json",
+  "current_build": "1.3.26-dev-channel-branding-fix18",
+  "current_package": "dev/builds/1.3.26-dev-channel-branding-fix18.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
-    "While fix13/fix15/fix16 may still exist, DEV publication uses portable-replay-safe-v1 dev-delta packages over the common path subset.",
-    "fix17 makes updater.html/updater.js optional in the new updater and allows replay-safe DEV delta recovery."
+    "While fix13/fix15/fix16/fix17 may still exist, DEV publication uses portable-replay-safe-v1 dev-delta packages over the common path subset.",
+    "fix17 makes updater.html/updater.js optional and replay-safe recovery compatible.",
+    "fix18 removes hardcoded DEV branding from popup.js so the same UI source renders DEV or RELEASE from the runtime channel."
   ]
 }
