@@ -85,16 +85,11 @@ def main():
     skipped = 0
     rescue_routes = 0
 
-    modern_bootstrap = next(
-        (
-            x for x in history.get("contracts", [])
-            if x.get("id") == "release-1.3.25-bootstrap-v3"
-            and x.get("route") == "modern"
-        ),
-        None
-    )
-    if not modern_bootstrap:
-        die("public-history no contiene el bootstrap-v3 como contrato modern")
+    rescue_spec = json.loads((root / str(history.get("legacy_rescue_profile", ""))).read_text(encoding="utf-8"))
+    rescue_target = rescue_spec.get("target_bootstrap") or {}
+    rescue_target_rel = str(rescue_target.get("package", ""))
+    if not rescue_target_rel or not (root / rescue_target_rel).exists():
+        die("legacy rescue target is missing from the matrix")
 
     for src in history.get("contracts", []):
         if not src.get("must_support_future_upgrade", False):
@@ -110,7 +105,7 @@ def main():
                 die(f"{src.get('id')}: rescue_profile inconsistente")
             print(
                 f"PASS rescue route registered: {src.get('id')} -> "
-                f"{modern_bootstrap.get('id')} -> {target_rel}"
+                f"{rescue_target.get('build')} -> {target_rel}"
             )
             rescue_routes += 1
             tested += 1
