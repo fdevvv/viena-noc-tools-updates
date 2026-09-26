@@ -111,6 +111,13 @@
       "updater_sha256": "b1706c0d6ff08200dbe89c2b9a6b254947861d6790699656277f45a7a98cb367",
       "must_support_future_upgrade": true,
       "notes": "Immediate predecessor of the operator release-history fix31."
+    },
+    {
+      "id": "dev-fix31",
+      "package": "dev/builds/1.3.26-dev-operator-release-history-fix31.json",
+      "updater_sha256": "b1706c0d6ff08200dbe89c2b9a6b254947861d6790699656277f45a7a98cb367",
+      "must_support_future_upgrade": true,
+      "notes": "Operator-facing RELEASE history fix immediately before runtime/folder coherence fix32."
     }
   ],
   "portable_profile": {
@@ -136,8 +143,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-operator-release-history-fix31",
-  "current_package": "dev/builds/1.3.26-dev-operator-release-history-fix31.json",
+  "current_build": "1.3.26-dev-release-runtime-folder-coherence-fix32",
+  "current_package": "dev/builds/1.3.26-dev-release-runtime-folder-coherence-fix32.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -156,6 +163,7 @@
     "fix28 promotes validated operator Assignments to the shared catalog and migrates equivalent local templates without data loss.",
     "fix29 hardens installation-registry cold-start behavior and removes forced popup sync.",
     "fix30 adds progressive 1/5/15-minute installation-registry backoff and resets it after a successful heartbeat.",
-    "fix31 restores the operator-facing RELEASE history through 1.3.29 and keeps developer-only implementation details out of that UI."
+    "fix31 restores the operator-facing RELEASE history through 1.3.29 and keeps developer-only implementation details out of that UI.",
+    "fix32 verifies linked-folder identity with read permission when possible, never renders unverified cached identity as current, hides the update-banner test action outside DEV, and treats stale registry identity as synchronizing."
   ]
 }
