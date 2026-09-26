@@ -1,16 +1,17 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.26",
+  "latest": "1.3.27",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Actualizador reforzado con recuperación de interrupciones, bloqueo de concurrencia, rollback verificado y control de integridad.",
-    "Se preservan Asignaciones, Completar Tarea, MIRA 5, GPON, MOICA2 y Fuentes/RPHY/VCCAP validados.",
-    "Se corrige la coherencia visual de canal e identidad entre DEV y RELEASE."
+    "Actualización más robusta: el proceso continúa aunque se cierre el popup.",
+    "El progreso de la actualización se muestra directamente en VIENA mientras el resto del navegador sigue disponible.",
+    "Asignaciones permite usar las plantillas definidas y crear nuevas desde la selección real de Tipificaciones de tarea.",
+    "Se preservan las funciones operativas existentes y se refuerza la estabilidad y coherencia del actualizador."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.26-modern-fix18-candidate1-package.json",
-  "package_sha256": "5d2ecc86f95af8c5e574a2337126a22065cd405b20987c6a6909699664c25aaf",
-  "source_package": "release/v1.3.26-modern-fix18-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.27-modern-background-updater-overlay-candidate1-package.json",
+  "package_sha256": "7c22920c399c03944d5477db6d4b13b7b4774dfc6fbe51d5c44caec449763b37",
+  "source_package": "release/v1.3.27-modern-background-updater-overlay-candidate1-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
