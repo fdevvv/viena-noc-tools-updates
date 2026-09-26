@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import base64, hashlib, json, pathlib, subprocess, sys, tempfile
+import base64, hashlib, json, pathlib, re, subprocess, sys, tempfile
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 
