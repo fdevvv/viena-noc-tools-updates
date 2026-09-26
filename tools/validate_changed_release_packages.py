@@ -90,7 +90,23 @@ def validate_runtime_identity(path, pkg):
         die(f"{path}: stale embedded runtime build IDs: {stale}")
 
 
-EXPECTED_FIX26_UPDATER_SHA256 = "b1706c0d6ff08200dbe89c2b9a6b254947861d6790699656277f45a7a98cb367"
+def current_validated_dev_updater_sha256():
+    pointer_path = ROOT / "dev/self-update.json"
+    pointer = json.loads(pointer_path.read_text(encoding="utf-8"))
+    url = str(pointer.get("package_url", ""))
+    rel = None
+    for marker in ("/refs/heads/main/", "/main/"):
+        if marker in url:
+            rel = url.split(marker, 1)[1]
+            break
+    if not rel:
+        die("dev/self-update.json has unsupported package_url")
+    package_path = ROOT / rel
+    if not package_path.exists():
+        die(f"current validated DEV package missing: {rel}")
+    dev_pkg = json.loads(package_path.read_text(encoding="utf-8"))
+    return hashlib.sha256(package_file_bytes(dev_pkg, "js/95-local-updater.js")).hexdigest()
+
 
 def semver(value):
     try:
@@ -115,8 +131,13 @@ def validate_fix26_regressions(path, pkg):
     banner = text_file(pkg, "js/80-update-banner.js")
     updater = text_file(pkg, "js/95-local-updater.js")
 
-    if hashlib.sha256(package_file_bytes(pkg, "js/95-local-updater.js")).hexdigest() != EXPECTED_FIX26_UPDATER_SHA256:
-        die(f"{path}: js/95-local-updater.js drifted from the validated fix26 updater")
+    actual_updater_sha = hashlib.sha256(package_file_bytes(pkg, "js/95-local-updater.js")).hexdigest()
+    expected_updater_sha = current_validated_dev_updater_sha256()
+    if actual_updater_sha != expected_updater_sha:
+        die(
+            f"{path}: js/95-local-updater.js drifted from the current validated DEV updater "
+            f"(candidate={actual_updater_sha}, dev={expected_updater_sha})"
+        )
 
     if "&& !sender?.tab &&" in background:
         die(f"{path}: legacy sender.tab rejection returned")
