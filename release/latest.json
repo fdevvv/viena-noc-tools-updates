@@ -1,17 +1,17 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.27",
+  "latest": "1.3.28",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Actualización más robusta: el proceso continúa aunque se cierre el popup.",
-    "El progreso de la actualización se muestra directamente en VIENA mientras el resto del navegador sigue disponible.",
-    "Asignaciones permite usar las plantillas definidas y crear nuevas desde la selección real de Tipificaciones de tarea.",
-    "Se preservan las funciones operativas existentes y se refuerza la estabilidad y coherencia del actualizador."
+    "Se corrige la vinculación y revinculación de la carpeta de VIENA NOC Tools desde una pestaña dedicada.",
+    "La pantalla de vinculación queda centrada y guía al operador para seleccionar la carpeta raíz correcta.",
+    "El aviso de actualización consulta el estado desde el service worker, evitando bloqueos CORS y estados inválidos.",
+    "Se conserva la actualización en segundo plano, el overlay de progreso y las funciones de Asignaciones."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.27-modern-background-updater-overlay-candidate1-package.json",
-  "package_sha256": "7c22920c399c03944d5477db6d4b13b7b4774dfc6fbe51d5c44caec449763b37",
-  "source_package": "release/v1.3.27-modern-background-updater-overlay-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.28-folder-link-recovery-banner-ux-fix26-candidate2-package.json",
+  "package_sha256": "b3bd5f15ab067f7823247eb6ece7819f90ee29961fe3849417c6230958fc5633",
+  "source_package": "release/v1.3.28-folder-link-recovery-banner-ux-fix26-candidate2-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
