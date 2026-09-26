@@ -51,6 +51,15 @@ jobs:
       - name: Validate frozen legacy bootstrap
         run: python3 tools/validate_bootstrap.py --public
 
+      - name: Validate changed immutable RELEASE packages
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
+        run: python3 tools/validate_changed_release_packages.py
+
       - name: Validate DEV historical updater matrix
         run: python3 tools/validate_dev_matrix.py
 
