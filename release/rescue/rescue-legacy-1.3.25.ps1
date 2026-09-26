@@ -8,8 +8,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$PackageUrl = "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.25-bootstrap-v3-package.json"
-$PackageSha256 = "c1ecc7dbf7f5deca115ee6a05e1dce598aca9c1b94e940ce7691e444152a65f5"
+$PackageUrl = "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/rescue/v1.3.25-bootstrap-release-v4-channel-fix-package.json"
+$PackageSha256 = "60847e341df9eb514ec2fef3f1210bccea824d8af0272172d2016200d88b71f6"
 $ExpectedSourceVersion = "1.3.25"
 $ExpectedSourceBuild = "1.3.25-release"
 $ExpectedSourceChannel = "RELEASE"
@@ -18,7 +18,7 @@ $AllowedSourceUpdaterSha256 = @(
   "a83d37f077e466ac9591eee48cf52dcdacb62fe264be3476eba65616763d61f4"
 )
 $ExpectedTargetVersion = "1.3.25"
-$ExpectedTargetBuild = "1.3.25-bootstrap-release-v3"
+$ExpectedTargetBuild = "1.3.25-bootstrap-release-v4-channel-fix"
 $ExpectedTargetChannel = "RELEASE"
 $ExpectedModernPointer = "release/latest.json"
 
@@ -203,6 +203,9 @@ try {
   $popupText = [System.Text.Encoding]::UTF8.GetString($decoded["popup.js"])
   if ($backgroundText -notlike "*$ExpectedModernPointer*" -or $popupText -notlike "*$ExpectedModernPointer*") {
     throw "El bootstrap objetivo no usa release/latest.json en background/popup."
+  }
+  if ($popupText -notlike "*const channelLabel = isDevRuntime() ? 'DEV' : 'RELEASE'*") {
+    throw "El bootstrap objetivo no contiene el render dinámico DEV/RELEASE del encabezado."
   }
 
   if ($null -eq $targetIntegrity.files) {

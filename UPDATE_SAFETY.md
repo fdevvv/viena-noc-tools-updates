@@ -341,9 +341,9 @@ Because the permanent bootstrap is also 1.3.25 and `version.json` must remain sa
 
 The definitive route is:
 
-`historical 1.3.25-release -> audited one-time rescue -> 1.3.25-bootstrap-release-v3 -> release/latest.json -> future modern RELEASE`.
+`historical 1.3.25-release -> audited one-time rescue -> 1.3.25-bootstrap-release-v4-channel-fix -> release/latest.json -> future modern RELEASE`.
 
-The rescue profile is `release/rescue/legacy-1.3.25.json`; the executable procedure is `release/rescue/rescue-legacy-1.3.25.ps1`.
+The rescue profile is `release/rescue/legacy-1.3.25.json`; the executable procedure is `release/rescue/rescue-legacy-1.3.25.ps1`. The public 1.3.24 bootstrap remains frozen at v3; v4 is a rescue-only immutable derivative whose changes are limited to build/integrity metadata and popup channel branding.
 
 The rescue:
 - verifies version/build/channel and the exact historical updater SHA-256 fingerprint;

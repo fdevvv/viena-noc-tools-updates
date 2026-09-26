@@ -21,12 +21,13 @@
     }
   ],
   "target_bootstrap": {
-    "package": "release/v1.3.25-bootstrap-v3-package.json",
-    "package_sha256": "c1ecc7dbf7f5deca115ee6a05e1dce598aca9c1b94e940ce7691e444152a65f5",
+    "package": "release/rescue/v1.3.25-bootstrap-release-v4-channel-fix-package.json",
+    "package_sha256": "60847e341df9eb514ec2fef3f1210bccea824d8af0272172d2016200d88b71f6",
     "version": "1.3.25",
-    "build": "1.3.25-bootstrap-release-v3",
+    "build": "1.3.25-bootstrap-release-v4-channel-fix",
     "channel": "RELEASE",
-    "modern_pointer": "release/latest.json"
+    "modern_pointer": "release/latest.json",
+    "purpose": "Rescue-only immutable bootstrap derived from public bootstrap-v3 with channel-branding correction."
   },
   "rescue_script": "release/rescue/rescue-legacy-1.3.25.ps1",
   "policy": {
@@ -35,6 +36,18 @@
     "identity_files_last": true,
     "verify_after_write": true,
     "rollback_on_failure": true,
-    "require_source_updater_fingerprint": true
+    "require_source_updater_fingerprint": true,
+    "rescue_target_changes_limited_to": [
+      "background.js",
+      "build.json",
+      "integrity-manifest.json",
+      "popup.html",
+      "popup.js"
+    ]
+  },
+  "base_public_bootstrap": {
+    "package": "release/v1.3.25-bootstrap-v3-package.json",
+    "package_sha256": "c1ecc7dbf7f5deca115ee6a05e1dce598aca9c1b94e940ce7691e444152a65f5",
+    "build": "1.3.25-bootstrap-release-v3"
   }
 }

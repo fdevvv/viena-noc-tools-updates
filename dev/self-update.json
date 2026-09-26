@@ -1,15 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-update-portable-bridge-fix17",
+  "build": "1.3.26-dev-channel-branding-fix18",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-portable-bridge-fix17.json",
-  "package_sha256": "ab3f6a9d2e5a13ca3e98888d5be48755d132d0e267ce8a43f52e761cb4bce7cf",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-channel-branding-fix18.json",
+  "package_sha256": "38da557f7598e7444ac455949934616927d3f8609c14d4bd953bbe615b002d03",
   "notes": [
-    "Corrige el fork de compatibilidad DEV descubierto entre fix13 y fix15.",
-    "Paquete portable replay-safe consumible por los updaters historicos fix13, fix15 y fix16.",
-    "No incluye updater.html/updater.js en el payload, pero el updater nuevo los acepta como artifacts opcionales para evitar futuros forks.",
-    "Mantiene journal, recovery, lock exclusivo, rollback verificado, bloqueo de downgrade y health-check post-reload.",
-    "No modifica la logica funcional validada de VIENA, Asignaciones, MIRA, GPON, MOICA, Fuentes/RPHY/VCCAP, motivos ni toasts."
+    "Corrige el encabezado del popup: DEV se muestra sólo en el canal DEV y RELEASE se renderiza como RELEASE.",
+    "El fallback HTML deja de hardcodear un canal para evitar inconsistencias antes de inicializar popup.js.",
+    "Mantiene el perfil portable replay-safe y toda la seguridad de actualización de fix17.",
+    "No modifica la lógica funcional validada de VIENA, Asignaciones, MIRA, GPON, MOICA, Fuentes/RPHY/VCCAP, motivos ni toasts."
   ]
 }

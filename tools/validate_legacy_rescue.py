@@ -63,6 +63,24 @@ def main():
     if spec.get("schema") != 1 or spec.get("role") != "legacy-release-rescue":
         die("legacy rescue spec schema/role invalid")
 
+    base = spec.get("base_public_bootstrap") or {}
+    base_rel = str(base.get("package", ""))
+    base_path = root / base_rel
+    if not base_path.exists():
+        die(f"base public bootstrap package missing: {base_rel}")
+    base_raw = base_path.read_bytes()
+    base_sha = sha256_bytes(base_raw)
+    if base_sha != str(base.get("package_sha256", "")).lower():
+        die(f"base public bootstrap SHA mismatch: {base_sha}")
+    if base_rel != str(bootstrap_cfg.get("package_path", "")):
+        die("base public bootstrap != release/bootstrap.json package")
+    if base_sha != str(bootstrap_cfg.get("package_sha256", "")).lower():
+        die("base public bootstrap SHA != release/bootstrap.json SHA")
+
+    base_pkg = json.loads(base_raw.decode("utf-8"))
+    if str(base_pkg.get("build", "")) != str(base.get("build", "")):
+        die("base public bootstrap build mismatch")
+
     target = spec.get("target_bootstrap") or {}
     target_rel = str(target.get("package", ""))
     target_path = root / target_rel
@@ -73,10 +91,6 @@ def main():
     target_sha = sha256_bytes(target_raw)
     if target_sha != str(target.get("package_sha256", "")).lower():
         die(f"rescue target SHA mismatch: {target_sha}")
-    if target_rel != str(bootstrap_cfg.get("package_path", "")):
-        die("rescue target package != release/bootstrap.json package")
-    if target_sha != str(bootstrap_cfg.get("package_sha256", "")).lower():
-        die("rescue target SHA != release/bootstrap.json SHA")
 
     target_pkg = json.loads(target_raw.decode("utf-8"))
     if str(target_pkg.get("version", "")) != str(target.get("version", "")):
@@ -86,6 +100,24 @@ def main():
     if str(target_pkg.get("channel", "")).upper() != str(target.get("channel", "")).upper():
         die("rescue target channel mismatch")
 
+    allowed_changes = set((spec.get("policy") or {}).get("rescue_target_changes_limited_to") or [])
+    base_files = {str(x.get("path", "")): x for x in base_pkg.get("files", [])}
+    target_files = {str(x.get("path", "")): x for x in target_pkg.get("files", [])}
+    if set(base_files) != set(target_files):
+        die("rescue target changed the bootstrap file set")
+    changed = {
+        path for path in base_files
+        if str(base_files[path].get("sha256", "")).lower() != str(target_files[path].get("sha256", "")).lower()
+    }
+    if not changed:
+        die("rescue target is unexpectedly byte-identical to the public bootstrap")
+    unexpected = sorted(changed - allowed_changes)
+    if unexpected:
+        die(f"rescue target changed unauthorized files: {unexpected}")
+    required_changes = {"background.js", "build.json", "integrity-manifest.json", "popup.js"}
+    if not required_changes.issubset(changed):
+        die(f"rescue target missing expected controlled changes: {sorted(required_changes - changed)}")
+
     _, build_sha = extract(target_pkg, "build.json")
     build = json.loads(extract(target_pkg, "build.json")[0].decode("utf-8"))
     if int(build.get("updater_contract", 0)) < 2:
@@ -94,6 +126,15 @@ def main():
         die("bootstrap release compatibility floor mismatch")
     if str(build.get("update_channel", "")) != str(target.get("modern_pointer", "")):
         die("bootstrap does not switch to modern pointer")
+
+    popup = extract(target_pkg, "popup.js")[0].decode("utf-8")
+    popup_html = extract(target_pkg, "popup.html")[0].decode("utf-8")
+    if "const channelLabel = isDevRuntime() ? 'DEV' : 'RELEASE'" not in popup:
+        die("rescue target popup does not render channel dynamically")
+    if "brandVersionEl.textContent = `v${chrome.runtime.getManifest().version} DEV" in popup:
+        die("rescue target still hardcodes DEV in runtime branding")
+    if 'class="version">v1.3.25 DEV' in popup_html:
+        die("rescue target fallback HTML still hardcodes DEV")
 
     history_by_id = {str(x.get("id")): x for x in history.get("contracts", [])}
     active_quarantine = []
@@ -174,6 +215,8 @@ def main():
             + ", ".join(active_quarantine)
         )
 
+    print(f"PASS legacy rescue base: {base_rel} sha256={base_sha}")
+    print(f"PASS legacy rescue controlled changes: {sorted(changed)}")
     print(f"PASS legacy rescue target: {target_rel} sha256={target_sha}")
     print("PASS legacy rescue script is bound to the audited historical updater fingerprints")
     if active_quarantine:
