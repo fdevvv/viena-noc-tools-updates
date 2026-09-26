@@ -1,15 +1,16 @@
 {
-  "latest": "1.3.25",
+  "schema": 2,
+  "role": "modern-release",
+  "latest": "1.3.26",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Canal moderno de VIENA NOC Tools.",
-    "Bootstrap de actualización y recuperación reforzado."
+    "Actualizador reforzado con recuperación de interrupciones, bloqueo de concurrencia, rollback verificado y control de integridad.",
+    "Se preservan Asignaciones, Completar Tarea, MIRA 5, GPON, MOICA2 y Fuentes/RPHY/VCCAP validados.",
+    "Se corrige la coherencia visual de canal e identidad entre DEV y RELEASE."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.25-bootstrap-v3-package.json",
-  "package_sha256": "c1ecc7dbf7f5deca115ee6a05e1dce598aca9c1b94e940ce7691e444152a65f5",
-  "schema": 2,
-  "role": "modern-release",
-  "source_package": "release/v1.3.25-bootstrap-v3-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.26-modern-fix18-candidate1-package.json",
+  "package_sha256": "5d2ecc86f95af8c5e574a2337126a22065cd405b20987c6a6909699664c25aaf",
+  "source_package": "release/v1.3.26-modern-fix18-candidate1-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
