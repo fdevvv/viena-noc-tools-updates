@@ -41,6 +41,22 @@
       "must_support_future_upgrade": true,
       "route": "modern",
       "notes": "Permanent 1.3.24 bootstrap. Uses release/latest.json after installation and updater contract >=2."
+    },
+    {
+      "id": "release-1.3.26-modern",
+      "version": "1.3.26",
+      "package": "release/v1.3.26-modern-fix18-candidate1-package.json",
+      "must_support_future_upgrade": true,
+      "route": "modern",
+      "notes": "First public modern RELEASE after the permanent bootstrap. Reads release/latest.json and must remain able to skip directly to future compatible RELEASE packages."
+    },
+    {
+      "id": "release-1.3.27-modern",
+      "version": "1.3.27",
+      "package": "release/v1.3.27-modern-background-updater-overlay-candidate1-package.json",
+      "must_support_future_upgrade": true,
+      "route": "modern",
+      "notes": "Public RELEASE with updater execution owned by the service worker and VIENA progress overlay. Must remain able to skip directly to future compatible RELEASE packages."
     }
   ],
   "modern_pointer": "release/latest.json",
