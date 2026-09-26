@@ -146,6 +146,36 @@ def main():
     if str(base.get("build", "")) in runtime_status or str(base.get("build", "")) in update_banner:
         die("rescue target still contains stale public-bootstrap content build identity")
 
+    # Functional-equivalence guard: rescue v5 may change only identity/branding
+    # plumbing. Operational behavior must remain byte-equivalent to the frozen
+    # public bootstrap after normalizing the intended identity substitutions.
+    base_build = str(base.get("build", ""))
+    base_background = extract(base_pkg, "background.js")[0].decode("utf-8")
+    target_background = extract(target_pkg, "background.js")[0].decode("utf-8")
+    if target_background.replace(target_build, base_build) != base_background:
+        die("rescue target background.js changed behavior beyond VIENA_BUILD_ID")
+
+    base_runtime_status = extract(base_pkg, "js/90-runtime-status.js")[0].decode("utf-8")
+    if runtime_status.replace(target_build, base_build) != base_runtime_status:
+        die("rescue target runtime-status changed behavior beyond BUILD_ID")
+
+    base_update_banner = extract(base_pkg, "js/80-update-banner.js")[0].decode("utf-8")
+    if update_banner.replace(target_build, base_build) != base_update_banner:
+        die("rescue target update-banner changed behavior beyond CONTENT_BUILD_ID")
+
+    base_popup = extract(base_pkg, "popup.js")[0].decode("utf-8")
+    dynamic_branding = "if (brandVersionEl) { const channelLabel = isDevRuntime() ? 'DEV' : 'RELEASE'; brandVersionEl.textContent = `v${chrome.runtime.getManifest().version} ${channelLabel} · Manifest V3`; }"
+    legacy_branding = "if (brandVersionEl) brandVersionEl.textContent = `v${chrome.runtime.getManifest().version} DEV · Manifest V3`;"
+    if dynamic_branding not in popup:
+        die("rescue target popup dynamic branding line missing")
+    if popup.replace(dynamic_branding, legacy_branding) != base_popup:
+        die("rescue target popup.js changed behavior beyond channel branding")
+
+    operational_paths = sorted(set(base_files) - required_changes)
+    for rel in operational_paths:
+        if str(base_files[rel].get("sha256", "")).lower() != str(target_files[rel].get("sha256", "")).lower():
+            die(f"operational file changed unexpectedly in rescue target: {rel}")
+
     history_by_id = {str(x.get("id")): x for x in history.get("contracts", [])}
     active_quarantine = []
 
