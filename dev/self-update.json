@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-stale-journal-retirement-fix23",
+  "build": "1.3.26-dev-banner-background-state-fix24",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-stale-journal-retirement-fix23.json",
-  "package_sha256": "d00132c1dcf3b0c1e2792265f9d2575d6e538eb2b77235264d119b0d9a0635bb",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-banner-background-state-fix24.json",
+  "package_sha256": "be0104d54034fbf4ed6d715dfe618160b0f055c3727a6ce4bdfb17abb72c0356",
   "notes": [
-    "Incluye todas las correcciones fix22 de vinculación/revinculación y recuperación de actualización.",
-    "Descarta automáticamente un journal viejo cuando el runtime ya está en una versión superior al destino pendiente.",
-    "Evita reintentos de downgrade después de un rescate manual conservando el resto de la configuración."
+    "Incluye fix22/fix23: vinculación y revinculación segura, recuperación de actualizaciones y retiro de journals obsoletos.",
+    "El aviso DEV en VIENA ya no consulta GitHub directamente desde la página; obtiene el estado desde el service worker.",
+    "Elimina los errores CORS contra raw.githubusercontent.com y evita polling sobre un contexto de extensión invalidado."
   ]
 }

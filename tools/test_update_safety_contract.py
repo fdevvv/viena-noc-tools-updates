@@ -136,6 +136,15 @@ def assert_hardened(label,pkg,dev=False):
         if "Recuperación anterior descartada." not in background:
             die(f"{label}: obsolete recovery journal retirement missing")
 
+        # Regression guard for fix24: update manifests are fetched by the
+        # service worker, never directly from the VIENA content script.
+        update_banner=text_file(pkg,"js/80-update-banner.js")
+        if "raw.githubusercontent.com" in update_banner or "await fetch(" in update_banner:
+            die(f"{label}: update banner still performs a direct remote fetch")
+        for token in ["VIENA_UPDATE_BANNER_GET_STATE","IS_DEV_CONTENT"]:
+            if token not in update_banner:
+                die(f"{label}: fix24 background-owned banner token missing: {token}")
+
     p=paths(pkg)
     if dev:
         if str(pkg.get("profile","")) != "portable-replay-safe-v1":
