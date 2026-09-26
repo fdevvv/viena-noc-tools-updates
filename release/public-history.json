@@ -15,20 +15,24 @@
       "version": "1.3.25",
       "package": "release/v1.3.25-package.json",
       "must_support_future_upgrade": true,
-      "quarantine": true,
+      "quarantine": false,
       "notes": "Historical fork: updater requires updater.html/updater.js. Automatic migration through the frozen version.json pointer is impossible without breaking 1.3.24; use the audited one-time legacy rescue.",
       "route": "legacy_rescue",
-      "rescue_profile": "release/rescue/legacy-1.3.25.json"
+      "rescue_profile": "release/rescue/legacy-1.3.25.json",
+      "quarantine_retired_on": "2026-09-26",
+      "quarantine_retirement_evidence": "Installation registry scan found no remaining 1.3.25-release build; the only registered 1.3.25 RELEASE installation reports 1.3.25-bootstrap-release-v5-runtime-coherence-fix."
     },
     {
       "id": "release-1.3.25-bridge-v2",
       "version": "1.3.25",
       "package": "release/v1.3.25-bridge-1.3.24-v2-package.json",
       "must_support_future_upgrade": true,
-      "quarantine": true,
+      "quarantine": false,
       "notes": "Historical bridge with portable updater but the same 1.3.25-release identity. Its runtime reads version.json and compares RELEASE updates only by semver, so it cannot automatically hop 1.3.25 -> bootstrap 1.3.25. Use the audited one-time legacy rescue.",
       "route": "legacy_rescue",
-      "rescue_profile": "release/rescue/legacy-1.3.25.json"
+      "rescue_profile": "release/rescue/legacy-1.3.25.json",
+      "quarantine_retired_on": "2026-09-26",
+      "quarantine_retirement_evidence": "Installation registry scan found no remaining 1.3.25-release build; the only registered 1.3.25 RELEASE installation reports 1.3.25-bootstrap-release-v5-runtime-coherence-fix."
     },
     {
       "id": "release-1.3.25-bootstrap-v3",
