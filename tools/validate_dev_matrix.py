@@ -103,10 +103,59 @@ def validate_portable_profile(hist,target):
         if str(file_map[path].get("sha256","")).lower()!=str(expected_hash).lower():
             die(f"DEV portable integrity hash mismatch for {path}")
 
+def package_text(target,path):
+    item=next((x for x in target.get("files",[]) if str(x.get("path",""))==path),None)
+    if not item:
+        die(f"DEV candidate missing runtime identity file: {path}")
+    try:
+        return base64.b64decode(item["content_base64"],validate=True).decode("utf-8")
+    except Exception as e:
+        die(f"DEV candidate cannot decode {path}: {e}")
+
+def const_value(source,name,path):
+    m=re.search(rf"\\bconst\\s+{re.escape(name)}\\s*=\\s*['\\\"]([^'\\\"]+)['\\\"]",source)
+    if not m:
+        die(f"DEV candidate missing {name} in {path}")
+    return m.group(1)
+
+def validate_runtime_identity(target):
+    expected=str(target.get("build",""))
+    if not expected:
+        die("DEV candidate build is empty")
+
+    background=package_text(target,"background.js")
+    banner=package_text(target,"js/80-update-banner.js")
+    runtime=package_text(target,"js/90-runtime-status.js")
+    build_json=json.loads(package_text(target,"build.json"))
+    manifest=json.loads(package_text(target,"manifest.json"))
+
+    actual={
+        "background.js:VIENA_BUILD_ID": const_value(background,"VIENA_BUILD_ID","background.js"),
+        "js/80-update-banner.js:CONTENT_BUILD_ID": const_value(banner,"CONTENT_BUILD_ID","js/80-update-banner.js"),
+        "js/90-runtime-status.js:BUILD_ID": const_value(runtime,"BUILD_ID","js/90-runtime-status.js"),
+    }
+    bad={k:v for k,v in actual.items() if v!=expected}
+    if bad:
+        die(f"DEV runtime build identity mismatch expected={expected} actual={bad}")
+
+    if str(build_json.get("build",""))!=expected:
+        die("DEV build.json build does not match package build")
+    if str(build_json.get("version",""))!=str(target.get("version","")):
+        die("DEV build.json version does not match package version")
+    if str(build_json.get("channel","")).upper()!="DEV":
+        die("DEV build.json channel must be DEV")
+    if str(manifest.get("version",""))!=str(target.get("version","")):
+        die("DEV manifest version does not match package version")
+    if "DEV" not in str(manifest.get("name","")).upper():
+        die("DEV manifest name must identify the DEV channel")
+
+    print(f"PASS DEV runtime identity coherence: {expected}")
+
 def main():
     hist=load(ROOT/"dev/history.json")
     ptr,rel,target_path,target=pointer()
     validate_portable_profile(hist,target)
+    validate_runtime_identity(target)
 
     contracts=hist.get("contracts")
     if not contracts:
