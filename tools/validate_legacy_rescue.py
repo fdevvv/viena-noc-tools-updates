@@ -79,11 +79,6 @@ def main():
         die("rescue target SHA != release/bootstrap.json SHA")
 
     target_pkg = json.loads(target_raw.decode("utf-8"))
-    for key in ("version", "build", "channel"):
-        if str(target_pkg.get(key, "")).upper() if key == "channel" else str(target_pkg.get(key, "")) != (
-            str(target.get(key, "")).upper() if key == "channel" else str(target.get(key, ""))
-        ):
-            pass
     if str(target_pkg.get("version", "")) != str(target.get("version", "")):
         die("rescue target version mismatch")
     if str(target_pkg.get("build", "")) != str(target.get("build", "")):
