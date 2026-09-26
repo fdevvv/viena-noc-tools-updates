@@ -57,6 +57,14 @@
       "must_support_future_upgrade": true,
       "route": "modern",
       "notes": "Public RELEASE with updater execution owned by the service worker and VIENA progress overlay. Must remain able to skip directly to future compatible RELEASE packages."
+    },
+    {
+      "id": "release-1.3.28-modern",
+      "version": "1.3.28",
+      "package": "release/v1.3.28-folder-link-recovery-banner-ux-fix26-candidate2-package.json",
+      "must_support_future_upgrade": true,
+      "route": "modern",
+      "notes": "Public RELEASE with fix22-fix26: extension-owned standalone folder authorization, stale recovery retirement, background-owned update banner state, dedicated link/relink UX and full-tab centering. Must remain able to skip directly to future compatible RELEASE packages."
     }
   ],
   "modern_pointer": "release/latest.json",
