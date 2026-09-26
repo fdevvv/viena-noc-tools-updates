@@ -48,6 +48,13 @@
       "updater_sha256": "c4fb3f5d2e3991ec7f37e05ad8c550628ccb5422e7c31d040b09a31f278e8df3",
       "must_support_future_upgrade": true,
       "notes": "Runtime-coherence build immediately before background-owned update flow."
+    },
+    {
+      "id": "dev-fix20",
+      "package": "dev/builds/1.3.26-dev-background-update-overlay-fix20.json",
+      "updater_sha256": "ca4ed44b96282ee4bf994f01907f66c47b20dc47018185d7c338e93b8ade3b6c",
+      "must_support_future_upgrade": true,
+      "notes": "First background-owned updater. This exact updater must be able to install fix21 and every future portable DEV candidate."
     }
   ],
   "portable_profile": {
@@ -73,8 +80,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-background-update-overlay-fix20",
-  "current_package": "dev/builds/1.3.26-dev-background-update-overlay-fix20.json",
+  "current_build": "1.3.26-dev-background-update-overlay-fix21-test",
+  "current_package": "dev/builds/1.3.26-dev-background-update-overlay-fix21-test.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -82,6 +89,7 @@
     "fix17 makes updater.html/updater.js optional and replay-safe recovery compatible.",
     "fix18 removes hardcoded DEV branding from popup.js so the same UI source renders DEV or RELEASE from the runtime channel.",
     "fix19 synchronizes background, update-banner and runtime-status build identity to eliminate false TAB/Recargar states.",
-    "fix20 hands update execution from the toolbar popup to the service worker after folder authorization and adds a persistent VIENA progress overlay."
+    "fix20 hands update execution from the toolbar popup to the service worker after folder authorization and adds a persistent VIENA progress overlay.",
+    "fix21 is an intentionally minimal test target for the real fix20 background updater; functional code is unchanged apart from coherent build identity."
   ]
 }
