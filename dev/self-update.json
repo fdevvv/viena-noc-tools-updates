@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-runtime-coherence-fix19",
+  "build": "1.3.26-dev-background-update-overlay-fix20",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-runtime-coherence-fix19.json",
-  "package_sha256": "2ddae6cca1baa80e9cc3c9ea9dec49bea5895d016dbb8617aad6c378655a4a4c",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-background-update-overlay-fix20.json",
+  "package_sha256": "20400a52b57c96c911f4e47ea7a25def95eaa950d77e6926099b7cb8a7bf77dd",
   "notes": [
-    "Corrige los falsos estados TAB / Recargar del popup cuando la extensión DEV ya está actualizada.",
-    "Sincroniza la identidad de build entre background, update-banner y runtime-status.",
-    "Mantiene el branding dinámico de fix18 y el perfil portable replay-safe de fix17.",
-    "No modifica la lógica funcional validada de VIENA, Asignaciones, MIRA, GPON, MOICA, Fuentes/RPHY/VCCAP, motivos ni toasts."
+    "La actualización continúa en segundo plano aunque el popup se cierre o pierda el foco.",
+    "VIENA muestra un overlay con progreso mientras se prepara, descarga, verifica, aplica y reinicia la extensión.",
+    "Si el popup se vuelve a abrir durante la actualización, muestra el estado en curso y bloquea un segundo inicio.",
+    "Mantiene la coherencia de runtime de fix19 y toda la lógica funcional validada."
   ]
 }
