@@ -18,13 +18,13 @@ But their updater contracts forked:
 - `release/v1.3.25-package.json` requires `updater.html` and `updater.js` in a FULL package.
 - `release/v1.3.25-bridge-1.3.24-v2-package.json` uses the portable root set, but its RELEASE runtime decides availability by semantic version only.
 
-The permanent bootstrap is also version 1.3.25. Therefore bridge-v2 does not
+The permanent public bootstrap is also version 1.3.25. Therefore bridge-v2 does not
 offer the bootstrap as an update, while the older 1.3.25 updater rejects the
 portable bootstrap package. Moving `version.json` to a special package would
 also expose that package to 1.3.24 and would break the frozen 1.3.24 bootstrap
 route.
 
-The audited source fingerprints and target bootstrap are declared in:
+The audited source fingerprints, frozen public bootstrap base, and rescue-only target bootstrap are declared in:
 
 `release/rescue/legacy-1.3.25.json`
 
@@ -34,13 +34,14 @@ The audited source fingerprints and target bootstrap are declared in:
 
 1. verifies source version/build/channel;
 2. verifies `js/95-local-updater.js` against one of the two audited historical SHA-256 fingerprints;
-3. downloads the immutable bootstrap-v3 package, or accepts `-PackagePath` only for controlled CI/integration testing;
+3. downloads the immutable rescue bootstrap v4 package derived from public bootstrap-v3, or accepts `-PackagePath` only for controlled CI/integration testing;
 4. validates package SHA, schema/app identity, mode, paths, sizes, per-file SHA and integrity inventory;
 5. verifies updater contract >= 2, compatibility floor 1.3.24 and `release/latest.json` as the next channel;
 6. creates a full sibling backup of the installation directory;
 7. writes non-identity files first and `manifest.json`, `integrity-manifest.json`, `build.json` last;
 8. verifies every written file and the final identity;
 9. restores the backup on a caught write/verification failure.
+10. verifies the popup channel label is dynamic so RELEASE cannot render as DEV.
 
 The script does not clear or migrate Chrome storage. The same unpacked extension
 folder is preserved, so the extension ID/storage association remains intact.
@@ -52,7 +53,7 @@ pwsh -NoProfile -File .\release\rescue\rescue-legacy-1.3.25.ps1 -InstallPath "C:
 ```
 
 After `RESCATE OK`, reload the unpacked extension from `chrome://extensions`.
-The installed build becomes `1.3.25-bootstrap-release-v3`; all later RELEASE
+The installed build becomes `1.3.25-bootstrap-release-v4-channel-fix`; all later RELEASE
 checks use `release/latest.json`.
 
 ## CI and promotion gate
