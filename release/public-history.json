@@ -1,5 +1,5 @@
 {
-  "schema": 1,
+  "schema": 2,
   "compatibility_floor": "1.3.24",
   "contracts": [
     {
@@ -16,17 +16,19 @@
       "package": "release/v1.3.25-package.json",
       "must_support_future_upgrade": true,
       "quarantine": true,
-      "notes": "Historical incompatible 1.3.25 contract. Blocks future modern promotion until all such installations are remediated.",
-      "route": "legacy_quarantine"
+      "notes": "Historical fork: updater requires updater.html/updater.js. Automatic migration through the frozen version.json pointer is impossible without breaking 1.3.24; use the audited one-time legacy rescue.",
+      "route": "legacy_rescue",
+      "rescue_profile": "release/rescue/legacy-1.3.25.json"
     },
     {
       "id": "release-1.3.25-bridge-v2",
       "version": "1.3.25",
       "package": "release/v1.3.25-bridge-1.3.24-v2-package.json",
       "must_support_future_upgrade": true,
-      "notes": "Short-lived bridge v2. Treat any 1.3.25-release build without updater_contract metadata as quarantine until remediated.",
-      "route": "legacy_quarantine",
-      "quarantine": true
+      "quarantine": true,
+      "notes": "Historical bridge with portable updater but the same 1.3.25-release identity. Its runtime reads version.json and compares RELEASE updates only by semver, so it cannot automatically hop 1.3.25 -> bootstrap 1.3.25. Use the audited one-time legacy rescue.",
+      "route": "legacy_rescue",
+      "rescue_profile": "release/rescue/legacy-1.3.25.json"
     },
     {
       "id": "release-1.3.25-bootstrap-v3",
@@ -39,5 +41,6 @@
   ],
   "modern_pointer": "release/latest.json",
   "legacy_bootstrap_pointer": "version.json",
-  "legacy_bootstrap_config": "release/bootstrap.json"
+  "legacy_bootstrap_config": "release/bootstrap.json",
+  "legacy_rescue_profile": "release/rescue/legacy-1.3.25.json"
 }

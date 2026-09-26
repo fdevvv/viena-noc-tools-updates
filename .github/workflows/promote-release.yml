@@ -60,6 +60,15 @@ jobs:
       - name: Validate frozen legacy bootstrap
         run: python3 tools/validate_bootstrap.py --public
 
+      - name: Validate historical 1.3.25 rescue contract
+        run: python3 tools/validate_legacy_rescue.py
+
+      - name: Test historical 1.3.25 rescue integration
+        run: python3 tools/test_legacy_rescue.py --require-pwsh
+
+      - name: Require legacy quarantine remediation
+        run: python3 tools/validate_legacy_rescue.py --require-retired
+
       - name: Validate modern candidate/pointer
         run: python3 tools/validate_release_compat.py --pointer --pointer-file release/latest.json
 
