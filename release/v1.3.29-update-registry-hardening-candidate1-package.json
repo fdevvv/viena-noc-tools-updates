@@ -5,8 +5,7 @@
   "build": "1.3.29-release-update-registry-hardening-candidate1",
   "channel": "RELEASE",
   "generated_at": "2026-09-26T13:30:00Z",
-  "mode": "dev-delta",
-  "profile": "portable-replay-safe-v1",
+  "mode": "full",
   "files": [
     {
       "path": "background.js",
