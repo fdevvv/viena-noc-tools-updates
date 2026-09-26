@@ -58,6 +58,8 @@ def run():
     target_path = ROOT / spec["target_bootstrap"]["package"]
     target_pkg = load(target_path)
     script = ROOT / spec["rescue_script"]
+    if not script.read_bytes().startswith(b"\xef\xbb\xbf"):
+        die("legacy rescue script must carry UTF-8 BOM for Windows PowerShell 5.1 compatibility")
 
     with tempfile.TemporaryDirectory() as td:
         root = pathlib.Path(td)

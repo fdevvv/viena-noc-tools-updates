@@ -114,7 +114,7 @@ def main():
     unexpected = sorted(changed - allowed_changes)
     if unexpected:
         die(f"rescue target changed unauthorized files: {unexpected}")
-    required_changes = {"background.js", "build.json", "integrity-manifest.json", "popup.js"}
+    required_changes = {"background.js", "build.json", "integrity-manifest.json", "popup.js", "js/80-update-banner.js", "js/90-runtime-status.js"}
     if not required_changes.issubset(changed):
         die(f"rescue target missing expected controlled changes: {sorted(required_changes - changed)}")
 
@@ -135,6 +135,16 @@ def main():
         die("rescue target still hardcodes DEV in runtime branding")
     if 'class="version">v1.3.25 DEV' in popup_html:
         die("rescue target fallback HTML still hardcodes DEV")
+
+    runtime_status = extract(target_pkg, "js/90-runtime-status.js")[0].decode("utf-8")
+    update_banner = extract(target_pkg, "js/80-update-banner.js")[0].decode("utf-8")
+    target_build = str(target.get("build", ""))
+    if f"const BUILD_ID = '{target_build}'" not in runtime_status:
+        die("rescue target runtime-status content build does not match runtime build")
+    if f"const CONTENT_BUILD_ID='{target_build}'" not in update_banner:
+        die("rescue target update-banner content build does not match runtime build")
+    if str(base.get("build", "")) in runtime_status or str(base.get("build", "")) in update_banner:
+        die("rescue target still contains stale public-bootstrap content build identity")
 
     history_by_id = {str(x.get("id")): x for x in history.get("contracts", [])}
     active_quarantine = []

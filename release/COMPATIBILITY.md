@@ -58,7 +58,7 @@ and script:
 
 `release/rescue/rescue-legacy-1.3.25.ps1`
 
-After rescue, the installed build is `1.3.25-bootstrap-release-v4-channel-fix` and all
+After rescue, the installed build is `1.3.25-bootstrap-release-v5-runtime-coherence-fix` and all
 subsequent RELEASE updates use `release/latest.json`.
 
 ## Required reachability matrix
