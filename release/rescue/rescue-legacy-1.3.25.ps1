@@ -118,7 +118,15 @@ try {
     throw "Identidad del bootstrap inválida."
   }
 
-  if (@($pkg.patches).Count -gt 0 -or @($pkg.remove).Count -gt 0) {
+  $patchCount = 0
+  if ($null -ne $pkg.PSObject.Properties["patches"] -and $null -ne $pkg.patches) {
+    $patchCount = [int]$pkg.patches.Count
+  }
+  $removeCount = 0
+  if ($null -ne $pkg.PSObject.Properties["remove"] -and $null -ne $pkg.remove) {
+    $removeCount = [int]$pkg.remove.Count
+  }
+  if ($patchCount -gt 0 -or $removeCount -gt 0) {
     throw "El bootstrap de rescate no puede contener patches ni remove."
   }
 
