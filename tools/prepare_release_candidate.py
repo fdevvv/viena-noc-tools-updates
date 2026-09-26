@@ -178,10 +178,8 @@ def promote(dev_pkg, release_version, release_build, generated_at, current_relea
         "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/latest.json",
     )
     popup = popup.replace("version.json no contiene latest válido", "release/latest.json no contiene latest válido")
-    if current_release_pkg:
-        current_files, _ = decode_files(current_release_pkg)
-        if "popup.js" in current_files:
-            popup = transplant_release_history(popup, current_files["popup.js"].decode("utf-8"))
+    # The validated DEV popup is the source of truth for operator-facing RELEASE history.
+    # Do not overwrite it with an older published RELEASE history.
     set_text(files, "popup.js", popup)
 
     # The validated updater is functional code, not channel identity. It must remain byte-identical.

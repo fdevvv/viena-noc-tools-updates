@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-registry-backoff-fix30",
+  "build": "1.3.26-dev-operator-release-history-fix31",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-registry-backoff-fix30.json",
-  "package_sha256": "07f583ec03f64b485c3d64a4343971712b077507451873dc90b98445bb8a62bf",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-operator-release-history-fix31.json",
+  "package_sha256": "3eb5b229c381414496e05d5367191456a21768767b7a5ad8d4335b829a4acb31",
   "notes": [
-    "Fix30 agrega backoff progresivo del registro: 1, 5 y 15 minutos ante fallos consecutivos.",
-    "Un registro exitoso reinicia el backoff y limpia el estado de error.",
-    "Conserva fix29: popup no bloqueante, timeout tolerante a cold start y reintento automático."
+    "Corrige el historial visible para que incluya las RELEASES 1.3.25 a 1.3.29.",
+    "El historial muestra únicamente cambios funcionales relevantes para el operador.",
+    "No modifica configuraciones, asignaciones guardadas ni el funcionamiento operativo existente."
   ]
 }
