@@ -174,6 +174,16 @@ def assert_hardened(label,pkg,dev=False):
         if "INSTALL_REGISTRY_RETRY_DELAYS_MINUTES = [1,5,15]" not in background or "INSTALL_REGISTRY_RETRY_LEVEL_KEY" not in background:
             die(f"{label}: fix30 registry backoff guard missing")
 
+        for token in ['id="testUpdateNotificationRow" style="display:none"', 'Probar aviso en VIENA DEV']:
+            if token not in popup_html:
+                die(f"{label}: fix32 DEV-only update test UI guard missing: {token}")
+        for token in ["testUpdateNotificationRow?.remove();", "versión pendiente de verificación", "identityStale", "Registro de instalación: sincronizando versión actual"]:
+            if token not in popup:
+                die(f"{label}: fix32 popup coherence guard missing: {token}")
+        for token in ["permissionState(handle, 'read')", "identityVerified", "readPermission"]:
+            if token not in updater:
+                die(f"{label}: fix32 linked-folder identity guard missing: {token}")
+
         assignments=text_file(pkg,"js/40-templates.js")
         for token in [
             "name: 'CIERRE'",
