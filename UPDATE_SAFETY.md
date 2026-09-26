@@ -289,9 +289,12 @@ Mandatory order:
 12. Run adversarial tests.
 13. Run JS/integrity/manifest/BUILD_ID/update-safety checks.
 14. Verify the remote immutable artifact SHA.
-15. Only if every gate is green, commit release/latest.json.
-16. Verify release/latest.json remotely.
-17. Test at least one real Chrome update through the oldest relevant route before considering publication closed.
+15. Only if every pre-publication gate is green, commit release/latest.json to a dedicated `release/promote-*` branch.
+16. Open a pointer-only PR to `main`; the PR must change `release/latest.json` and nothing else.
+17. Require the always-on `Main protection gate` check to pass before merge.
+18. Merge the promotion PR; this merge is the publication event.
+19. Verify release/latest.json remotely.
+20. Test at least one real Chrome update through the oldest relevant route before considering publication closed.
 
 The workflow .github/workflows/promote-release.yml is the standard promotion path. Direct manual edits of release/latest.json are not an accepted publication process.
 
@@ -321,14 +324,42 @@ Every complete VIENA NOC Tools handoff must preserve this update-safety contract
 
 This section is permanent unless Emanuel explicitly changes the support floor or publication policy.
 
-## 18. Pointer self-healing and publication authorization
+## 18. Repository hardening, pointer guards and publication authorization
 
 The repository includes:
-- a modern pointer guard that automatically restores the previous release/latest.json if a pushed pointer fails the safety matrix;
-- a legacy bootstrap pointer guard that restores version.json if it no longer mirrors release/bootstrap.json;
-- a manual workflow_dispatch promotion workflow requiring an explicit PROMOTE confirmation.
+- an always-on `Main protection gate` workflow for every pull request targeting `main`;
+- the existing DEV, RELEASE and bootstrap safety workflows as specialized diagnostics;
+- a modern pointer guard on pushes that touch `release/latest.json`;
+- a legacy bootstrap pointer guard on pushes that touch `version.json`;
+- a manual `workflow_dispatch` promotion workflow requiring explicit `PROMOTE` confirmation.
 
-The GitHub connection used by ChatGPT currently has no administration permission to configure branch protection/rulesets. Repository-level required-status-check enforcement should be enabled manually in GitHub if administrative hard blocking is desired. Until then, the transactional promotion workflow plus automatic pointer rollback are the fail-safe controls.
+The only repository-level required status check for normal PR merging should be the job named exactly:
+
+`Main protection gate`
+
+Do not require `DEV update safety`, `Release update safety`, `Legacy bootstrap safety` or the pointer guards globally. Those workflows use path/event filtering and therefore do not create a check on every PR; GitHub can leave a required filtered check pending forever.
+
+The `Main protection gate` has no path filter. It validates the frozen bootstrap, the current DEV historical updater matrix, the modern RELEASE compatibility/adversarial/update matrix, the historical rescue and v4->v5 repair integrations, update-safety contracts, and JavaScript/destructive-operation rules. It also enforces repository policy:
+- `version.json` is rejected in any PR;
+- `release/latest.json` may change only from a `release/promote-*` branch;
+- a promotion PR must change `release/latest.json` and no other file.
+
+The promotion workflow no longer pushes `release/latest.json` directly to `main`. After every pre-publication validation passes, it creates a dedicated `release/promote-*` branch and opens a pointer-only PR. Publication occurs only when that PR passes `Main protection gate` and is merged.
+
+Recommended active ruleset for `main`:
+- target the default branch / `main`;
+- require a pull request before merging;
+- require **0 approvals** so the single repository owner is not deadlocked from merging their own PR;
+- require status check **Main protection gate**;
+- require branches to be up to date before merging;
+- block force pushes;
+- restrict deletions;
+- require conversation resolution;
+- no general bypass actor for GitHub Actions.
+
+GitHub Actions must be allowed to create pull requests in repository Actions settings because the promotion workflow opens the protected promotion PR. The workflow itself declares only the permissions it needs (`contents: write`, `pull-requests: write`).
+
+The GitHub connection used by ChatGPT can read repository/ruleset state but cannot administer branch protection/rulesets. Ruleset activation therefore remains an explicit repository Settings action by Emanuel.
 
 ## 19. Historical 1.3.25 quarantine and rescue
 
