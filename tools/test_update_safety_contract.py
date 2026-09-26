@@ -159,6 +159,13 @@ def assert_hardened(label,pkg,dev=False):
         if "standalone-folder-root" not in popup_html or "document.documentElement.classList.add('standalone-folder-root')" not in popup:
             die(f"{label}: fix26 standalone centering guard missing")
 
+        if "(expectedChannel==='DEV' && !expectedBuild)" not in background:
+            die(f"{label}: fix27 RELEASE identity compatibility guard missing")
+        if "INSTALL_REGISTRY_RETRY_ALARM" not in background or "INSTALL_REGISTRY_PERIOD_MINUTES = 5" not in background:
+            die(f"{label}: fix27 registry retry/heartbeat hardening missing")
+        if "updateTargetChannel = 'RELEASE'" not in popup:
+            die(f"{label}: fix27 popup RELEASE identity propagation missing")
+
     p=paths(pkg)
     if dev:
         if str(pkg.get("profile","")) != "portable-replay-safe-v1":
