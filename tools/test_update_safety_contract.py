@@ -74,6 +74,7 @@ def assert_hardened(label,pkg,dev=False):
 
     if dev:
         runtime_status=text_file(pkg,"js/90-runtime-status.js")
+        popup_html=text_file(pkg,"popup.html")
         feature_tokens={
           "background.js":[
             "VIENA_BACKGROUND_UPDATE_START",
@@ -83,8 +84,11 @@ def assert_hardened(label,pkg,dev=False):
           ],
           "popup.js":[
             "VIENA_BACKGROUND_UPDATE_START",
-            "La actualización continúa aunque cierres este popup",
             "refreshBackgroundUpdateState"
+          ],
+          "popup.html":[
+            "backgroundUpdatePanel",
+            "La actualización continúa aunque cierres este popup"
           ],
           "js/90-runtime-status.js":[
             "VIENA_BACKGROUND_UPDATE_PROGRESS",
@@ -100,6 +104,7 @@ def assert_hardened(label,pkg,dev=False):
         sources={
           "background.js":background,
           "popup.js":popup,
+          "popup.html":popup_html,
           "js/90-runtime-status.js":runtime_status,
           "js/95-local-updater.js":updater
         }
