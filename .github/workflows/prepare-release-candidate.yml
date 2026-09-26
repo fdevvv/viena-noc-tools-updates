@@ -1,0 +1,132 @@
+name: Prepare RELEASE candidate from DEV
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "New RELEASE semver, e.g. 1.3.29"
+        required: true
+        type: string
+      candidate_number:
+        description: "Immutable candidate number"
+        required: true
+        default: "1"
+        type: string
+      confirmation:
+        description: "Type BUILD to create the candidate PR"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: prepare-release-candidate
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require explicit build authorization
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          test "$CONFIRMATION" = "BUILD" || { echo "Explicit BUILD confirmation missing"; exit 1; }
+
+      - name: Resolve current validated DEV package
+        id: dev
+        shell: python
+        run: |
+          import json, os, pathlib
+          p=json.loads(pathlib.Path("dev/self-update.json").read_text(encoding="utf-8"))
+          url=str(p["package_url"])
+          for marker in ("/refs/heads/main/","/main/"):
+              if marker in url:
+                  rel=url.split(marker,1)[1]
+                  break
+          else:
+              raise SystemExit("Unsupported DEV package_url")
+          if not pathlib.Path(rel).exists():
+              raise SystemExit(f"DEV package missing: {rel}")
+          print(f"package={rel}")
+          with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as f:
+              f.write(f"package={rel}\n")
+
+      - name: Build immutable RELEASE candidate and operator ZIP
+        id: build
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          CANDIDATE_NUMBER: ${{ inputs.candidate_number }}
+          DEV_PACKAGE: ${{ steps.dev.outputs.package }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          result="$(python3 tools/prepare_release_candidate.py \
+            --dev-package "$DEV_PACKAGE" \
+            --version "$RELEASE_VERSION" \
+            --candidate "$CANDIDATE_NUMBER")"
+          printf '%s\n' "$result"
+          candidate="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["candidate"])')"
+          zip_path="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["zip"])')"
+          candidate_sha="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["candidate_sha256"])')"
+          build_id="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["build"])')"
+          {
+            echo "candidate=$candidate"
+            echo "zip=$zip_path"
+            echo "candidate_sha=$candidate_sha"
+            echo "build_id=$build_id"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate RELEASE compatibility before PR
+        env:
+          CANDIDATE: ${{ steps.build.outputs.candidate }}
+        run: python3 tools/validate_release_compat.py --package "$CANDIDATE"
+
+      - name: Ensure frozen legacy pointer remains untouched
+        run: git diff --exit-code -- version.json release/latest.json
+
+      - name: Create candidate PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          CANDIDATE_NUMBER: ${{ inputs.candidate_number }}
+          CANDIDATE: ${{ steps.build.outputs.candidate }}
+          ZIP_PATH: ${{ steps.build.outputs.zip }}
+          CANDIDATE_SHA: ${{ steps.build.outputs.candidate_sha }}
+          BUILD_ID: ${{ steps.build.outputs.build_id }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "$CANDIDATE" "$ZIP_PATH"
+          staged="$(git diff --cached --name-only)"
+          test "$(printf '%s\n' "$staged" | wc -l)" -eq 2 || {
+            echo "Candidate preparation must stage exactly package + ZIP."
+            printf '%s\n' "$staged"
+            exit 1
+          }
+
+          branch="release/candidate-${RELEASE_VERSION}-c${CANDIDATE_NUMBER}-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          git commit -m "release: prepare ${RELEASE_VERSION} candidate ${CANDIDATE_NUMBER}"
+          git push origin "HEAD:$branch"
+
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "Release: prepare ${RELEASE_VERSION} candidate ${CANDIDATE_NUMBER}" \
+            --body "Automated DEV → RELEASE candidate from the current validated dev/self-update.json target.
+
+Candidate: `$CANDIDATE`
+Build: `$BUILD_ID`
+Package SHA256: `$CANDIDATE_SHA`
+Operator ZIP: `$ZIP_PATH`
+
+This PR does NOT modify release/latest.json or version.json. Main protection gate and Release update safety remain mandatory before merge."
