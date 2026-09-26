@@ -1,16 +1,16 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.30",
+  "latest": "1.3.31",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Se actualiza el historial de versiones para mostrar nuevamente las RELEASES recientes.",
-    "El historial queda enfocado únicamente en funciones y cambios relevantes para el operador.",
+    "Se mejora la coherencia del estado y la versión mostrados durante la actualización.",
+    "La instalación vinculada evita presentar información anterior mientras se resincroniza.",
     "Se conservan las asignaciones, configuraciones y datos existentes."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.30-operator-history-candidate1-package.json",
-  "package_sha256": "71715a84fdc02f31a5da3c7a8d643a673cbc83237b8ce120415e9b1ed9c66092",
-  "source_package": "release/v1.3.30-operator-history-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.31-release-runtime-folder-coherence-fix32-candidate2-package.json",
+  "package_sha256": "6b9a85e298123c184609f765225ef4097f52722f5367b632951e0da9157fcfa7",
+  "source_package": "release/v1.3.31-release-runtime-folder-coherence-fix32-candidate2-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
