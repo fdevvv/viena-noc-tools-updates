@@ -406,3 +406,13 @@ This is the same class of runtime-coherence defect that was corrected in the 1.3
 Permanent rule for future builds: every build-producing path must synchronize the background runtime build ID and all content/runtime-status build IDs from one canonical build identity. A pre-release regression must reject any package containing a stale embedded build ID.
 
 The pre-candidate `release/v1.3.26-modern-fix18-candidate1-package.json` already normalizes these IDs for RELEASE packaging, but it must not be promoted until the source DEV itself is corrected and validated in Chrome.
+
+
+### Point 6 resolution
+
+Resolution implemented in DEV fix19 (`1.3.26-dev-runtime-coherence-fix19`):
+- `background.js:VIENA_BUILD_ID`, `js/80-update-banner.js:CONTENT_BUILD_ID` and `js/90-runtime-status.js:BUILD_ID` are synchronized to the same canonical build;
+- `dev/history.json` registers fix18 as a historical upgrade source before moving the current DEV pointer to fix19;
+- `tools/validate_dev_matrix.py` now rejects any future DEV candidate whose embedded runtime build IDs diverge from the package build.
+
+This closes the repository-side cause of the false `TAB / Recargar` state. Real Chrome validation remains the final operator check after installing fix19.
