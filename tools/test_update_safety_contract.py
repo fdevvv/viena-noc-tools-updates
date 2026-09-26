@@ -113,6 +113,27 @@ def assert_hardened(label,pkg,dev=False):
                 if token not in sources[path]:
                     die(f"{label}: background-update feature token missing in {path}: {token}")
 
+        # Regression guard for fix22: extension-owned standalone tabs must be trusted,
+        # while arbitrary web tabs still fail the extension-origin prefix check.
+        if "&& !sender?.tab &&" in background:
+            die(f"{label}: standalone extension pages are still rejected by sender guard")
+        for token in [
+            "const url=senderUrl(sender);",
+            "url.startsWith(chrome.runtime.getURL(''))",
+            "BACKGROUND_UPDATE_STALE_MS"
+        ]:
+            if token not in background:
+                die(f"{label}: fix22 background recovery token missing: {token}")
+        for token in [
+            "standaloneFolderMode",
+            "pickAndLink({ requireRuntimeMatch: !hasRecoveryJournal })",
+            "No se puede desvincular la carpeta mientras una actualización"
+        ]:
+            if token not in popup:
+                die(f"{label}: fix22 standalone/recovery token missing: {token}")
+        if "async function pickAndLink({ requireRuntimeMatch = true } = {})" not in updater:
+            die(f"{label}: recovery-aware folder relink contract missing")
+
     p=paths(pkg)
     if dev:
         if str(pkg.get("profile","")) != "portable-replay-safe-v1":

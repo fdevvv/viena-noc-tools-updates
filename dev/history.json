@@ -55,6 +55,13 @@
       "updater_sha256": "ca4ed44b96282ee4bf994f01907f66c47b20dc47018185d7c338e93b8ade3b6c",
       "must_support_future_upgrade": true,
       "notes": "First background-owned updater. This exact updater must be able to install fix21 and every future portable DEV candidate."
+    },
+    {
+      "id": "dev-fix21",
+      "package": "dev/builds/1.3.26-dev-background-update-overlay-fix21-test.json",
+      "updater_sha256": "ca4ed44b96282ee4bf994f01907f66c47b20dc47018185d7c338e93b8ade3b6c",
+      "must_support_future_upgrade": true,
+      "notes": "Validated real background-updater target immediately before standalone folder-link/recovery fix22."
     }
   ],
   "portable_profile": {
@@ -80,8 +87,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-background-update-overlay-fix21-test",
-  "current_package": "dev/builds/1.3.26-dev-background-update-overlay-fix21-test.json",
+  "current_build": "1.3.26-dev-folder-link-recovery-fix22",
+  "current_package": "dev/builds/1.3.26-dev-folder-link-recovery-fix22.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -90,6 +97,7 @@
     "fix18 removes hardcoded DEV branding from popup.js so the same UI source renders DEV or RELEASE from the runtime channel.",
     "fix19 synchronizes background, update-banner and runtime-status build identity to eliminate false TAB/Recargar states.",
     "fix20 hands update execution from the toolbar popup to the service worker after folder authorization and adds a persistent VIENA progress overlay.",
-    "fix21 is an intentionally minimal test target for the real fix20 background updater; functional code is unchanged apart from coherent build identity."
+    "fix21 is an intentionally minimal test target for the real fix20 background updater; functional code is unchanged apart from coherent build identity.",
+    "fix22 authorizes extension-owned standalone tabs without authorizing web origins, performs folder picking in the standalone page, guards unlink during active updates, and recovers stale background-update state."
   ]
 }
