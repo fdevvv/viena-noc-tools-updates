@@ -43,7 +43,7 @@ jobs:
         id: dev
         shell: python
         run: |
-          import json, pathlib
+          import json, os, pathlib
           p=json.loads(pathlib.Path("dev/self-update.json").read_text(encoding="utf-8"))
           url=str(p["package_url"])
           for marker in ("/refs/heads/main/","/main/"):
@@ -55,7 +55,7 @@ jobs:
           if not pathlib.Path(rel).exists():
               raise SystemExit(f"DEV package missing: {rel}")
           print(f"package={rel}")
-          with open("$GITHUB_OUTPUT","a",encoding="utf-8") as f:
+          with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as f:
               f.write(f"package={rel}\n")
 
       - name: Build immutable RELEASE candidate and operator ZIP
