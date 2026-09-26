@@ -166,6 +166,11 @@ def assert_hardened(label,pkg,dev=False):
         if "updateTargetChannel = 'RELEASE'" not in popup:
             die(f"{label}: fix27 popup RELEASE identity propagation missing")
 
+        if "setTimeout(()=>controller.abort(),20000)" not in background:
+            die(f"{label}: fix29 registry cold-start timeout guard missing")
+        if "await refreshRegistrySyncStatus(false);" not in popup or "reason:'popup_open'" not in popup:
+            die(f"{label}: fix29 registry popup nonblocking guard missing")
+
         assignments=text_file(pkg,"js/40-templates.js")
         for token in [
             "name: 'CIERRE'",
