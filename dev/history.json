@@ -76,6 +76,13 @@
       "updater_sha256": "b1706c0d6ff08200dbe89c2b9a6b254947861d6790699656277f45a7a98cb367",
       "must_support_future_upgrade": true,
       "notes": "Stale-journal retirement build immediately before content-script CORS fix24."
+    },
+    {
+      "id": "dev-fix24",
+      "package": "dev/builds/1.3.26-dev-banner-background-state-fix24.json",
+      "updater_sha256": "b1706c0d6ff08200dbe89c2b9a6b254947861d6790699656277f45a7a98cb367",
+      "must_support_future_upgrade": true,
+      "notes": "Background-owned update-banner state build immediately before the dedicated standalone folder UX fix25."
     }
   ],
   "portable_profile": {
@@ -101,8 +108,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-banner-background-state-fix24",
-  "current_package": "dev/builds/1.3.26-dev-banner-background-state-fix24.json",
+  "current_build": "1.3.26-dev-folder-setup-ux-fix25",
+  "current_package": "dev/builds/1.3.26-dev-folder-setup-ux-fix25.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -114,6 +121,7 @@
     "fix21 is an intentionally minimal test target for the real fix20 background updater; functional code is unchanged apart from coherent build identity.",
     "fix22 authorizes extension-owned standalone tabs without authorizing web origins, performs folder picking in the standalone page, guards unlink during active updates, and recovers stale background-update state.",
     "fix23 retires only obsolete recovery journal/request/lock state when the running semantic version is already newer than the pending recovery target.",
-    "fix24 moves DEV update-manifest reads out of the VIENA content script and uses the service worker state API, eliminating raw.githubusercontent.com CORS failures and invalidated-context polling."
+    "fix24 moves DEV update-manifest reads out of the VIENA content script and uses the service worker state API, eliminating raw.githubusercontent.com CORS failures and invalidated-context polling.",
+    "fix25 keeps the hardened standalone-tab authorization path but presents a dedicated folder-link/relink screen, handles picker cancellation as a normal user action, and preserves the worker-safe updater required for the next RELEASE."
   ]
 }

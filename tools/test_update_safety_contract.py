@@ -145,6 +145,17 @@ def assert_hardened(label,pkg,dev=False):
             if token not in update_banner:
                 die(f"{label}: fix24 background-owned banner token missing: {token}")
 
+        # Regression guard for fix25: dedicated standalone folder UX and
+        # service-worker-safe updater must survive future builds.
+        for token in ["standaloneFolderPage","standaloneFolderSelect"]:
+            if token not in popup_html:
+                die(f"{label}: fix25 standalone folder UI token missing: {token}")
+        for token in ["performStandaloneFolderLink","No se seleccionó ninguna carpeta.","closeStandaloneFolderPage"]:
+            if token not in popup:
+                die(f"{label}: fix25 standalone folder behavior token missing: {token}")
+        if "const PAGE_WINDOW = typeof window !== 'undefined' ? window : null;" not in updater:
+            die(f"{label}: updater is not safe to import from the service worker")
+
     p=paths(pkg)
     if dev:
         if str(pkg.get("profile","")) != "portable-replay-safe-v1":
