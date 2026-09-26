@@ -60,18 +60,20 @@ This rule prevents a newer installed updater from blocking a future package that
 
 ## 3. Reachability / skip requirement
 
-Before a modern RELEASE is published, the candidate must be validated using the **actual historical updater validator** from every supported modern updater contract.
+Before a modern RELEASE is published, the candidate must be validated using the **actual historical updater validator** from every supported modern updater contract plus the audited rescue contract for historical 1.3.25 forks.
 
 The required paths are:
 
 - 1.3.24 -> frozen bootstrap (tested independently and permanently);
+- historical 1.3.25-release v1 -> audited rescue -> bootstrap;
+- historical 1.3.25-release bridge-v2 -> audited rescue -> bootstrap;
 - bootstrap -> candidate modern RELEASE;
 - previous public modern RELEASE -> candidate;
 - every other still-supported modern RELEASE updater contract -> candidate.
 
-Users do not need to install every intermediate modern release. The only permanent staged hop is the legacy 1.3.24 -> bootstrap transition required by the historical contract fork.
+Users do not need to install every intermediate modern release. The permanent staged path is the bootstrap architecture; the one-time external rescue exists only for the two already-published 1.3.25-release contracts that cannot be moved safely by one static pointer.
 
-Historical 1.3.25-release variants that predate the bootstrap architecture are quarantine contracts. A future modern promotion must remain blocked until all active quarantine installations are remediated or explicitly retired from support with evidence.
+The rescue definition is `release/rescue/legacy-1.3.25.json`. It fingerprints the exact historical updater bytes and the immutable bootstrap target. A future modern promotion remains blocked while either historical 1.3.25 quarantine entry is still marked active.
 
 ## 4. DEV reachability requirement
 
@@ -281,13 +283,15 @@ Mandatory order:
 6. Never overwrite an existing RELEASE artifact.
 7. Stage release/latest.json locally/in CI through the manual promotion workflow.
 8. Validate frozen version.json -> bootstrap and exact 1.3.24 -> bootstrap.
-9. Run the modern historical-updater matrix against the staged candidate.
-10. Run adversarial tests.
-11. Run JS/integrity/manifest/BUILD_ID/update-safety checks.
-12. Verify the remote immutable artifact SHA.
-13. Only if every gate is green, commit release/latest.json.
-14. Verify release/latest.json remotely.
-15. Test at least one real Chrome update through the oldest relevant route before considering publication closed.
+9. Validate the historical 1.3.25 rescue profile and execute its PowerShell integration test.
+10. Require the historical 1.3.25 quarantine entries to be retired only after registry evidence confirms remediation.
+11. Run the modern historical-updater/rescue matrix against the staged candidate.
+12. Run adversarial tests.
+13. Run JS/integrity/manifest/BUILD_ID/update-safety checks.
+14. Verify the remote immutable artifact SHA.
+15. Only if every gate is green, commit release/latest.json.
+16. Verify release/latest.json remotely.
+17. Test at least one real Chrome update through the oldest relevant route before considering publication closed.
 
 The workflow .github/workflows/promote-release.yml is the standard promotion path. Direct manual edits of release/latest.json are not an accepted publication process.
 
@@ -326,19 +330,32 @@ The repository includes:
 
 The GitHub connection used by ChatGPT currently has no administration permission to configure branch protection/rulesets. Repository-level required-status-check enforcement should be enabled manually in GitHub if administrative hard blocking is desired. Until then, the transactional promotion workflow plus automatic pointer rollback are the fail-safe controls.
 
-## 19. Historical 1.3.25 quarantine
+## 19. Historical 1.3.25 quarantine and rescue
 
-The historical build 1.3.25-release may use an updater contract incompatible with both the 1.3.24 floor and the modern bootstrap contract.
+Two historical public packages share the identity `1.3.25 / 1.3.25-release / RELEASE` but have incompatible update behavior:
 
-Such installations are identifiable by build identity and must be remediated once using release/rescue/rescue-legacy-1.3.25.ps1 or another explicitly verified rescue procedure.
+- `release/v1.3.25-package.json` ships updater SHA-256 `8c7f72f1f25aae048bbb82024384797b359c03fce4fb5a493eee92bf98309f7f` and requires `updater.html/updater.js` in FULL packages;
+- `release/v1.3.25-bridge-1.3.24-v2-package.json` ships updater SHA-256 `a83d37f077e466ac9591eee48cf52dcdacb62fe264be3476eba65616763d61f4` and accepts the portable bootstrap, but the installed RELEASE runtime still reads `version.json` and only offers a newer semantic version.
+
+Because the permanent bootstrap is also 1.3.25 and `version.json` must remain safe for 1.3.24 forever, there is no single automatic static-pointer migration that can rescue both historical variants without breaking the compatibility floor.
+
+The definitive route is:
+
+`historical 1.3.25-release -> audited one-time rescue -> 1.3.25-bootstrap-release-v3 -> release/latest.json -> future modern RELEASE`.
+
+The rescue profile is `release/rescue/legacy-1.3.25.json`; the executable procedure is `release/rescue/rescue-legacy-1.3.25.ps1`.
 
 The rescue:
-- verifies the exact source build;
-- verifies the immutable bootstrap package and each file;
-- backs up the installation directory;
+- verifies version/build/channel and the exact historical updater SHA-256 fingerprint;
+- verifies the immutable bootstrap package SHA before any write;
+- validates schema, portable paths, sizes, per-file hashes and the complete integrity inventory;
+- verifies updater contract >= 2, compatibility floor 1.3.24 and `release/latest.json` as the target channel;
+- backs up the entire installation directory;
 - writes identity files last;
-- verifies the final files;
-- restores the backup on failure;
-- does not clear Chrome storage.
+- verifies all target files and final identity;
+- restores the backup on a caught write/verification failure;
+- does not clear or migrate Chrome storage.
 
-A modern RELEASE promotion above 1.3.25 remains blocked by the historical updater matrix while a quarantine contract is still marked active.
+`tools/validate_legacy_rescue.py` proves the historical contracts and expected validator behavior. `tools/test_legacy_rescue.py` executes the PowerShell rescue against both historical packages and negative tamper cases.
+
+Both entries remain `quarantine: true` until installation-registry evidence confirms all active historical 1.3.25 installations have been remediated. The manual promotion workflow explicitly fails while that quarantine remains active; do not remove the flag merely to publish.
