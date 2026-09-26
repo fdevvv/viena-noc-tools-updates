@@ -17,12 +17,87 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: prepare-release-candidate
+  cancel-in-progress: false
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate workflow dispatch inputs
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require explicit build authorization
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
         run: |
-          echo "release_version=${{ inputs.release_version }}"
-          echo "candidate_number=${{ inputs.candidate_number }}"
-          test "${{ inputs.confirmation }}" = "BUILD"
+          test "$CONFIRMATION" = "BUILD" || {
+            echo "Explicit BUILD confirmation missing"
+            exit 1
+          }
+
+      - name: Resolve current validated DEV package
+        id: dev
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import pathlib
+
+          pointer = json.loads(pathlib.Path("dev/self-update.json").read_text(encoding="utf-8"))
+          url = str(pointer["package_url"])
+
+          rel = None
+          for marker in ("/refs/heads/main/", "/main/"):
+              if marker in url:
+                  rel = url.split(marker, 1)[1]
+                  break
+
+          if not rel:
+              raise SystemExit("Unsupported DEV package_url")
+          if not pathlib.Path(rel).exists():
+              raise SystemExit(f"DEV package missing: {rel}")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"package={rel}\n")
+          PY
+
+      - name: Build immutable RELEASE candidate and operator ZIP
+        id: build
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          CANDIDATE_NUMBER: ${{ inputs.candidate_number }}
+          DEV_PACKAGE: ${{ steps.dev.outputs.package }}
+        run: |
+          set -euo pipefail
+          result="$(python3 tools/prepare_release_candidate.py \
+            --dev-package "$DEV_PACKAGE" \
+            --version "$RELEASE_VERSION" \
+            --candidate "$CANDIDATE_NUMBER")"
+
+          candidate="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["candidate"])')"
+          zip_path="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["zip"])')"
+          candidate_sha="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["candidate_sha256"])')"
+          build_id="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["build"])')"
+
+          {
+            echo "candidate=$candidate"
+            echo "zip=$zip_path"
+            echo "candidate_sha=$candidate_sha"
+            echo "build_id=$build_id"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate RELEASE compatibility before PR
+        env:
+          CANDIDATE: ${{ steps.build.outputs.candidate }}
+        run: python3 tools/validate_release_compat.py --package "$CANDIDATE"
+
+      - name: Ensure frozen legacy pointer remains untouched
+        run: git diff --exit-code -- version.json release/latest.json
