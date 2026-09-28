@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-assigned-user-filter-fix38",
+  "build": "1.3.26-dev-assigned-user-toggle-fix39",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assigned-user-filter-fix38.json",
-  "package_sha256": "9c9d35dd69c203b12a305d83ff45df49c3cd27da595ce068edc3519c87c7b683",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assigned-user-toggle-fix39.json",
+  "package_sha256": "5a01551f3c464cdeec6affc82dd8c5f66f9ec51140e737ef70dbf485cc88101f",
   "notes": [
-    "Tareas Internas incorpora el botón “Asignado - usuario” junto a Asignaciones.",
-    "Si ASIGNADA ya está marcada, se conserva; si no, se selecciona antes de completar “Asignado a”.",
-    "La acción finaliza cerrando Filtros de tabla y refrescando el listado."
+    "El botón “Asignado - usuario” ahora funciona como toggle.",
+    "Si el filtro “Asignado a” ya contiene el usuario VIENA, el segundo toque lo limpia sin desmarcar ASIGNADA.",
+    "Si “Asignado a” está vacío o contiene otro valor, el botón vuelve a aplicar el usuario VIENA y refresca la tabla."
   ]
 }
