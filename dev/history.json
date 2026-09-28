@@ -139,6 +139,13 @@
       "updater_sha256": "613ea03563c4379dd7832f5e60b1dac838e5e428809667d8b886886060dbbcef",
       "must_support_future_upgrade": true,
       "notes": "Registry stable identity and post-update heartbeat build immediately before persistent dialog backdrop zoom fix35."
+    },
+    {
+      "id": "dev-fix35",
+      "package": "dev/builds/1.3.26-dev-persistent-dialog-backdrop-zoom-fix35.json",
+      "updater_sha256": "613ea03563c4379dd7832f5e60b1dac838e5e428809667d8b886886060dbbcef",
+      "must_support_future_upgrade": true,
+      "notes": "Persistent dialog backdrop zoom fix immediately before registry-pending status fix36."
     }
   ],
   "portable_profile": {
@@ -164,8 +171,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-persistent-dialog-backdrop-zoom-fix35",
-  "current_package": "dev/builds/1.3.26-dev-persistent-dialog-backdrop-zoom-fix35.json",
+  "current_build": "1.3.26-dev-registry-pending-status-fix36",
+  "current_package": "dev/builds/1.3.26-dev-registry-pending-status-fix36.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -188,6 +195,7 @@
     "fix32 verifies linked-folder identity with read permission when possible, never renders unverified cached identity as current, hides the update-banner test action outside DEV, and treats stale registry identity as synchronizing.",
     "fix33 requires a valid JSON {ok:true} registry response, rejects HTML/login/error responses as real failures, and keeps automatic retry active.",
     "fix34 stabilizes fresh-install registry identity per operator+channel, includes a short Chrome runtime id in the reported build, and requires post-update registry confirmation after runtime verification.",
-    "fix35 suppresses Vuetify persistent-dialog backdrop bounce by activating the existing transition/animation lock on pointerdown outside the active dialog without cancelling the click or changing dialog transform."
+    "fix35 suppresses Vuetify persistent-dialog backdrop bounce by activating the existing transition/animation lock on pointerdown outside the active dialog without cancelling the click or changing dialog transform.",
+    "fix36 distinguishes registry confirmation failures from actual update failures after post-reload runtime verification."
   ]
 }
