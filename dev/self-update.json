@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-update-registry-coherence-fix37",
+  "build": "1.3.26-dev-assigned-user-filter-fix38",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-registry-coherence-fix37.json",
-  "package_sha256": "ec1d676f7e22fcc84fe94f6faeae44f22d4d25fb041cfccf38b0f33c89dae3c1",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assigned-user-filter-fix38.json",
+  "package_sha256": "9c9d35dd69c203b12a305d83ff45df49c3cd27da595ce068edc3519c87c7b683",
   "notes": [
-    "Se eliminan automáticamente los avisos de actualización obsoletos que ya no coinciden con el canal publicado.",
-    "RELEASE bloquea por runtime las acciones internas de prueba y revalida el canal antes de abrir una notificación.",
-    "La carpeta vinculada muestra acceso guardado y aclara que su identidad se verificará al momento de actualizar."
+    "Tareas Internas incorpora el botón “Asignado - usuario” junto a Asignaciones.",
+    "Si ASIGNADA ya está marcada, se conserva; si no, se selecciona antes de completar “Asignado a”.",
+    "La acción finaliza cerrando Filtros de tabla y refrescando el listado."
   ]
 }
