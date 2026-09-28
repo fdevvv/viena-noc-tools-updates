@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-assigned-native-filter-fix41",
+  "build": "1.3.26-dev-ticket-start-zoom-fix42",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assigned-native-filter-fix41.json",
-  "package_sha256": "f014ea7c85d3969080f39e62a4492213375f9e377590834d1174c8e013ca0471",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ticket-start-zoom-fix42.json",
+  "package_sha256": "ab4c38e68ff5356c395c28265e35b2c855dd2728e8d48ba336f13b1fb70bd215",
   "notes": [
-    "El botón “Asignado - usuario” ahora aplica el formulario con el botón nativo FILTRAR de VIENA.",
-    "Se elimina el uso incorrecto del refresh de la tabla para confirmar “Asignado a”.",
-    "Se mantiene ASIGNADA y el toggle usuario/vacío, pero el criterio queda realmente aplicado desde el primer uso."
+    "Se elimina el mini-zoom del ticket al usar Iniciar Tarea después de interactuar con Cambiar Estado.",
+    "Iniciar Tarea activa el mismo bloqueo temporal seguro de transition/animation usado por el fix de diálogos persistentes.",
+    "El flujo automático también rearma el bloqueo antes de pulsar el Cambiar Estado nativo, sin modificar transform ni el comportamiento del modal."
   ]
 }
