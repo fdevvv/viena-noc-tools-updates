@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-assigned-user-toggle-fix39",
+  "build": "1.3.26-dev-assigned-empty-input-fix40",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assigned-user-toggle-fix39.json",
-  "package_sha256": "5a01551f3c464cdeec6affc82dd8c5f66f9ec51140e737ef70dbf485cc88101f",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assigned-empty-input-fix40.json",
+  "package_sha256": "0f802aa1b482aa3591b26814cf3bdf239fe0931f7d641b64a90f670a5453885f",
   "notes": [
-    "El botón “Asignado - usuario” ahora funciona como toggle.",
-    "Si el filtro “Asignado a” ya contiene el usuario VIENA, el segundo toque lo limpia sin desmarcar ASIGNADA.",
-    "Si “Asignado a” está vacío o contiene otro valor, el botón vuelve a aplicar el usuario VIENA y refresca la tabla."
+    "Se corrige el primer uso del botón “Asignado - usuario” cuando “Asignado a” está vacío.",
+    "El control de “Asignado a” se inicializa como una interacción real de Vuetify antes de escribir el usuario VIENA.",
+    "El toggle sigue manteniendo ASIGNADA y alterna correctamente entre usuario VIENA y campo vacío."
   ]
 }
