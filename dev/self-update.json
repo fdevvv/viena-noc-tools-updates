@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-install-registry-strict-response-fix33",
+  "build": "1.3.26-dev-registry-stable-identity-fix34",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-install-registry-strict-response-fix33.json",
-  "package_sha256": "286ba36c9382706b442e3e12b378bdec62ca01a00e7c36429226eba2015b5e62",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-registry-stable-identity-fix34.json",
+  "package_sha256": "858116c4fbb02def07c350839663dd90957867292121a0838cec9144ce2c9c32",
   "notes": [
-    "El registro de instalaciones sólo acepta una respuesta JSON válida con ok:true.",
-    "Las páginas HTML, redirects inesperados y respuestas inválidas del Web App dejan de contarse como sincronización exitosa.",
-    "Ante un fallo real se conserva el retry automático 1/5/15 minutos y el popup muestra el error de sincronización."
+    "Las instalaciones nuevas usan una identidad estable por operador y canal para evitar duplicados futuros.",
+    "El registro incluye un identificador corto del runtime de Chrome para detectar instancias paralelas.",
+    "Después de una actualización, el proceso no se considera completo hasta verificar el runtime nuevo y confirmar el heartbeat del registro."
   ]
 }
