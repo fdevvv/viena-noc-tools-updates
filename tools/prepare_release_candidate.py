@@ -175,6 +175,16 @@ def promote(dev_pkg, release_version, release_build, generated_at, current_relea
     popup_html = popup_html.replace("Probar aviso en VIENA DEV", "Probar aviso en VIENA")
     if "Probar aviso en VIENA DEV" in popup_html:
         die("DEV popup branding leaked into RELEASE")
+    # The installation-registry manual test is an internal diagnostic action.
+    # RELEASE must not expose it to operators.
+    popup_html, registry_test_count = re.subn(
+        r'\s*<div class="update-actions" style="margin-top:7px"><button id="testRegistry"[^>]*>Probar registro ahora</button></div>',
+        "",
+        popup_html,
+        count=1,
+    )
+    if registry_test_count != 1 or 'id="testRegistry"' in popup_html:
+        die("RELEASE registry test action was not removed")
     set_text(files, "popup.html", popup_html)
 
     popup = text(files, "popup.js")
@@ -232,6 +242,8 @@ def promote(dev_pkg, release_version, release_build, generated_at, current_relea
         die("DEV-only update test action is not hidden by default")
     if "testUpdateNotificationRow?.remove();" not in pj:
         die("RELEASE popup does not remove DEV-only update test action")
+    if 'id="testRegistry"' in ph or "Probar registro ahora" in ph:
+        die("RELEASE exposes internal registry test action")
     for token in (
         "performStandaloneFolderLink",
         "closeStandaloneFolderPage",
