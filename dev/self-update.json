@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-registry-pending-status-fix36",
+  "build": "1.3.26-dev-update-registry-coherence-fix37",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-registry-pending-status-fix36.json",
-  "package_sha256": "c908f707353749801cee4998e85a6b5f0ec998d8d4ce73013e260249f0ec8244",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-registry-coherence-fix37.json",
+  "package_sha256": "ec1d676f7e22fcc84fe94f6faeae44f22d4d25fb041cfccf38b0f33c89dae3c1",
   "notes": [
-    "Se separa un fallo del registro de instalaciones de un fallo real de actualización.",
-    "Si el runtime nuevo ya fue verificado, la UI muestra Actualización completada · registro pendiente en vez de Error al actualizar.",
-    "El registro sigue reintentándose automáticamente y conserva el error técnico para diagnóstico."
+    "Se eliminan automáticamente los avisos de actualización obsoletos que ya no coinciden con el canal publicado.",
+    "RELEASE bloquea por runtime las acciones internas de prueba y revalida el canal antes de abrir una notificación.",
+    "La carpeta vinculada muestra acceso guardado y aclara que su identidad se verificará al momento de actualizar."
   ]
 }

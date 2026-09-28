@@ -177,9 +177,20 @@ def assert_hardened(label,pkg,dev=False):
         for token in ['id="testUpdateNotificationRow" style="display:none"', 'Probar aviso en VIENA DEV']:
             if token not in popup_html:
                 die(f"{label}: fix32 DEV-only update test UI guard missing: {token}")
-        for token in ["testUpdateNotificationRow?.remove();", "versión pendiente de verificación", "identityStale", "Registro de instalación: sincronizando versión actual"]:
+        for token in ["testUpdateNotificationRow?.remove();", "identityStale", "Registro de instalación: sincronizando versión actual"]:
             if token not in popup:
                 die(f"{label}: fix32 popup coherence guard missing: {token}")
+
+        # Regression guard for fix37: stale OS notifications must be retired,
+        # RELEASE must reject DEV-only test actions at runtime, and folder UX
+        # must not present an unverified cached version as current.
+        for token in ["clearStaleUpdateNotifications", "chrome.notifications.getAll()", "puntero RELEASE incoherente", "code:'dev_only'"]:
+            if token not in background:
+                die(f"{label}: fix37 update-notification hardening missing: {token}")
+        if "versión pendiente de verificación" in popup:
+            die(f"{label}: fix37 obsolete folder pending-version wording returned")
+        if "se verificará al actualizar" not in popup:
+            die(f"{label}: fix37 folder verification UX missing")
         for token in ["permissionState(handle, 'read')", "identityVerified", "readPermission"]:
             if token not in updater:
                 die(f"{label}: fix32 linked-folder identity guard missing: {token}")
