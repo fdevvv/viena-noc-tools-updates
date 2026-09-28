@@ -1,16 +1,16 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.31",
+  "latest": "1.3.32",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Se mejora la coherencia del estado y la versión mostrados durante la actualización.",
-    "La instalación vinculada evita presentar información anterior mientras se resincroniza.",
-    "Se conservan las asignaciones, configuraciones y datos existentes."
+    "Se mejora la estabilidad visual de los modales para evitar movimientos al hacer click fuera.",
+    "Se mejora la confirmación del estado después de una actualización.",
+    "Se optimiza la sincronización de la versión instalada y se ocultan controles internos de diagnóstico."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.31-release-runtime-folder-coherence-fix32-candidate2-package.json",
-  "package_sha256": "6b9a85e298123c184609f765225ef4097f52722f5367b632951e0da9157fcfa7",
-  "source_package": "release/v1.3.31-release-runtime-folder-coherence-fix32-candidate2-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.32-registry-pending-status-fix36-candidate1-package.json",
+  "package_sha256": "ed27181901d0b0707321f88f9475f5e94b28205689152cacde0595db26feb2f7",
+  "source_package": "release/v1.3.32-registry-pending-status-fix36-candidate1-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
