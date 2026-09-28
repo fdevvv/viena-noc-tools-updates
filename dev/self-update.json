@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-assigned-empty-input-fix40",
+  "build": "1.3.26-dev-assigned-native-filter-fix41",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assigned-empty-input-fix40.json",
-  "package_sha256": "0f802aa1b482aa3591b26814cf3bdf239fe0931f7d641b64a90f670a5453885f",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assigned-native-filter-fix41.json",
+  "package_sha256": "f014ea7c85d3969080f39e62a4492213375f9e377590834d1174c8e013ca0471",
   "notes": [
-    "Se corrige el primer uso del botón “Asignado - usuario” cuando “Asignado a” está vacío.",
-    "El control de “Asignado a” se inicializa como una interacción real de Vuetify antes de escribir el usuario VIENA.",
-    "El toggle sigue manteniendo ASIGNADA y alterna correctamente entre usuario VIENA y campo vacío."
+    "El botón “Asignado - usuario” ahora aplica el formulario con el botón nativo FILTRAR de VIENA.",
+    "Se elimina el uso incorrecto del refresh de la tabla para confirmar “Asignado a”.",
+    "Se mantiene ASIGNADA y el toggle usuario/vacío, pero el criterio queda realmente aplicado desde el primer uso."
   ]
 }
