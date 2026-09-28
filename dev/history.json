@@ -178,8 +178,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-assigned-empty-input-fix40",
-  "current_package": "dev/builds/1.3.26-dev-assigned-empty-input-fix40.json",
+  "current_build": "1.3.26-dev-assigned-native-filter-fix41",
+  "current_package": "dev/builds/1.3.26-dev-assigned-native-filter-fix41.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -207,6 +207,7 @@
     "fix37 retires stale OS update notifications after remote revalidation, blocks DEV-only test messages in RELEASE at the service-worker boundary, validates RELEASE pointer/package coherence, and replaces ambiguous linked-folder pending-version wording with explicit verification-on-update UX.",
     "fix38 adds a one-click Tareas Internas filter for the configured VIENA user: it idempotently ensures ASIGNADA, writes Asignado a through native input events, collapses filters, and refreshes the table without relying on dynamic Vuetify IDs.",
     "fix39 turns the Tareas Internas assigned-user action into an idempotent toggle: a second click clears only Asignado a while keeping ASIGNADA selected, then refreshes the table.",
-    "fix40 initializes the Vuetify Asignado a autocomplete before programmatic writes, fixing the empty-field first-use case while preserving the fix39 toggle and ASIGNADA state."
+    "fix40 initializes the Vuetify Asignado a autocomplete before programmatic writes, fixing the empty-field first-use case while preserving the fix39 toggle and ASIGNADA state.",
+    "fix41 follows VIENA's native filter commit path: after updating ASIGNADA/Asignado a it clicks the exact FILTRAR action instead of table refresh, so assignedTo is committed before the criteria request."
   ]
 }
