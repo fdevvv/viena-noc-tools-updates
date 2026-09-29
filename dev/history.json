@@ -192,8 +192,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-mira-cuadras-rowdata-fix44",
-  "current_package": "dev/builds/1.3.26-dev-mira-cuadras-rowdata-fix44.json",
+  "current_build": "1.3.26-dev-mira-cuadras-templates-fix46",
+  "current_package": "dev/builds/1.3.26-dev-mira-cuadras-templates-fix46.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -225,6 +225,8 @@
     "fix41 follows VIENA's native filter commit path: after updating ASIGNADA/Asignado a it clicks the exact FILTRAR action instead of table refresh, so assignedTo is committed before the criteria request.",
     "fix42 extends the persistent-dialog bounce protection to the open-ticket Iniciar Tarea flow: it arms a short transition/animation lock on pointerdown/click and immediately before the native Cambiar Estado action, without overriding dialog transforms.",
     "fix43 adds an always-visible MIRA Listado de CMs block-selection action, groups selected street heights into consecutive 100-address ranges, previews the exact ticket text before copying, and keeps Copiar datos Edif aligned in the same action group when present.",
-    "fix44 reads Listado de CMs through jqGrid row data and broadens Dirección-cell detection so checkbox injection does not depend on one exact DOM path."
+    "fix44 reads Listado de CMs through jqGrid row data and broadens Dirección-cell detection so checkbox injection does not depend on one exact DOM path.",
+    "fix45 makes MIRA cuadras selection render immediately using DOM/title values with extended-address fallback and without per-row getRowData calls.",
+    "fix46 turns cuadras preview into an editable operational template, adds persistent selectable failure presets, and keeps manual text intact while presets are toggled."
   ]
 }
