@@ -1,0 +1,56 @@
+name: Sync RELEASE registry pointer
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - release/latest.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-release-registry-pointer
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read and validate published RELEASE
+        id: release
+        shell: python
+        run: |
+          import json, os, pathlib, re
+          pointer = json.loads(pathlib.Path("release/latest.json").read_text(encoding="utf-8"))
+          version = str(pointer.get("latest", "")).strip()
+          if not re.fullmatch(r"\d+\.\d+\.\d+", version):
+              raise SystemExit(f"Invalid release/latest.json latest: {version!r}")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"version={version}\n")
+
+      - name: Update registry mirror
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          printf 'latest_release\n%s\n' "$RELEASE_VERSION" > release/latest-version.csv
+
+      - name: Commit mirror only when changed
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          if git diff --quiet -- release/latest-version.csv; then
+            echo "Registry mirror already synchronized with $RELEASE_VERSION"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add release/latest-version.csv
+          git commit -m "chore: sync registry release $RELEASE_VERSION"
+          git push origin HEAD:main
