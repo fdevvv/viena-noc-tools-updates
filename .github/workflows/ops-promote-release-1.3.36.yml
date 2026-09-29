@@ -1,0 +1,107 @@
+name: OPS promote RELEASE 1.3.36
+
+on:
+  push:
+    branches:
+      - ops/promote-release-1.3.36
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_PATH: release/v1.3.36-release-history-fix51-candidate1-package.json
+      RELEASE_NOTES: |
+        Completar Tarea y los botones personales ahora mantienen un solo menú desplegable abierto a la vez.
+        El historial de versiones visible en el popup se actualiza e incorpora las RELEASES hasta 1.3.35.
+      MINIMUM_VERSION: "1.3.25"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 2
+
+      - name: Prepare pointer
+        run: |
+          python3 tools/prepare_release_pointer.py \
+            --candidate "$CANDIDATE_PATH" \
+            --minimum "$MINIMUM_VERSION" \
+            --notes "$RELEASE_NOTES"
+
+      - name: Validate frozen legacy bootstrap
+        run: python3 tools/validate_bootstrap.py --public
+
+      - name: Validate historical 1.3.25 rescue contract
+        run: python3 tools/validate_legacy_rescue.py
+
+      - name: Test historical 1.3.25 rescue integration
+        run: python3 tools/test_legacy_rescue.py --require-pwsh
+
+      - name: Validate rescue v4 to v5 repair contract
+        run: python3 tools/validate_bootstrap_v4_repair.py
+
+      - name: Test rescue v4 to v5 repair integration
+        run: python3 tools/test_bootstrap_v4_repair.py --require-pwsh
+
+      - name: Require legacy quarantine remediation
+        run: python3 tools/validate_legacy_rescue.py --require-retired
+
+      - name: Validate modern candidate and pointer
+        run: python3 tools/validate_release_compat.py --pointer --pointer-file release/latest.json
+
+      - name: Adversarial validation
+        run: python3 tools/test_release_validator.py --pointer-file release/latest.json
+
+      - name: Historical updater matrix
+        run: python3 tools/validate_update_matrix.py --pointer-file release/latest.json
+
+      - name: Assert updater safety mechanisms
+        run: python3 tools/test_update_safety_contract.py
+
+      - name: Check JavaScript and destructive operations
+        shell: python
+        run: |
+          import base64,json,pathlib,re,subprocess,tempfile
+          root=pathlib.Path('.')
+          pointer=json.loads((root/'release/latest.json').read_text())
+          rel=pointer['package_url'].split('/main/',1)[1]
+          pkg=json.loads((root/rel).read_text())
+          assert not pkg.get('remove')
+          assert not pkg.get('patches')
+          dangerous=[re.compile(rb'chrome\.storage\.local\.clear\s*\('),re.compile(rb'indexedDB\.deleteDatabase\s*\(')]
+          with tempfile.TemporaryDirectory() as td:
+              td=pathlib.Path(td)
+              for item in pkg['files']:
+                  if not item['path'].endswith('.js'): continue
+                  raw=base64.b64decode(item['content_base64'],validate=True)
+                  for pattern in dangerous:
+                      assert not pattern.search(raw), f"destructive storage operation in {item['path']}"
+                  out=td/item['path'].replace('/','__')
+                  out.write_bytes(raw)
+                  subprocess.run(['node','--check',str(out)],check=True)
+          print('PASS candidate JS/destructive scan')
+
+      - name: Verify immutable artifact from remote main
+        run: |
+          tmp="$(mktemp)"
+          curl --fail --silent --show-error --location "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/${CANDIDATE_PATH}?_=$(date +%s)" -o "$tmp"
+          local_sha="$(sha256sum "$CANDIDATE_PATH" | awk '{print $1}')"
+          remote_sha="$(sha256sum "$tmp" | awk '{print $1}')"
+          test "$local_sha" = "$remote_sha"
+
+      - name: Ensure protected bootstrap unchanged
+        run: git diff --exit-code -- version.json release/bootstrap.json
+
+      - name: Commit pointer-only promotion
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add release/latest.json
+          staged_files="$(git diff --cached --name-only)"
+          test "$staged_files" = "release/latest.json"
+          git switch -c release/promote-1.3.36
+          git commit -m "release: promote modern 1.3.36"
+          git push origin HEAD:release/promote-1.3.36
