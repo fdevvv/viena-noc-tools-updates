@@ -319,7 +319,11 @@ def main():
     if marker in suffix:
         suffix = suffix.split(marker, 1)[1]
     suffix = re.sub(r"[^A-Za-z0-9._-]+", "-", suffix).strip("-") or "validated-dev"
-    release_build = f"{args.version}-release-{suffix}-candidate{args.candidate}"
+
+    # RELEASE identity is always the clean semantic version only.
+    # DEV/candidate provenance remains in immutable artifact filenames, not in
+    # the runtime build shown to operators or installation registry.
+    release_build = args.version
 
     generated_at = args.generated_at or datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
