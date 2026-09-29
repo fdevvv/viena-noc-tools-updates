@@ -1,0 +1,64 @@
+name: OPS DEV fix51 release history
+
+on:
+  push:
+    branches:
+      - ops/dev-fix51-release-history
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ops/dev-fix51-release-history
+          fetch-depth: 0
+
+      - name: Build fix51 package
+        run: python3 tools/ops_build_fix51.py
+
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+
+      - name: Validate JavaScript syntax and operator history
+        run: |
+          python3 - <<'PY'
+          import base64, json, pathlib, subprocess, tempfile
+          path = pathlib.Path('dev/builds/1.3.26-dev-release-history-fix51.json')
+          pkg = json.loads(path.read_text(encoding='utf-8'))
+          popup = None
+          with tempfile.TemporaryDirectory() as td:
+              root = pathlib.Path(td)
+              for item in pkg['files']:
+                  raw = base64.b64decode(item['content_base64'], validate=True)
+                  if item['path'] == 'popup.js':
+                      popup = raw.decode('utf-8')
+                  if item['path'].endswith('.js'):
+                      out = root / item['path'].replace('/', '__')
+                      out.write_bytes(raw)
+                      subprocess.run(['node','--check',str(out)], check=True)
+          assert popup is not None
+          for version in ('1.3.35','1.3.34','1.3.33','1.3.32','1.3.31','1.3.30','1.3.29'):
+              assert f"version: '{version}'" in popup, f'missing operator history {version}'
+          assert popup.index("version: '1.3.35'") < popup.index("version: '1.3.29'")
+          print('PASS operator history through 1.3.35')
+          PY
+
+      - name: Create DEV PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-release-history-fix51.json dev/self-update.json dev/history.json
+          git commit -m "dev: fix51 update operator release history"
+          git push origin HEAD:dev/release-history-fix51
+          gh pr create \
+            --base main \
+            --head dev/release-history-fix51 \
+            --title "DEV fix51: actualizar historial visible hasta 1.3.35" \
+            --body "Actualiza el historial de RELEASES visible en el popup desde 1.3.29 hasta 1.3.35 con contenido útil para el operador. No modifica RELEASE ni el workflow de la planilla."
