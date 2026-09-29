@@ -232,6 +232,7 @@
     "fix48 adds a protected checkbox hitbox that suppresses native MIRA grid clicks in the selector area, makes quick-failure/admin panels collapsible, and adds explicit confirmation before restoring default templates.",
     "fix49 moves default-template restore confirmation into a centered modal and adds smooth open/close transitions to the quick-failure and template-management panels.",
     "fix50 makes the Completar Tarea menu and all personal-button menus mutually exclusive, so opening one always closes any other currently open completion menu.",
-    "fix51 updates the operator-facing RELEASE history through 1.3.35 without exposing internal implementation or publication details."
+    "fix51 updates the operator-facing RELEASE history through 1.3.35 without exposing internal implementation or publication details.",
+    "fix51 rebuilt from fix50 and validated by the DEV matrix before release promotion."
   ]
 }
