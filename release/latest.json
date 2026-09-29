@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.35",
+  "latest": "1.3.36",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Vista previa de cuadras incorpora fallas rápidas y templates editables para completar FALLA DETECTADA.",
-    "Las cuadras se muestran un rango por línea y los templates se insertan al final de FALLA DETECTADA sin alterar ESTADO DE FUENTE."
+    "Completar Tarea y los botones personales ahora mantienen un solo menú desplegable abierto a la vez.",
+    "El historial de versiones visible en el popup se actualiza e incorpora las RELEASES hasta 1.3.35."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.35-mira-cuadras-modal-transitions-fix49-candidate1-package.json",
-  "package_sha256": "89c88ef417c455dde5aa53af6adf99f1716777cc5ef4dd87c5c94642b8a43fa4",
-  "source_package": "release/v1.3.35-mira-cuadras-modal-transitions-fix49-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.36-release-history-fix51-candidate1-package.json",
+  "package_sha256": "eb280aba58078ac7134905a9e9d21b1a654c907622b7a5789dd102c01fff08f2",
+  "source_package": "release/v1.3.36-release-history-fix51-candidate1-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
