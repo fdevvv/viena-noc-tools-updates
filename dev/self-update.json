@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-mira-cuadras-templates-fix46",
+  "build": "1.3.26-dev-mira-cuadras-template-order-fix47",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-mira-cuadras-templates-fix46.json",
-  "package_sha256": "57ae576f9741abca48c74e37c23daf97069444c49a2ea995536a1c117f0831a8",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-mira-cuadras-template-order-fix47.json",
+  "package_sha256": "ee6687c5ad1de80df67e0f0aa77b2558bfb68377606751c80566db38cd69efcb",
   "notes": [
-    "Fix46 DEV: la vista previa de cuadras genera el template completo con Nodo CMTS, cuadras, Falla detectada y Estado de fuente.",
-    "Falla detectada incorpora templates seleccionables sin sobrescribir texto manual.",
-    "Los templates pueden crearse, editarse, eliminarse y restaurarse; se guardan en chrome.storage.local."
+    "Fix47 DEV: CUADRAS se muestra en bloque, con cada rango en su propia línea.",
+    "Los templates nuevos se insertan al final de FALLA DETECTADA, incluso si ESTADO DE FUENTE ya fue completado.",
+    "Se conserva intacto el texto manual del operador dentro de FALLA DETECTADA."
   ]
 }
