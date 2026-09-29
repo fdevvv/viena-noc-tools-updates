@@ -1,16 +1,15 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.33",
+  "latest": "1.3.34",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Se eliminan avisos de actualización obsoletos que ya no coinciden con la RELEASE publicada.",
-    "Se vuelve a validar la versión publicada antes de actuar sobre un aviso de actualización.",
-    "Se mejora la claridad de la carpeta vinculada y la sincronización del registro de instalación."
+    "Cable Modem incorpora Seleccionar cuadras para elegir direcciones del listado y copiar la información agrupada.",
+    "Tareas Internas incorpora el botón Asignado - usuario VIENA para completar o quitar rápidamente el usuario reconocido manteniendo el estado Asignada."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.33-update-registry-coherence-fix37-candidate1-package.json",
-  "package_sha256": "7f589e633203992534bd4013ee16fab831911f0a23773de7596e010cd1c38038",
-  "source_package": "release/v1.3.33-update-registry-coherence-fix37-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.34-mira-cuadras-dom-fix45-candidate1-package.json",
+  "package_sha256": "14f9eba762e5e718a04028cb0e95644e64c96c597ce15c16eb9e0a88d92fc04c",
+  "source_package": "release/v1.3.34-mira-cuadras-dom-fix45-candidate1-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
