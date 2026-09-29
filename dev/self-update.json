@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-ticket-start-zoom-fix42",
+  "build": "1.3.26-dev-mira-cuadras-fix43",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ticket-start-zoom-fix42.json",
-  "package_sha256": "ab4c38e68ff5356c395c28265e35b2c855dd2728e8d48ba336f13b1fb70bd215",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-mira-cuadras-fix43.json",
+  "package_sha256": "8d8adba497e151b24565ea4bb228cef4c1b795efed935437bb044780f5e4c8ca",
   "notes": [
-    "Se elimina el mini-zoom del ticket al usar Iniciar Tarea después de interactuar con Cambiar Estado.",
-    "Iniciar Tarea activa el mismo bloqueo temporal seguro de transition/animation usado por el fix de diálogos persistentes.",
-    "El flujo automático también rearma el bloqueo antes de pulsar el Cambiar Estado nativo, sin modificar transform ni el comportamiento del modal."
+    "MIRA 5 Listado de CMs incorpora Seleccionar cuadras siempre visible junto a las acciones del listado.",
+    "Las direcciones seleccionadas se agrupan por calle en cuadras de 100 y sólo se fusionan rangos consecutivos; los huecos se mantienen separados.",
+    "Antes de copiar se muestra una vista previa exacta del texto, y un nuevo filtro limpia la selección anterior sin alterar el filtrado nativo."
   ]
 }

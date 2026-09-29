@@ -153,6 +153,13 @@
       "updater_sha256": "613ea03563c4379dd7832f5e60b1dac838e5e428809667d8b886886060dbbcef",
       "must_support_future_upgrade": true,
       "notes": "Registry-pending status build immediately before stale update-notification and folder-verification coherence fix37."
+    },
+    {
+      "id": "dev-fix42",
+      "package": "dev/builds/1.3.26-dev-ticket-start-zoom-fix42.json",
+      "updater_sha256": "613ea03563c4379dd7832f5e60b1dac838e5e428809667d8b886886060dbbcef",
+      "must_support_future_upgrade": true,
+      "notes": "Immediate predecessor of the MIRA Listado de CMs block-range selection fix43."
     }
   ],
   "portable_profile": {
@@ -178,8 +185,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-ticket-start-zoom-fix42",
-  "current_package": "dev/builds/1.3.26-dev-ticket-start-zoom-fix42.json",
+  "current_build": "1.3.26-dev-mira-cuadras-fix43",
+  "current_package": "dev/builds/1.3.26-dev-mira-cuadras-fix43.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -209,6 +216,7 @@
     "fix39 turns the Tareas Internas assigned-user action into an idempotent toggle: a second click clears only Asignado a while keeping ASIGNADA selected, then refreshes the table.",
     "fix40 initializes the Vuetify Asignado a autocomplete before programmatic writes, fixing the empty-field first-use case while preserving the fix39 toggle and ASIGNADA state.",
     "fix41 follows VIENA's native filter commit path: after updating ASIGNADA/Asignado a it clicks the exact FILTRAR action instead of table refresh, so assignedTo is committed before the criteria request.",
-    "fix42 extends the persistent-dialog bounce protection to the open-ticket Iniciar Tarea flow: it arms a short transition/animation lock on pointerdown/click and immediately before the native Cambiar Estado action, without overriding dialog transforms."
+    "fix42 extends the persistent-dialog bounce protection to the open-ticket Iniciar Tarea flow: it arms a short transition/animation lock on pointerdown/click and immediately before the native Cambiar Estado action, without overriding dialog transforms.",
+    "fix43 adds an always-visible MIRA Listado de CMs block-selection action, groups selected street heights into consecutive 100-address ranges, previews the exact ticket text before copying, and keeps Copiar datos Edif aligned in the same action group when present."
   ]
 }
