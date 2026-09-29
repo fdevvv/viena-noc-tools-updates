@@ -38,7 +38,7 @@ jobs:
         env:
           RELEASE_VERSION: ${{ steps.release.outputs.version }}
         run: |
-          printf 'latest_release\n%s\n' "$RELEASE_VERSION" > release/latest-version.csv
+          printf 'latest_release\nv%s\n' "$RELEASE_VERSION" > release/latest-version.csv
 
       - name: Commit mirror only when changed
         env:
