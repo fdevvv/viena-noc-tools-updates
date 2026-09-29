@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.34",
+  "latest": "1.3.35",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Cable Modem incorpora Seleccionar cuadras para elegir direcciones del listado y copiar la información agrupada.",
-    "Tareas Internas incorpora el botón Asignado - usuario VIENA para completar o quitar rápidamente el usuario reconocido manteniendo el estado Asignada."
+    "Vista previa de cuadras incorpora fallas rápidas y templates editables para completar FALLA DETECTADA.",
+    "Las cuadras se muestran un rango por línea y los templates se insertan al final de FALLA DETECTADA sin alterar ESTADO DE FUENTE."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.34-mira-cuadras-dom-fix45-candidate1-package.json",
-  "package_sha256": "14f9eba762e5e718a04028cb0e95644e64c96c597ce15c16eb9e0a88d92fc04c",
-  "source_package": "release/v1.3.34-mira-cuadras-dom-fix45-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.35-mira-cuadras-modal-transitions-fix49-candidate1-package.json",
+  "package_sha256": "89c88ef417c455dde5aa53af6adf99f1716777cc5ef4dd87c5c94642b8a43fa4",
+  "source_package": "release/v1.3.35-mira-cuadras-modal-transitions-fix49-candidate1-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
