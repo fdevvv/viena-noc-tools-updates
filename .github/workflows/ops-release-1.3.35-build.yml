@@ -1,0 +1,85 @@
+name: OPS Prepare RELEASE 1.3.35
+
+on:
+  push:
+    branches:
+      - ops/release-1.3.35-build
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Resolve current validated DEV package
+        id: dev
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          pointer=json.loads(pathlib.Path("dev/self-update.json").read_text(encoding="utf-8"))
+          url=str(pointer["package_url"])
+          rel=None
+          for marker in ("/refs/heads/main/","/main/"):
+              if marker in url:
+                  rel=url.split(marker,1)[1]
+                  break
+          if not rel or not pathlib.Path(rel).exists():
+              raise SystemExit(f"DEV package missing/unsupported: {rel}")
+          with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as fh:
+              fh.write(f"package={rel}\n")
+          PY
+
+      - name: Build immutable RELEASE candidate and operator ZIP
+        id: build
+        env:
+          DEV_PACKAGE: ${{ steps.dev.outputs.package }}
+        run: |
+          set -euo pipefail
+          result="$(python3 tools/prepare_release_candidate.py --dev-package "$DEV_PACKAGE" --version "1.3.35" --candidate "1")"
+          printf '%s\n' "$result"
+          candidate="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["candidate"])')"
+          zip_path="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["zip"])')"
+          candidate_sha="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["candidate_sha256"])')"
+          build_id="$(printf '%s' "$result" | python3 -c 'import json,sys; print(json.load(sys.stdin)["build"])')"
+          {
+            echo "candidate=$candidate"
+            echo "zip=$zip_path"
+            echo "candidate_sha=$candidate_sha"
+            echo "build_id=$build_id"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate RELEASE compatibility
+        env:
+          CANDIDATE: ${{ steps.build.outputs.candidate }}
+        run: python3 tools/validate_release_compat.py --package "$CANDIDATE"
+
+      - name: Ensure frozen pointers remain untouched
+        run: git diff --exit-code -- version.json release/latest.json
+
+      - name: Create candidate PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE: ${{ steps.build.outputs.candidate }}
+          ZIP_PATH: ${{ steps.build.outputs.zip }}
+          CANDIDATE_SHA: ${{ steps.build.outputs.candidate_sha }}
+          BUILD_ID: ${{ steps.build.outputs.build_id }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$CANDIDATE" "$ZIP_PATH"
+          staged="$(git diff --cached --name-only)"
+          test "$(printf '%s\n' "$staged" | wc -l)" -eq 2
+          branch="release/candidate-1.3.35-c1-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          git commit -m "release: prepare 1.3.35 candidate 1"
+          git push origin "HEAD:$branch"
+          gh pr create --base main --head "$branch" --title "Release: prepare 1.3.35 candidate 1" --body "Candidate RELEASE 1.3.35 desde el DEV validado actual. Build público: $BUILD_ID. Package SHA256: $CANDIDATE_SHA. Incluye únicamente package inmutable y ZIP de operador; no modifica release/latest.json ni version.json."
