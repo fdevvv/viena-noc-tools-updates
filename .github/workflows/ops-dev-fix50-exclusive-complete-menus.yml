@@ -1,0 +1,227 @@
+name: OPS DEV fix50 exclusive complete menus
+
+on:
+  push:
+    branches:
+      - ops/dev-fix50-exclusive-complete-menus
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build DEV fix50
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, pathlib
+          from datetime import datetime, timezone
+
+          root = pathlib.Path(".")
+          src_path = root / "dev/builds/1.3.26-dev-mira-cuadras-modal-transitions-fix49.json"
+          dst_rel = "dev/builds/1.3.26-dev-completar-exclusive-menus-fix50.json"
+          dst_path = root / dst_rel
+          old_build = "1.3.26-dev-mira-cuadras-modal-transitions-fix49"
+          new_build = "1.3.26-dev-completar-exclusive-menus-fix50"
+
+          pkg = json.loads(src_path.read_text(encoding="utf-8"))
+          files = {}
+          order = []
+          for item in pkg["files"]:
+              raw = base64.b64decode(item["content_base64"], validate=True)
+              assert len(raw) == item["size"]
+              assert hashlib.sha256(raw).hexdigest() == item["sha256"]
+              files[item["path"]] = raw
+              order.append(item["path"])
+
+          js_path = "js/40-templates.js"
+          src = files[js_path].decode("utf-8")
+
+          marker = """    function limpiarMenusGruposPersonalizados() {
+        document.querySelectorAll('.viena-custom-template-group-menu').forEach(el => el.remove());
+    }
+
+    function crearMenuGrupoPersonalizado(grupo, boton) {"""
+          replacement = """    function limpiarMenusGruposPersonalizados() {
+        document.querySelectorAll('.viena-custom-template-group-menu').forEach(el => el.remove());
+    }
+
+    // Sólo puede haber un menú de Completar Tarea abierto a la vez.
+    // Centraliza el cierre entre el botón principal y todos los botones personales.
+    function cerrarMenusCompletarExcepto(excepto = null) {
+        const principal = document.getElementById('viena-completar-menu-principal');
+        if (principal && principal !== excepto) principal.style.display = 'none';
+
+        document.querySelectorAll('.viena-custom-template-group-menu').forEach(menu => {
+            if (menu !== excepto) menu.style.display = 'none';
+        });
+
+        if (ocultarEditorPlantillaGlobal) ocultarEditorPlantillaGlobal();
+    }
+
+    function crearMenuGrupoPersonalizado(grupo, boton) {"""
+          if marker not in src:
+              raise SystemExit("No se encontró el bloque para insertar cerrarMenusCompletarExcepto")
+          src = src.replace(marker, replacement, 1)
+
+          old_custom = """        boton.addEventListener('click', e => {
+            e.stopPropagation();
+            const abrir = menu.style.display === 'none';
+            document.querySelectorAll('.viena-custom-template-group-menu').forEach(m => { if (m !== menu) m.style.display='none'; });
+            if (abrir) { posicionar(); menu.style.display='block'; }
+            else { menu.style.display='none'; if (ocultarEditorPlantillaGlobal) ocultarEditorPlantillaGlobal(); }
+            setTimeout(()=>{try{boton.blur();}catch(_){}},0);
+        });"""
+          new_custom = """        boton.addEventListener('click', e => {
+            e.stopPropagation();
+            const abrir = menu.style.display === 'none';
+            cerrarMenusCompletarExcepto(menu);
+            if (abrir) { posicionar(); menu.style.display='block'; }
+            else { menu.style.display='none'; }
+            setTimeout(()=>{try{boton.blur();}catch(_){}},0);
+        });"""
+          if old_custom not in src:
+              raise SystemExit("No se encontró el click del botón personalizado")
+          src = src.replace(old_custom, new_custom, 1)
+
+          old_main = """        boton.onclick = (e) => {
+
+            e.stopPropagation();
+
+            const abrir = menu.style.display === 'none';
+            if (abrir) {
+                const r = boton.getBoundingClientRect();
+                menu.style.left = `${Math.max(8, Math.round(r.left))}px`;
+                menu.style.top = `${Math.round(r.bottom + 6)}px`;
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+                ocultarEditor();
+            }
+            setTimeout(() => { try { boton.blur(); } catch (_) {} }, 0);
+        };"""
+          new_main = """        boton.onclick = (e) => {
+
+            e.stopPropagation();
+
+            const abrir = menu.style.display === 'none';
+            cerrarMenusCompletarExcepto(menu);
+            if (abrir) {
+                const r = boton.getBoundingClientRect();
+                menu.style.left = `${Math.max(8, Math.round(r.left))}px`;
+                menu.style.top = `${Math.round(r.bottom + 6)}px`;
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+            setTimeout(() => { try { boton.blur(); } catch (_) {} }, 0);
+        };"""
+          if old_main not in src:
+              raise SystemExit("No se encontró el click del botón principal")
+          src = src.replace(old_main, new_main, 1)
+          files[js_path] = src.encode("utf-8")
+
+          # Coherencia de identidad DEV: todos los textos que embeben el build deben
+          # pasar al nuevo identificador, sin modificar funcionalidad adicional.
+          for path, raw in list(files.items()):
+              if path == "integrity-manifest.json":
+                  continue
+              try:
+                  txt = raw.decode("utf-8")
+              except UnicodeDecodeError:
+                  continue
+              if old_build in txt:
+                  files[path] = txt.replace(old_build, new_build).encode("utf-8")
+
+          # Recalcular integridad del payload.
+          integrity = json.loads(files["integrity-manifest.json"].decode("utf-8"))
+          integrity["build"] = new_build
+          inventory = {}
+          for path in order:
+              if path == "integrity-manifest.json":
+                  continue
+              inventory[path] = hashlib.sha256(files[path]).hexdigest()
+          integrity["files"] = inventory
+          files["integrity-manifest.json"] = (json.dumps(integrity, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+
+          pkg["build"] = new_build
+          pkg["generated_at"] = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00","Z")
+          items = []
+          for path in order:
+              raw = files[path]
+              items.append({
+                  "path": path,
+                  "size": len(raw),
+                  "sha256": hashlib.sha256(raw).hexdigest(),
+                  "content_base64": base64.b64encode(raw).decode("ascii")
+              })
+          pkg["files"] = items
+
+          raw_pkg = (json.dumps(pkg, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+          dst_path.write_bytes(raw_pkg)
+          package_sha = hashlib.sha256(raw_pkg).hexdigest()
+
+          pointer_path = root / "dev/self-update.json"
+          pointer = json.loads(pointer_path.read_text(encoding="utf-8"))
+          pointer.update({
+              "build": new_build,
+              "package_url": f"https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/{dst_rel}",
+              "package_sha256": package_sha,
+              "notes": [
+                  "Fix50 DEV: sólo puede quedar abierto un menú de Completar Tarea a la vez.",
+                  "Al abrir Completar Tarea se cierran los botones personales abiertos, y al abrir un botón personal se cierra Completar Tarea.",
+                  "Volver a tocar el mismo botón sigue cerrando su propio menú."
+              ]
+          })
+          pointer_path.write_text(json.dumps(pointer, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          history_path = root / "dev/history.json"
+          history = json.loads(history_path.read_text(encoding="utf-8"))
+          history["current_build"] = new_build
+          history["current_package"] = dst_rel
+          note = "fix50 makes the Completar Tarea menu and all personal-button menus mutually exclusive, so opening one always closes any other currently open completion menu."
+          if note not in history.get("notes", []):
+              history.setdefault("notes", []).append(note)
+          history_path.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          print(json.dumps({"package": dst_rel, "package_sha256": package_sha, "build": new_build}, indent=2))
+          PY
+
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+
+      - name: Check JS syntax
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess,tempfile
+          p=json.loads(pathlib.Path("dev/builds/1.3.26-dev-completar-exclusive-menus-fix50.json").read_text())
+          with tempfile.TemporaryDirectory() as td:
+              td=pathlib.Path(td)
+              for item in p["files"]:
+                  if not item["path"].endswith(".js"): continue
+                  out=td/item["path"].replace("/","__")
+                  out.write_bytes(base64.b64decode(item["content_base64"],validate=True))
+                  subprocess.run(["node","--check",str(out)],check=True)
+          PY
+
+      - name: Create DEV PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-completar-exclusive-menus-fix50.json dev/self-update.json dev/history.json
+          branch="dev/completar-exclusive-menus-fix50-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          git commit -m "dev: fix50 exclusive Completar Tarea menus"
+          git push origin "HEAD:$branch"
+          gh pr create --base main --head "$branch"             --title "DEV fix50: cerrar menús de Completar Tarea entre sí"             --body "Corrige el caso reproducido por tracer: Completar Tarea y los botones personales podían dejar dos desplegables abiertos. Centraliza el cierre para que sólo exista un menú de cierre abierto a la vez. Mantiene el toggle del mismo botón y no modifica RELEASE."
