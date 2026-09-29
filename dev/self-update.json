@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-mira-cuadras-fix43",
+  "build": "1.3.26-dev-mira-cuadras-rowdata-fix44",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-mira-cuadras-fix43.json",
-  "package_sha256": "8d8adba497e151b24565ea4bb228cef4c1b795efed935437bb044780f5e4c8ca",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-mira-cuadras-rowdata-fix44.json",
+  "package_sha256": "c175d8247478d0a40739e08d02b5101e712088d45f7d07ffd95c07aab7a28195",
   "notes": [
-    "MIRA 5 Listado de CMs incorpora Seleccionar cuadras siempre visible junto a las acciones del listado.",
-    "Las direcciones seleccionadas se agrupan por calle en cuadras de 100 y sólo se fusionan rangos consecutivos; los huecos se mantienen separados.",
-    "Antes de copiar se muestra una vista previa exacta del texto, y un nuevo filtro limpia la selección anterior sin alterar el filtrado nativo."
+    "Corrige la activación de checkbox en Seleccionar cuadras.",
+    "Lee calle, altura y Dirección desde jqGrid getRowData con fallback al DOM.",
+    "Amplía la detección de filas y de la celda Dirección sin modificar el filtrado nativo."
   ]
 }
