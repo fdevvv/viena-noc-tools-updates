@@ -1,13 +1,15 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-mira-cuadras-rowdata-fix44",
+  "build": "1.3.26-dev-mira-cuadras-dom-fix45",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-mira-cuadras-rowdata-fix44.json",
-  "package_sha256": "c175d8247478d0a40739e08d02b5101e712088d45f7d07ffd95c07aab7a28195",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/dev/mira-cuadras-fix45/dev/self-update-package.json",
+  "package_sha256": "18b3540d8d2023a183d89b11d61ee1aa9f22d9bb1a2f1175abe673b7bcc99c90",
   "notes": [
-    "Corrige la activación de checkbox en Seleccionar cuadras.",
-    "Lee calle, altura y Dirección desde jqGrid getRowData con fallback al DOM.",
-    "Amplía la detección de filas y de la celda Dirección sin modificar el filtrado nativo."
-  ]
+    "Fix45 DEV: selección de cuadras sin getRowData por fila.",
+    "Los checkbox aparecen de inmediato y el grid evita reprocesamientos causados por sus propias mutaciones.",
+    "La dirección se resuelve desde las celdas y atributos title del jqGrid, con fallback a dirección extendida."
+  ],
+  "latest": "1.3.26",
+  "generated_at": "2026-09-29T09:05:00-03:00"
 }
