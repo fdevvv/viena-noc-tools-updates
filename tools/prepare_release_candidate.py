@@ -193,6 +193,13 @@ def promote(dev_pkg, release_version, release_build, generated_at, current_relea
         "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/latest.json",
     )
     popup = popup.replace("version.json no contiene latest válido", "release/latest.json no contiene latest válido")
+    history_start = popup.find("const OPERATOR_RELEASE_HISTORY = [")
+    history_end = popup.find("\n\nfunction renderOperatorReleaseHistory()", history_start)
+    if history_start >= 0 and history_end > history_start:
+        operator_history = popup[history_start:history_end].lower()
+        for forbidden_history_text in ("registro de instalaciones", "installation registry"):
+            if forbidden_history_text in operator_history:
+                die(f"operator-facing RELEASE history contains forbidden internal detail: {forbidden_history_text}")
     # The validated DEV popup is the source of truth for operator-facing RELEASE history.
     # Do not overwrite it with an older published RELEASE history.
     set_text(files, "popup.js", popup)
