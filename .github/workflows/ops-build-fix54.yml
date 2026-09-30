@@ -1,0 +1,31 @@
+name: OPS build DEV fix54 release status/history
+
+on:
+  push:
+    branches:
+      - ops/dev-fix54-release-status-history
+    paths:
+      - tools/ops_build_fix54.py
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ops/dev-fix54-release-status-history
+          fetch-depth: 0
+      - name: Build fix54
+        run: python3 tools/ops_build_fix54.py
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Commit generated DEV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-release-status-history-fix54.json dev/self-update.json dev/history.json
+          git commit -m "dev: release status/history fix54"
+          git push origin HEAD:ops/dev-fix54-release-status-history
