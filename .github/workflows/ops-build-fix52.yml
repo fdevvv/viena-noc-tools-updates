@@ -1,0 +1,34 @@
+name: OPS build DEV fix52 registry v2.1
+
+on:
+  push:
+    branches:
+      - ops/dev-fix52-registry-v21
+    paths:
+      - tools/ops_build_fix52.py
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ops/dev-fix52-registry-v21
+          fetch-depth: 0
+
+      - name: Build fix52
+        run: python3 tools/ops_build_fix52.py
+
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+
+      - name: Commit generated DEV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-registry-v21-fix52.json dev/self-update.json dev/history.json
+          git commit -m "dev: registry backend v2.1 fix52"
+          git push origin HEAD:ops/dev-fix52-registry-v21
