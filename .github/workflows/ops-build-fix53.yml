@@ -1,0 +1,31 @@
+name: OPS build DEV fix53 release history 1.3.37
+
+on:
+  push:
+    branches:
+      - ops/dev-fix53-release-history-137
+    paths:
+      - tools/ops_build_fix53.py
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ops/dev-fix53-release-history-137
+          fetch-depth: 0
+      - name: Build fix53
+        run: python3 tools/ops_build_fix53.py
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Commit generated DEV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-release-history-137-fix53.json dev/self-update.json dev/history.json
+          git commit -m "dev: release history 1.3.37 fix53"
+          git push origin HEAD:ops/dev-fix53-release-history-137
