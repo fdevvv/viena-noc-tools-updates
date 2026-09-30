@@ -48,7 +48,8 @@ history = """const OPERATOR_RELEASE_HISTORY = [
       'Completar Tarea y los botones personales mantienen un solo menú desplegable abierto a la vez.',
       'El historial de versiones visible en el popup se actualizó con las RELEASES recientes.'
     ]
-  },
+  }
+];
 """
 src = src[:a] + history + src[b:]
 for forbidden in ("registro de instalaciones", "installation registry"):
