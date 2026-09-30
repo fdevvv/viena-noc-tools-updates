@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-release-history-fix51",
+  "build": "1.3.26-dev-registry-v21-fix52",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-release-history-fix51.json",
-  "package_sha256": "9d7ff74d5d4e154bfab5fa088a6a0db64264e01d06876cbba77145021b46b5a7",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-registry-v21-fix52.json",
+  "package_sha256": "a66afa590a30ef98c5369c9fd455b1e2fa84f9bc25b4cbb1546978910f69106e",
   "notes": [
-    "Fix51 DEV: el historial visible del popup se actualiza desde 1.3.29 hasta 1.3.35.",
-    "El historial mantiene sólo cambios útiles para el operador y omite detalles internos de desarrollo.",
-    "No modifica RELEASE ni el flujo de actualización."
+    "Fix52 DEV: migra el registro de instalaciones al backend Apps Script v2.1.",
+    "El nuevo backend reutiliza la primera fila libre real y consolida registros repetidos.",
+    "No modifica funcionalidades operativas de VIENA, MIRA 5, GPON, MOICA ni Grafana."
   ]
 }
