@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-release-history-137-fix53",
+  "build": "1.3.26-dev-release-status-history-fix54",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-release-history-137-fix53.json",
-  "package_sha256": "1b47b5494732c2296c1ad2d5ff1e915fd47a22459606997fb4180c1890a80657",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-release-status-history-fix54.json",
+  "package_sha256": "b464d975fe55f1f46d57a4591e8dbd8891bd95a5efa695573e7716cc46e1208f",
   "notes": [
-    "Fix53 DEV: prepara el historial visible para la RELEASE 1.3.37.",
-    "Agrega 1.3.36 y 1.3.37 al historial del popup.",
-    "Mantiene el backend de registro v2.1 validado en fix52."
+    "Fix54 DEV: corrige el historial visible y prepara la siguiente RELEASE.",
+    "El estado de actualización se alinea con la RELEASE vigente.",
+    "El historial visible queda limitado a información útil para el operador."
   ]
 }
