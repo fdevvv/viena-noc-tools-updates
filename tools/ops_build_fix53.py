@@ -99,4 +99,3 @@ if note not in history.get("notes", []):
 history_path.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 print(json.dumps({"package": dst_rel, "sha256": package_sha, "build": new_build}, indent=2))
-\n# trigger\n
