@@ -148,6 +148,17 @@ pointer_path.write_text(json.dumps(pointer, ensure_ascii=False, indent=2) + "\n"
 
 history_path = root / "dev/history.json"
 history = json.loads(history_path.read_text(encoding="utf-8"))
+profile = history.setdefault("portable_profile", {})
+required = list(profile.get("required_root_files", []))
+for path in [
+    "home.html", "home.css", "home.js",
+    "icons/vn-1-16.png", "icons/vn-1-32.png", "icons/vn-1-48.png", "icons/vn-1-128.png",
+    "icons/vn-2-16.png", "icons/vn-2-32.png", "icons/vn-2-48.png", "icons/vn-2-128.png",
+    "icons/vn-3-16.png", "icons/vn-3-32.png", "icons/vn-3-48.png", "icons/vn-3-128.png",
+]:
+    if path not in required:
+        required.append(path)
+profile["required_root_files"] = required
 history["current_build"] = new_build
 history["current_package"] = dst_rel
 note = "fix60 introduces the popup/full-view UX redesign, integrated button editor and icon personalization while preserving the existing updater and persistent data."
