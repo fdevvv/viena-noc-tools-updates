@@ -157,4 +157,4 @@ for required in ["home.html","home.css","home.js","icons/vn-1-16.png","icons/vn-
     assert required in files
 assert json.loads(files["manifest.json"].decode("utf-8"))["version"] == "1.3.26"
 
-print(json.dumps({"package": dst_rel, "sha256": package_sha, "build": new_build, "files": len(pkg["files"]}, indent=2))
+print(json.dumps({"package": dst_rel, "sha256": package_sha, "build": new_build, "files": len(pkg["files"])}, indent=2))
