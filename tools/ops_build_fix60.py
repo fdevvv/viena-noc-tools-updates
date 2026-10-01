@@ -76,8 +76,6 @@ desired_order = [
   "manifest.json",
   "popup.html",
   "popup.js",
-  "updater.html",
-  "updater.js"
 ]
 
 pkg = json.loads(src_path.read_text(encoding="utf-8"))
@@ -90,6 +88,10 @@ for item in pkg["files"]:
 
 for path, compressed_b64 in overlays.items():
     files[path] = zlib.decompress(base64.b64decode(compressed_b64))
+
+# Legacy forked updater UI is intentionally excluded from portable DEV packages.
+files.pop("updater.html", None)
+files.pop("updater.js", None)
 
 # Integrity inventory covers every runtime file except itself.
 missing = [p for p in desired_order if p != "integrity-manifest.json" and p not in files]
@@ -154,7 +156,7 @@ if note not in history.get("notes", []):
 history_path.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 # Safety assertions for this update.
-assert len(pkg["files"]) == len(desired_order) == 43
+assert len(pkg["files"]) == len(desired_order) == 41
 for required in ["home.html","home.css","home.js","icons/vn-1-16.png","icons/vn-2-128.png","icons/vn-3-128.png"]:
     assert required in files
 assert json.loads(files["manifest.json"].decode("utf-8"))["version"] == "1.3.26"
