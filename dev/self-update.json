@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-persistent-dialog-bounce-fix55",
+  "build": "1.3.26-dev-moica-cmts-fix56",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-persistent-dialog-bounce-fix55.json",
-  "package_sha256": "40cb4d15c00b80e7d6d1223a5b3692cb6eaf4c2153ddde285a342594d51bf4dd",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-moica-cmts-fix56.json",
+  "package_sha256": "d72cd115525751d2888b53f70596286d8db15619323aab86abd69073c94b4cec",
   "notes": [
-    "Fix55 DEV: elimina el rebote/mini-zoom de los modales persistent al hacer click fuera.",
-    "El modal sigue siendo persistent y no se cierra al tocar el overlay.",
-    "El cambio se limita a la animación v-dialog--animated de Vuetify."
+    "Fix56 DEV: MOICA2 usa Nodo CMTS cuando el campo Nodo viene concatenado.",
+    "Los nodos simples mantienen exactamente el flujo anterior.",
+    "Los tickets especiales de falla de fuente conservan su resolución autoritativa desde Mensaje."
   ]
 }
