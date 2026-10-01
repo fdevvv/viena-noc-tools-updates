@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-release-status-history-fix54",
+  "build": "1.3.26-dev-persistent-dialog-bounce-fix55",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-release-status-history-fix54.json",
-  "package_sha256": "b464d975fe55f1f46d57a4591e8dbd8891bd95a5efa695573e7716cc46e1208f",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-persistent-dialog-bounce-fix55.json",
+  "package_sha256": "40cb4d15c00b80e7d6d1223a5b3692cb6eaf4c2153ddde285a342594d51bf4dd",
   "notes": [
-    "Fix54 DEV: corrige el historial visible y prepara la siguiente RELEASE.",
-    "El estado de actualización se alinea con la RELEASE vigente.",
-    "El historial visible queda limitado a información útil para el operador."
+    "Fix55 DEV: elimina el rebote/mini-zoom de los modales persistent al hacer click fuera.",
+    "El modal sigue siendo persistent y no se cierra al tocar el overlay.",
+    "El cambio se limita a la animación v-dialog--animated de Vuetify."
   ]
 }
