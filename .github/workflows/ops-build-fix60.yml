@@ -1,0 +1,56 @@
+name: OPS build DEV fix60 UI redesign
+
+on:
+  push:
+    branches:
+      - ops/dev-fix60-ui-redesign
+    paths:
+      - tools/ops_build_fix60.py
+      - .github/workflows/ops-build-fix60.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ops/dev-fix60-ui-redesign
+          fetch-depth: 0
+
+      - name: Build fix60 package
+        run: python3 tools/ops_build_fix60.py
+
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+
+      - name: Validate fix60 package contents
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, pathlib
+          p=pathlib.Path('dev/builds/1.3.26-dev-icon-personalization-polish-fix60.json')
+          d=json.loads(p.read_text(encoding='utf-8'))
+          assert d['build']=='1.3.26-dev-icon-personalization-polish-fix60'
+          assert d['channel']=='DEV' and d['version']=='1.3.26'
+          assert len(d['files'])==43
+          names={x['path'] for x in d['files']}
+          required={'home.html','home.css','home.js','icons/vn-1-16.png','icons/vn-2-128.png','icons/vn-3-128.png','integrity-manifest.json'}
+          assert required <= names
+          for x in d['files']:
+              raw=base64.b64decode(x['content_base64'], validate=True)
+              assert len(raw)==x['size']
+              assert hashlib.sha256(raw).hexdigest()==x['sha256']
+          ptr=json.loads(pathlib.Path('dev/self-update.json').read_text(encoding='utf-8'))
+          assert ptr['package_sha256']==hashlib.sha256(p.read_bytes()).hexdigest()
+          print({'files':len(d['files']),'sha256':ptr['package_sha256']})
+          PY
+
+      - name: Commit generated DEV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-icon-personalization-polish-fix60.json dev/self-update.json dev/history.json
+          git commit -m "dev: publish UI redesign fix60"
+          git push origin HEAD:ops/dev-fix60-ui-redesign
