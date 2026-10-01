@@ -4,7 +4,7 @@
   "build": "1.3.26-dev-moica-cmts-fix56",
   "channel": "DEV",
   "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-moica-cmts-fix56.json",
-  "package_sha256": "b04f5568b059f89c1df41ed965316ad6804886d4e551fe2481336a20f1d77be9",
+  "package_sha256": "d72cd115525751d2888b53f70596286d8db15619323aab86abd69073c94b4cec",
   "notes": [
     "Fix56 DEV: MOICA2 usa Nodo CMTS cuando el campo Nodo viene concatenado.",
     "Los nodos simples mantienen exactamente el flujo anterior.",
