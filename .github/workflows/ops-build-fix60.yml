@@ -34,9 +34,9 @@ jobs:
           d=json.loads(p.read_text(encoding='utf-8'))
           assert d['build']=='1.3.26-dev-icon-personalization-polish-fix60'
           assert d['channel']=='DEV' and d['version']=='1.3.26'
-          assert len(d['files'])==41
+          assert len(d['files'])==28
           names={x['path'] for x in d['files']}
-          required={'home.html','home.css','home.js','icons/vn-1-16.png','icons/vn-2-128.png','icons/vn-3-128.png','integrity-manifest.json'}
+          required={'popup.html','popup.js','js/96-ui-assets.js','js/97-home-ui.js','js/40-templates.js','integrity-manifest.json'}
           assert required <= names
           for x in d['files']:
               raw=base64.b64decode(x['content_base64'], validate=True)
