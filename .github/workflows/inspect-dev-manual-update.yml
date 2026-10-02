@@ -1,0 +1,25 @@
+name: Inspect DEV manual update surfaces
+on:
+  push:
+    branches: [ops/inspect-dev-manual-update]
+    paths: [.github/workflows/inspect-dev-manual-update.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          import json,base64,re
+          p=json.load(open('dev/builds/1.3.26-dev-assign-start-selected-row-fix84.json',encoding='utf-8'))
+          files={x['path']:base64.b64decode(x['content_base64']).decode('utf-8','replace') for x in p['files']}
+          for path in ('popup.html','popup.js'):
+              s=files[path]
+              print('\n===== '+path+' =====')
+              for needle in ('id="checkUpdate"','id="openUpdate"','update-actions','viena_usuario','chrome.storage.local.get','renderUpdateActionButton'):
+                  i=s.find(needle)
+                  if i>=0:
+                      print('\n--- '+needle+' ---\n'+s[max(0,i-1200):i+3500])
+          PY
