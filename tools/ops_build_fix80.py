@@ -390,15 +390,19 @@ rep="""                fila.dataset.nuevosVts = '1';
 if anchor not in m: raise SystemExit("violet help anchor missing")
 m=m.replace(anchor,rep,1)
 
-anchor="""    // Fase 3: iniciar la lectura compartida en paralelo. TodavÃ­a no influye
-    // en procesarTabla()/procesarFila() ni en los colores existentes.
-    setTimeout(
+anchor="""    setTimeout(
+        sincronizarEstadosCompartidos,
+        500
+    );
 """
 rep="""    actualizarEstadoSyncUi(
         'syncing'
     );
 
     setTimeout(
+        sincronizarEstadosCompartidos,
+        500
+    );
 """
 if anchor not in m: raise SystemExit("execution status anchor missing")
 m=m.replace(anchor,rep,1)
