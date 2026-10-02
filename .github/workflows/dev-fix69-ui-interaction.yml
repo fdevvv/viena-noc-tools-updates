@@ -1,0 +1,59 @@
+name: DEV fix69 UI interaction
+on:
+  push:
+    branches: [dev/ui-interaction-fix69]
+    paths:
+      - tools/ops_build_fix69.py
+      - .github/workflows/dev-fix69-ui-interaction.yml
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/ui-interaction-fix69
+          fetch-depth: 0
+      - name: Build candidate
+        run: python3 tools/ops_build_fix69.py
+      - name: Validate exact DEV updater matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate all packaged JavaScript
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-ui-interaction-fix69.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              x=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              x.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(x)],check=True)
+          PY
+      - name: UI interaction acceptance
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-ui-interaction-fix69.json').read_text())
+          fs={f['path']:base64.b64decode(f['content_base64']) for f in p['files']}
+          h=fs['js/97-home-ui.js'].decode()
+          checks={
+            'update gap':'.view[data-view="updates"] .stats.two{margin-bottom:10px!important}' in h,
+            'global rebound removed':'fix68BaseRenderEditorForm' not in h,
+            'accordion anchor':'window.scrollBy(0,delta)' in h,
+            'expanded preserved':'preserveExpanded=true' in h,
+            'direct toolbar icon':'applyExtensionIconFromPage' in h and 'chrome.action.setIcon({imageData})' in h,
+            'system name visible':'nameInput.readOnly=isSystem' in h,
+            'loading hidden':"empty.style.display='none'" in h,
+          }
+          print(json.dumps(checks,ensure_ascii=False,indent=2))
+          bad=[k for k,v in checks.items() if not v]
+          if bad: raise SystemExit('FAILED: '+', '.join(bad))
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-ui-interaction-fix69.json dev/self-update.json dev/history.json
+          git commit -m "dev: build UI interaction fix69"
+          git push origin HEAD:dev/ui-interaction-fix69
