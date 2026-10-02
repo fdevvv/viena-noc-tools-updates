@@ -1,0 +1,59 @@
+name: DEV fix77 metricas sync violet phase6
+on:
+  push:
+    branches: [dev/metricas-sync-violet-phase6-fix77]
+    paths:
+      - tools/ops_build_fix77.py
+      - .github/workflows/dev-fix77-metricas-sync-violet-phase6.yml
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/metricas-sync-violet-phase6-fix77
+          fetch-depth: 0
+      - name: Build candidate
+        run: python3 tools/ops_build_fix77.py
+      - name: Validate exact DEV updater matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate JavaScript
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-metricas-sync-violet-phase6-fix77.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              x=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              x.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(x)],check=True)
+          PY
+      - name: Phase 6 acceptance
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-metricas-sync-violet-phase6-fix77.json').read_text())
+          m=base64.b64decode(next(f['content_base64'] for f in p['files'] if f['path']=='js/50-metrics.js')).decode(errors='replace')
+          checks={
+            'pending map':'metricasSyncPendientes = new Map()' in m,
+            'pending preferred':"fuenteSincronizada = 'pending'" in m,
+            'remote fallback':"fuenteSincronizada = 'global'" in m,
+            'global violet total':'valores.total > base.total' in m,
+            'global violet problem':'valores.problema > base.problema' in m,
+            'optimistic ctrl dblclick':'metricasSyncPendientes.set(' in m,
+            'server reconciliation':'metricasSyncPendientes.delete(nodo)' in m,
+            'immediate refresh':'procesarTabla();' in m,
+          }
+          print(json.dumps(checks,ensure_ascii=False,indent=2))
+          bad=[k for k,v in checks.items() if not v]
+          if bad: raise SystemExit('FAILED: '+', '.join(bad))
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-metricas-sync-violet-phase6-fix77.json dev/self-update.json dev/history.json
+          git commit -m "dev: build metricas sync violet phase6 fix77"
+          git push origin HEAD:dev/metricas-sync-violet-phase6-fix77
