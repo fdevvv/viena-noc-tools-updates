@@ -1,4 +1,4 @@
-name: Rehash DEV fix87
+name: Repair DEV fix87 integrity
 
 on:
   push:
@@ -11,23 +11,45 @@ permissions:
   contents: write
 
 jobs:
-  rehash:
+  repair:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: dev/fix87-update-ui-manual-zip
-      - name: Recalculate DEV package SHA-256
+      - name: Rebuild package integrity and pointer SHA
         run: |
           python3 - <<'PY'
-          import hashlib, json, pathlib
-          pkg = pathlib.Path('dev/builds/1.3.26-dev-update-ui-manual-zip-fix87.json')
-          sha = hashlib.sha256(pkg.read_bytes()).hexdigest()
-          ptr = pathlib.Path('dev/self-update.json')
-          data = json.loads(ptr.read_text(encoding='utf-8'))
-          data['package_sha256'] = sha
-          ptr.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-          print(sha)
+          import base64, hashlib, json, pathlib
+          package_path = pathlib.Path('dev/builds/1.3.26-dev-update-ui-manual-zip-fix87.json')
+          ptr_path = pathlib.Path('dev/self-update.json')
+          pkg = json.loads(package_path.read_text(encoding='utf-8'))
+          items = {item['path']: item for item in pkg['files']}
+          decoded = {}
+          for path,item in items.items():
+              decoded[path] = base64.b64decode(item['content_base64'], validate=True)
+          for path,data in decoded.items():
+              if path == 'integrity-manifest.json':
+                  continue
+              items[path]['size'] = len(data)
+              items[path]['sha256'] = hashlib.sha256(data).hexdigest()
+          integ = json.loads(decoded['integrity-manifest.json'].decode('utf-8'))
+          integ['build'] = pkg['build']
+          integ['files'] = {
+              path: hashlib.sha256(data).hexdigest()
+              for path,data in decoded.items()
+              if path != 'integrity-manifest.json'
+          }
+          integ_raw = (json.dumps(integ, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
+          items['integrity-manifest.json']['size'] = len(integ_raw)
+          items['integrity-manifest.json']['sha256'] = hashlib.sha256(integ_raw).hexdigest()
+          items['integrity-manifest.json']['content_base64'] = base64.b64encode(integ_raw).decode('ascii')
+          package_path.write_text(json.dumps(pkg, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          package_sha = hashlib.sha256(package_path.read_bytes()).hexdigest()
+          ptr = json.loads(ptr_path.read_text(encoding='utf-8'))
+          ptr['package_sha256'] = package_sha
+          ptr_path.write_text(json.dumps(ptr, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print('package_sha256', package_sha)
           PY
       - name: Validate DEV matrix
         run: python3 tools/validate_dev_matrix.py
@@ -46,11 +68,11 @@ jobs:
                   subprocess.run(['node','--check',str(out)],check=True)
           print('PASS JavaScript syntax')
           PY
-      - name: Commit corrected pointer
+      - name: Commit repaired artifacts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dev/self-update.json
+          git add dev/self-update.json dev/builds/1.3.26-dev-update-ui-manual-zip-fix87.json
           git rm .github/workflows/fix87-rehash.yml
-          git commit -m "DEV fix87: correct package SHA-256"
+          git commit -m "DEV fix87: repair package integrity"
           git push origin HEAD:dev/fix87-update-ui-manual-zip
