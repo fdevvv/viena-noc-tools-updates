@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-state-ring-icon-fix72",
+  "build": "1.3.26-dev-page-manifest-icon-fix73",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-state-ring-icon-fix72.json",
-  "package_sha256": "4dbf86b43659ba52c126e8aea56aab36bcf39241f6b6467efe298d03e10ad1dc",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-page-manifest-icon-fix73.json",
+  "package_sha256": "76df823de7292bde8d2c8b2a3be01e932a9473ae9ec9dd434d290d49531d9389",
   "notes": [
-    "El icono de la extensión incorpora un borde/anillo del color del estado actual sin perder la variante de icono elegida.",
-    "Activa usa borde verde; actualización disponible naranja; recarga de extensión rojo; recarga de pestaña ámbar.",
-    "El estado normal fuera de las páginas operativas mantiene el icono sin borde especial."
+    "La extensión incorpora iconos PNG propios en el manifest para reemplazar el icono genérico del navegador en la ficha de la extensión.",
+    "Cuando VIENA NOC Tools se abre en una pestaña, el favicon usa la variante de icono seleccionada en Personalización.",
+    "El icono de la barra del navegador y su borde de estado continúan funcionando de forma independiente."
   ]
 }
