@@ -1,0 +1,57 @@
+name: DEV fix80 metricas sync UI phase9
+on:
+  push:
+    branches: [dev/metricas-sync-ui-phase9-fix80]
+    paths:
+      - tools/ops_build_fix80.py
+      - .github/workflows/dev-fix80-metricas-sync-ui-phase9.yml
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/metricas-sync-ui-phase9-fix80
+          fetch-depth: 0
+      - name: Build candidate
+        run: python3 tools/ops_build_fix80.py
+      - name: Validate exact DEV updater matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate JavaScript
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-metricas-sync-ui-phase9-fix80.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              x=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              x.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(x)],check=True)
+          PY
+      - name: Phase 9 acceptance
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-metricas-sync-ui-phase9-fix80.json').read_text())
+          m=base64.b64decode(next(f['content_base64'] for f in p['files'] if f['path']=='js/50-metrics.js')).decode(errors='replace')
+          checks={
+            'synced status':'● Sincronizado' in m,
+            'syncing status':'↻ Sincronizando' in m,
+            'local status':'○ Modo local' in m,
+            'violet tooltip':'Valor incrementado después del reconocimiento. Ctrl + doble click para volver a marcarla en verde.' in m,
+            'once-session toast':'Violeta = aumentó después de la última marca. Ctrl + doble click para reconocer el nuevo valor.' in m and 'sessionStorage.getItem' in m,
+            'tooltip restore':'restaurarTooltipVioleta' in m,
+          }
+          print(json.dumps(checks,ensure_ascii=False,indent=2))
+          bad=[k for k,v in checks.items() if not v]
+          if bad: raise SystemExit('FAILED: '+', '.join(bad))
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-metricas-sync-ui-phase9-fix80.json dev/self-update.json dev/history.json
+          git commit -m "dev: build metricas sync UI phase9 fix80"
+          git push origin HEAD:dev/metricas-sync-ui-phase9-fix80
