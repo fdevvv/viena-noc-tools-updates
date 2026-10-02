@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-editor-entry-cleanup-fix64",
+  "build": "1.3.26-dev-icon-modal-confirm-fix65",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-editor-entry-cleanup-fix64.json",
-  "package_sha256": "639b40ce8ead8342c91face051166aefeea23afda54a6d58bcd246122ed6355a",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-icon-modal-confirm-fix65.json",
+  "package_sha256": "3499f4b839322a931a07a23be0d3be4c44f03bbfd13762385c166827b1aaf8f9",
   "notes": [
-    "Botones y plantillas abre directamente la nueva vista completa en Personalización y deja de invocar el editor viejo de VIENA.",
-    "El popup se cierra al transferir el foco al editor nuevo.",
-    "El editor ya no reserva un bloque vacío grande; Completar Tarea se selecciona automáticamente y la búsqueda aclara que filtra sólo botones personales."
+    "El selector de icono se mueve al inicio de Personalización, antes del editor, con una sección Apariencia visible.",
+    "Las eliminaciones de botones y plantillas usan un modal propio de VIENA NOC Tools y dejan de usar confirmaciones nativas del navegador.",
+    "Eliminar una plantilla queda como cambio de borrador hasta Guardar cambios; eliminar un botón confirma que la acción es irreversible."
   ]
 }
