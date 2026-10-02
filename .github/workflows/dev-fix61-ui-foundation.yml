@@ -1,0 +1,43 @@
+name: DEV fix61 UI foundation
+
+on:
+  push:
+    branches:
+      - dev/ui-foundation-fix61
+    paths:
+      - tools/ops_build_fix61.py
+      - .github/workflows/dev-fix61-ui-foundation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/ui-foundation-fix61
+          fetch-depth: 0
+      - name: Build candidate
+        run: python3 tools/ops_build_fix61.py
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate JS syntax
+        run: |
+          python3 - <<'PY'
+          import base64, json, pathlib, subprocess, tempfile
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-ui-foundation-fix61.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              path=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              path.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(path)],check=True)
+          PY
+      - name: Commit candidate to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-ui-foundation-fix61.json dev/self-update.json dev/history.json
+          git commit -m "dev: build UI foundation fix61"
+          git push origin HEAD:dev/ui-foundation-fix61

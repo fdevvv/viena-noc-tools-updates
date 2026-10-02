@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-icon-personalization-polish-fix60",
+  "build": "1.3.26-dev-ui-motion-toast-fix62",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-icon-personalization-polish-fix60.json",
-  "package_sha256": "afc990d4f912a45cfc1e7ec417aac7d25e6d1f79e3f36759a06116e15756e95b",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ui-motion-toast-fix62.json",
+  "package_sha256": "62b0ddf527355459ae56e9b78438934bd07a98654067e9f919274f6a5b9c6888",
   "notes": [
-    "Nuevo popup corporativo compacto con acceso a la vista completa de VIENA NOC Tools.",
-    "Nueva vista completa con herramientas, personalización, actualizaciones y diagnóstico reutilizando el estado existente.",
-    "Editor de botones integrado y personalización del icono con tres variantes, preservando storage, plantillas y updater actuales."
+    "Se agregan transiciones breves y feedback visual consistente al navegar y accionar botones.",
+    "La vista completa anima cambios de sección y expansiones sin afectar usuarios con reducción de movimiento.",
+    "Los avisos emergentes del popup, vista completa y VIENA pasan a un formato compacto para no cubrir contenido operativo."
   ]
 }
