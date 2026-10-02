@@ -122,8 +122,8 @@ if css_marker not in home:
   .nav-item span{font-size:17px}
 }
 '''
-    marker = '\";\\n  const HOME_BODY'
-    escaped = inject.replace('\\\\','\\\\\\\\').replace('\"','\\\\"').replace('\\n','\\\\n')
+    marker = '\";\n  const HOME_BODY'
+    escaped = inject.replace('\\\\','\\\\\\\\').replace('\"','\\\\"').replace('\n','\\n')
     if marker not in home:
         raise SystemExit("HOME_CSS marker not found")
     home = home.replace(marker, escaped + marker, 1)
