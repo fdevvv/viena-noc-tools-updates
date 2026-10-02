@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-ui-foundation-fix61",
+  "build": "1.3.26-dev-ui-motion-toast-fix62",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ui-foundation-fix61.json",
-  "package_sha256": "68827ca895cef6c90bb7e95cc2dcb4fe4cc1a74270d8681d6b21c16a3f5ee830",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ui-motion-toast-fix62.json",
+  "package_sha256": "62b0ddf527355459ae56e9b78438934bd07a98654067e9f919274f6a5b9c6888",
   "notes": [
-    "Se unifica el apellido para asignación entre popup y vista completa usando la misma clave persistente.",
-    "La vista completa simplifica el navbar a General, Personalización y Actualizaciones, eliminando accesos duplicados.",
-    "General concentra estado, herramientas, operador y actualización con una base responsive para resoluciones de escritorio y ventanas reducidas."
+    "Se agregan transiciones breves y feedback visual consistente al navegar y accionar botones.",
+    "La vista completa anima cambios de sección y expansiones sin afectar usuarios con reducción de movimiento.",
+    "Los avisos emergentes del popup, vista completa y VIENA pasan a un formato compacto para no cubrir contenido operativo."
   ]
 }
