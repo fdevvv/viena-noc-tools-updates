@@ -1,0 +1,56 @@
+name: Rehash DEV fix87
+
+on:
+  push:
+    branches:
+      - dev/fix87-update-ui-manual-zip
+    paths:
+      - .github/workflows/fix87-rehash.yml
+
+permissions:
+  contents: write
+
+jobs:
+  rehash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/fix87-update-ui-manual-zip
+      - name: Recalculate DEV package SHA-256
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          pkg = pathlib.Path('dev/builds/1.3.26-dev-update-ui-manual-zip-fix87.json')
+          sha = hashlib.sha256(pkg.read_bytes()).hexdigest()
+          ptr = pathlib.Path('dev/self-update.json')
+          data = json.loads(ptr.read_text(encoding='utf-8'))
+          data['package_sha256'] = sha
+          ptr.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(sha)
+          PY
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate JavaScript syntax in package
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess,tempfile
+          pkg=json.loads(pathlib.Path('dev/builds/1.3.26-dev-update-ui-manual-zip-fix87.json').read_text(encoding='utf-8'))
+          with tempfile.TemporaryDirectory() as td:
+              td=pathlib.Path(td)
+              for item in pkg['files']:
+                  if not item['path'].endswith('.js'):
+                      continue
+                  out=td/item['path'].replace('/','__')
+                  out.write_bytes(base64.b64decode(item['content_base64'],validate=True))
+                  subprocess.run(['node','--check',str(out)],check=True)
+          print('PASS JavaScript syntax')
+          PY
+      - name: Commit corrected pointer
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/self-update.json
+          git rm .github/workflows/fix87-rehash.yml
+          git commit -m "DEV fix87: correct package SHA-256"
+          git push origin HEAD:dev/fix87-update-ui-manual-zip
