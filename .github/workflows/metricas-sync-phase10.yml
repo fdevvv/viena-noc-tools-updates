@@ -42,14 +42,14 @@ jobs:
           ENDPOINT: https://script.google.com/macros/s/AKfycbxLKOhNj2nW8IQUVbxJK_i9j2xnIMYZQpDaecGpqhxWdB3Zld5Vi_ERWKqLsnFKdkVCFw/exec
         run: |
           set -euo pipefail
-          curl -fsSL --retry 3 --retry-delay 2 "$ENDPOINT?op=HEALTH" > /tmp/health.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 "$ENDPOINT?op=HEALTH" > /tmp/health.json
           python3 - <<'PY'
           import json
           d=json.load(open('/tmp/health.json'))
           assert d.get('ok') is True and d.get('service')=='METRICAS_SYNC', d
           print('HEALTH OK',d.get('date'),d.get('timezone'))
           PY
-          curl -fsSL --retry 3 --retry-delay 2 "$ENDPOINT?op=GET_TODAY_STATES&_=$(date +%s%N)" > /tmp/read.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 "$ENDPOINT?op=GET_TODAY_STATES" > /tmp/read.json
           python3 - <<'PY'
           import json
           d=json.load(open('/tmp/read.json'))
@@ -73,7 +73,7 @@ jobs:
           json.dump({"op":"DELETE_STATE","nodo":n},open('/tmp/d_payload.json','w'))
           PY
 
-          curl -fsSL --retry 3 --retry-delay 2             -H 'Content-Type: text/plain;charset=UTF-8'             --data-binary @/tmp/a_payload.json             "$ENDPOINT" > /tmp/a.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1             -H 'Content-Type: text/plain;charset=UTF-8'             --data-binary @/tmp/a_payload.json             "$ENDPOINT" > /tmp/a.json
           cat /tmp/a.json
           echo
           python3 - <<'PY'
@@ -84,7 +84,7 @@ jobs:
           print('operator A write OK')
           PY
 
-          curl -fsSL --retry 3 --retry-delay 2             -H 'Content-Type: text/plain;charset=UTF-8'             --data-binary @/tmp/b_payload.json             "$ENDPOINT" > /tmp/b.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1             -H 'Content-Type: text/plain;charset=UTF-8'             --data-binary @/tmp/b_payload.json             "$ENDPOINT" > /tmp/b.json
           cat /tmp/b.json
           echo
           python3 - <<'PY'
@@ -95,7 +95,7 @@ jobs:
           print('operator B write OK')
           PY
 
-          curl -fsSL --retry 3 --retry-delay 2 "$ENDPOINT?op=GET_TODAY_STATES&_=$(date +%s%N)" > /tmp/read2.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 "$ENDPOINT?op=GET_TODAY_STATES&_=$(date +%s%N)" > /tmp/read2.json
           python3 - <<'PY'
           import json
           node=open('/tmp/node').read().strip()
@@ -108,7 +108,7 @@ jobs:
           print('cross-operator latest-state OK')
           PY
 
-          curl -fsSL --retry 3 --retry-delay 2             -H 'Content-Type: text/plain;charset=UTF-8'             --data-binary @/tmp/d_payload.json             "$ENDPOINT" > /tmp/delete.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1             -H 'Content-Type: text/plain;charset=UTF-8'             --data-binary @/tmp/d_payload.json             "$ENDPOINT" > /tmp/delete.json
           python3 - <<'PY'
           import json
           d=json.load(open('/tmp/delete.json'))
@@ -116,7 +116,7 @@ jobs:
           print('cleanup request OK')
           PY
 
-          curl -fsSL --retry 3 --retry-delay 2 "$ENDPOINT?op=GET_TODAY_STATES&_=$(date +%s%N)" > /tmp/read3.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 "$ENDPOINT?op=GET_TODAY_STATES&_=$(date +%s%N)" > /tmp/read3.json
           python3 - <<'PY'
           import json
           node=open('/tmp/node').read().strip()
