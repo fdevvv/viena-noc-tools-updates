@@ -68,8 +68,7 @@ rep="""                metricasSyncInitEnCurso = new Set();
 assert anchor in m
 m=m.replace(anchor,rep,1)
 
-old_block="""            // Si antes tenía bandera y ahora no, borrar referencia
-            if (
+old_block="""            if (
                 nodo &&
                 historial[nodo]
             ) {
