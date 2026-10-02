@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-ui-detail-polish-fix68",
+  "build": "1.3.26-dev-ui-interaction-fix69",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ui-detail-polish-fix68.json",
-  "package_sha256": "2e950bfa74078b54a820d31a3f019ed0180d2a49710d21fbbbc49e91483db108",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ui-interaction-fix69.json",
+  "package_sha256": "c13d221ba975294f05fcf09dfdf91a7443c18aa7ad6661b3289f2dbdceeb85ec",
   "notes": [
-    "Se corrige la geometría y legibilidad de la sección Operador del popup, con cards proporcionadas y mejor espaciado.",
-    "El editor oculta correctamente el bloque de carga, alinea la búsqueda y los contadores de motivos, y muestra el nombre actual del botón.",
-    "Las plantillas incorporan una transición suave al desplegarse/cerrarse y las cards de versión reciben espaciado y jerarquía visual corregidos."
+    "Se corrige el espacio entre las cards de versión y el mensaje de estado en Actualizaciones.",
+    "El cambio de icono se aplica también desde la página de la extensión para actualizar inmediatamente el icono de la barra.",
+    "Las plantillas mantienen su posición visual al abrirse y ya no rebotan al guardar o descartar cambios; se conserva la plantilla abierta."
   ]
 }
