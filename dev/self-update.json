@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-assign-start-selected-row-fix84",
+  "build": "1.3.26-dev-manual-release-zip-fix85",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-assign-start-selected-row-fix84.json",
-  "package_sha256": "1691f766192796d13390e31014622a9cce55af6c98745b9cc04562ccd3290970",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-manual-release-zip-fix85.json",
+  "package_sha256": "4ff0bd6c9091eb26a2b9e7e5ea4bd00993b93fa8cd2ce4ac3d74c2439b5b8a3a",
   "notes": [
-    "Asignar e Iniciar ahora prioriza el ticket marcado con checkbox cuando hay exactamente uno seleccionado.",
-    "Sin tickets seleccionados conserva el comportamiento actual: toma la primera tarea visible en estado No asignada.",
-    "Si hay mas de un ticket seleccionado o la tarea elegida ya tiene usuario, no ejecuta para evitar operar otra fila por error."
+    "En DEV, efoschi puede descargar desde el popup el ZIP manual de la última RELEASE publicada.",
+    "La lógica queda preparada para que en RELEASE esta opción sea visible únicamente para mbruno.",
+    "La descarga manual es auxiliar y no modifica ni reemplaza el mecanismo normal de actualización."
   ]
 }
