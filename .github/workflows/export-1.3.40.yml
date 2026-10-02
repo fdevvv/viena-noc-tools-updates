@@ -1,0 +1,42 @@
+name: Export 1.3.40 ZIP
+
+on:
+  push:
+    branches:
+      - ops/export-1.3.40
+    paths:
+      - .github/workflows/export-1.3.40.yml
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build operator ZIP from published package
+        run: |
+          python3 - <<'PY'
+          import base64, json, pathlib, zipfile, shutil
+          package = pathlib.Path("release/v1.3.40-metricas-sync-assign-start-candidate1-package.json")
+          data = json.loads(package.read_text(encoding="utf-8"))
+          root = pathlib.Path("/tmp/viena_1_3_40")
+          if root.exists():
+              shutil.rmtree(root)
+          root.mkdir(parents=True)
+          for item in data["files"]:
+              path = root / item["path"]
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_bytes(base64.b64decode(item["content_base64"], validate=True))
+          out = pathlib.Path("VIENA_NOC_Tools_1.3.40.zip")
+          with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+              for p in sorted(root.rglob("*")):
+                  if p.is_file():
+                      z.write(p, p.relative_to(root).as_posix())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VIENA_NOC_Tools_1.3.40
+          path: VIENA_NOC_Tools_1.3.40.zip
+          if-no-files-found: error
