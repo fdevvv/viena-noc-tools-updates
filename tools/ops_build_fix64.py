@@ -28,7 +28,7 @@ files = {item["path"]: decode_file(item) for item in pkg["files"]}
 # 8) Popup -> new full-view editor directly. Do not call the legacy VIENA modal.
 popup_js = files["popup.js"].decode("utf-8")
 start = popup_js.find("// Editor global de botones:")
-end = popup_js.find("\n}\n", start)
+end = popup_js.rfind("\n\n}\n")
 if start < 0 or end < 0:
     raise SystemExit("legacy popup editor block not found")
 # Preserve final branch-closing brace by replacing only the editor block.
