@@ -24,7 +24,7 @@ for item in pkg["files"]:
 # Locate the existing VIENA content script that already answers VIENA_GET_DETECTED_USER.
 viena_path = None
 for path, raw in files.items():
-    if path.endswith(".js"):
+    if path.endswith(".js") and path not in {"background.js", "popup.js"}:
         s = raw.decode("utf-8", "ignore")
         if "VIENA_GET_DETECTED_USER" in s and "chrome.runtime.onMessage.addListener" in s:
             viena_path = path
