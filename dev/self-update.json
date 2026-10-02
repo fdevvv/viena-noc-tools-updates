@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-folder-popup-polish-fix63",
+  "build": "1.3.26-dev-editor-entry-cleanup-fix64",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-folder-popup-polish-fix63.json",
-  "package_sha256": "3e2c60b9d115867f15e3a7c5221ae0b4fbad784db0b6443ed35a72061b1ad041",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-editor-entry-cleanup-fix64.json",
+  "package_sha256": "639b40ce8ead8342c91face051166aefeea23afda54a6d58bcd246122ed6355a",
   "notes": [
-    "Administrar carpeta y la selección estable de carpeta se abren junto a la pestaña actual, no al final de Chrome.",
-    "El popup se compacta a 448 px y adopta tipografía Segoe UI/system con jerarquía, alineación y espaciado revisados.",
-    "La paleta se desplaza a un azul marino más corporativo y la sección Operador queda más compacta y legible."
+    "Botones y plantillas abre directamente la nueva vista completa en Personalización y deja de invocar el editor viejo de VIENA.",
+    "El popup se cierra al transferir el foco al editor nuevo.",
+    "El editor ya no reserva un bloque vacío grande; Completar Tarea se selecciona automáticamente y la búsqueda aclara que filtra sólo botones personales."
   ]
 }
