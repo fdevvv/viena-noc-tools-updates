@@ -1,14 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-status-operator-stability-fix70",
+  "build": "1.3.26-dev-icon-csp-template-viewport-fix71",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-status-operator-stability-fix70.json",
-  "package_sha256": "d667a18691eacebe764e2c6d9784eea11ba1219848641d5c65bf88877ac7eebf",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-icon-csp-template-viewport-fix71.json",
+  "package_sha256": "694a607f42ee473d6802bd2c756c8afca0fa79682c73eb7630d6094939e38d3c",
   "notes": [
-    "El estado normal de la extensión usa un badge verde mínimo para no tapar el icono.",
-    "El Usuario VIENA detectado se muestra una sola vez en Operador.",
-    "Guardar/Descartar ya no provocan saltos de scroll y se desactivan cuando no hay cambios.",
-    "Se refuerza el anclaje visual al abrir/cerrar plantillas y se elimina la ruta duplicada de cambio de icono desde la página."
+    "Se elimina el error CSP al cambiar/restaurar el icono de la extensión: los iconos embebidos ya no usan fetch sobre data: URLs.",
+    "Al desplegar una plantilla se conserva primero la posición de la fila elegida y luego se ajusta automáticamente el scroll mínimo para mostrar la plantilla completa dentro del viewport.",
+    "El cierre de una plantilla mantiene estable la posición de su encabezado y no fuerza scroll adicional."
   ]
 }
