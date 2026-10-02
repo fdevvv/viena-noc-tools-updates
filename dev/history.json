@@ -192,8 +192,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-ui-motion-toast-fix62",
-  "current_package": "dev/builds/1.3.26-dev-ui-motion-toast-fix62.json",
+  "current_build": "1.3.26-dev-folder-popup-polish-fix63",
+  "current_package": "dev/builds/1.3.26-dev-folder-popup-polish-fix63.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -241,6 +241,7 @@
     "fix56 preserves the existing MOICA2 flow for simple nodes and uses Nodo CMTS only when VIENA's Nodo is concatenated, preventing invalid concatenated MOICA searches.",
     "fix60 introduces the popup/full-view UX redesign, integrated button editor and icon personalization using only portable updater-safe paths.",
     "fix61 unifies assignment surname state, removes duplicated full-view navigation and establishes the responsive General layout foundation.",
-    "fix62 adds compact interaction motion and standardizes popup/full-view/VIENA toast sizing without changing operational logic."
+    "fix62 adds compact interaction motion and standardizes popup/full-view/VIENA toast sizing without changing operational logic.",
+    "fix63 opens folder management adjacent to the extension/current tab and compacts/refines the popup UI without changing popup business logic."
   ]
 }

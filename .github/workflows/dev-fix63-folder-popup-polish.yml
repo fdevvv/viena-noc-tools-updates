@@ -1,0 +1,58 @@
+name: DEV fix63 folder popup polish
+
+on:
+  push:
+    branches:
+      - dev/folder-popup-polish-fix63
+    paths:
+      - tools/ops_build_fix63.py
+      - .github/workflows/dev-fix63-folder-popup-polish.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/folder-popup-polish-fix63
+          fetch-depth: 0
+      - name: Build candidate
+        run: python3 tools/ops_build_fix63.py
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate JS syntax
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-folder-popup-polish-fix63.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              path=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              path.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(path)],check=True)
+          PY
+      - name: Validate targeted fixes
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-folder-popup-polish-fix63.json').read_text())
+          wanted={'popup.html','popup.js','js/97-home-ui.js'}
+          files={f['path']:base64.b64decode(f['content_base64']).decode('utf-8') for f in p['files'] if f['path'] in wanted}
+          assert 'fix63 — compact corporate popup' in files['popup.html']
+          assert 'width:448px' in files['popup.html']
+          assert '"Segoe UI"' in files['popup.html']
+          assert 'openAdjacentExtensionTab' in files['js/97-home-ui.js']
+          assert 'options.index=current.index+1' in files['js/97-home-ui.js']
+          assert 'options.index = current.index + 1' in files['popup.js']
+          print('PASS fix63 targeted checks')
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-folder-popup-polish-fix63.json dev/self-update.json dev/history.json
+          git commit -m "dev: build folder popup polish fix63"
+          git push origin HEAD:dev/folder-popup-polish-fix63
