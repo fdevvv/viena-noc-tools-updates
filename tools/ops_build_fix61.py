@@ -53,14 +53,14 @@ home = replace_function(
     home,
     "function setSection(name){",
     "\n    \n    document.querySelectorAll('[data-section]')",
-    "function setSection(name){if(name==='tools'||name==='diagnostics')name='general';document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===name));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===name));history.replaceState(null,'',\`#\${name}\`)}"
+    "function setSection(name){if(name==='tools'||name==='diagnostics')name='general';document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===name));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===name));history.replaceState(null,'',`#${name}`)}"
 )
 
 home = replace_function(
     home,
     "function renderToolScaffolds(){",
     "\n    \n    const faviconCache",
-    "function renderToolScaffolds(){const html=Object.keys(PLATFORM_LABELS).map(toolMarkup).join('');$('toolGridGeneral').innerHTML=html;if($('toolGridFull'))$('toolGridFull').innerHTML=html;const quick=$('quickTabs');if(quick){quick.innerHTML=Object.entries(PLATFORM_LABELS).filter(([k])=>k!=='viena').map(([k,v])=>\`<button class=\\\"chip\\\" data-quick=\\\"\${k}\\\">\${v}</button>\`).join('');document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>runPlatformAction(b.dataset.quick,'open',b)))}document.querySelectorAll('.tool-row').forEach(row=>row.querySelector('[data-action]').addEventListener('click',e=>runPlatformAction(row.dataset.tool,e.currentTarget.dataset.action,e.currentTarget)))}"
+    "function renderToolScaffolds(){const html=Object.keys(PLATFORM_LABELS).map(toolMarkup).join('');$('toolGridGeneral').innerHTML=html;if($('toolGridFull'))$('toolGridFull').innerHTML=html;const quick=$('quickTabs');if(quick){quick.innerHTML=Object.entries(PLATFORM_LABELS).filter(([k])=>k!=='viena').map(([k,v])=>`<button class=\\\"chip\\\" data-quick=\\\"${k}\\\">${v}</button>`).join('');document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>runPlatformAction(b.dataset.quick,'open',b)))}document.querySelectorAll('.tool-row').forEach(row=>row.querySelector('[data-action]').addEventListener('click',e=>runPlatformAction(row.dataset.tool,e.currentTarget.dataset.action,e.currentTarget)))}"
 )
 
 
