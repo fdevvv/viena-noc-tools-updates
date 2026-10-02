@@ -68,7 +68,7 @@ function getTodayStates_() {
 
   values.forEach(row => {
     const node = normalizeNode_(row[0]);
-    const date = String(row[4] || '').trim();
+    const date = normalizeOperationalDateCell_(row[4]);
     const updatedMs = Number(row[6] || 0);
     if (!node || date !== today) return;
 
@@ -112,7 +112,7 @@ function upsertState_(body) {
       const values = sheet.getRange(2,1,lastRow-1,METRICAS_SYNC.headers.length).getValues();
       for (let i = 0; i < values.length; i++) {
         const rowNode = normalizeNode_(values[i][0]);
-        const rowDate = String(values[i][4] || '').trim();
+        const rowDate = normalizeOperationalDateCell_(values[i][4]);
         if (rowNode === node && rowDate === today) {
           targetRow = i + 2;
           break;
@@ -162,7 +162,7 @@ function deleteState_(body) {
     const values = sheet.getRange(2,1,lastRow-1,METRICAS_SYNC.headers.length).getValues();
     const toDelete = [];
     values.forEach((row,i) => {
-      if (normalizeNode_(row[0]) === node && String(row[4] || '').trim() === today) {
+      if (normalizeNode_(row[0]) === node && normalizeOperationalDateCell_(row[4]) === today) {
         toDelete.push(i+2);
       }
     });
@@ -187,7 +187,7 @@ function cleanupExpiredStates() {
     const toDelete = [];
 
     values.forEach((row,i) => {
-      const date = String(row[4] || '').trim();
+      const date = normalizeOperationalDateCell_(row[4]);
       if (!date || date !== today) toDelete.push(i+2);
     });
 
@@ -236,11 +236,39 @@ function removeDuplicateRowsForKey_(sheet,node,date,keepRow) {
   values.forEach((row,i) => {
     const rowNumber = i+2;
     if (rowNumber === keepRow) return;
-    if (normalizeNode_(row[0]) === node && String(row[4] || '').trim() === date) {
+    if (normalizeNode_(row[0]) === node && normalizeOperationalDateCell_(row[4]) === date) {
       duplicates.push(rowNumber);
     }
   });
   duplicates.sort((a,b)=>b-a).forEach(r=>sheet.deleteRow(r));
+}
+
+
+function normalizeOperationalDateCell_(value) {
+  if (value instanceof Date && !isNaN(value.getTime())) {
+    return Utilities.formatDate(
+      value,
+      METRICAS_SYNC.timezone,
+      'yyyy-MM-dd'
+    );
+  }
+
+  const text = String(value == null ? '' : value).trim();
+  if (!text) return '';
+
+  const iso = text.match(/^(\d{4}-\d{2}-\d{2})(?:$|[T\s])/);
+  if (iso) return iso[1];
+
+  const parsed = new Date(text);
+  if (!isNaN(parsed.getTime())) {
+    return Utilities.formatDate(
+      parsed,
+      METRICAS_SYNC.timezone,
+      'yyyy-MM-dd'
+    );
+  }
+
+  return text;
 }
 
 function operationalDate_() {
