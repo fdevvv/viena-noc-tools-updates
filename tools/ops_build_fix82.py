@@ -68,7 +68,7 @@ rep="""                metricasSyncInitEnCurso = new Set();
 assert anchor in m
 m=m.replace(anchor,rep,1)
 
-old_block="""            // Si antes tenÃ­a bandera y ahora no, borrar referencia
+old_block="""            // Si antes tenía bandera y ahora no, borrar referencia
             if (
                 nodo &&
                 historial[nodo]
@@ -80,8 +80,8 @@ old_block="""            // Si antes tenÃ­a bandera y ahora no, borrar referen
             delete fila.dataset.nuevosVts;
 """
 new_block="""            // Una bandera puede desaparecer unos segundos cuando otro
-            // operador vuelve a iniciar/reasignar la misma mÃ©trica.
-            // No borrar inmediatamente el baseline local: eso generarÃ­a
+            // operador vuelve a iniciar/reasignar la misma métrica.
+            // No borrar inmediatamente el baseline local: eso generaría
             // una falsa nueva referencia con los valores actuales.
             if (
                 nodo &&
