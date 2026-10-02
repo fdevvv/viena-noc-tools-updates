@@ -39,7 +39,8 @@ jobs:
           python3 - <<'PY'
           import base64, json, pathlib
           p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-ui-motion-toast-fix62.json').read_text())
-          files={f['path']:base64.b64decode(f['content_base64']).decode('utf-8') for f in p['files']}
+          wanted={'js/97-home-ui.js','popup.html','js/30-corporate-detail.js'}
+          files={f['path']:base64.b64decode(f['content_base64']).decode('utf-8') for f in p['files'] if f['path'] in wanted}
           assert 'fix62 — motion feedback + compact notifications' in files['js/97-home-ui.js']
           assert 'prefers-reduced-motion:reduce' in files['js/97-home-ui.js']
           assert 'fix62 — compact toast + button feedback' in files['popup.html']
