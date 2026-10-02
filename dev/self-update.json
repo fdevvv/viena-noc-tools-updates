@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-metricas-sync-read-phase3-fix74",
+  "build": "1.3.26-dev-metricas-sync-write-phase4-fix75",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-read-phase3-fix74.json",
-  "package_sha256": "c009687a6eacc32763c78aa77e2cecc89249786f1cc35461b7b8622095c6c779",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-write-phase4-fix75.json",
+  "package_sha256": "7ce4b4343c9123771f166894ca973603380ad9e52637ff63c1304cdd82c5b9e7",
   "notes": [
-    "Métricas incorpora lectura de METRICAS_SYNC cada 10 segundos en modo observación.",
-    "Los estados remotos se normalizan por el valor literal del nodo y se validan contra la fecha operativa informada por el servidor.",
-    "Esta fase no modifica colores, banderas ni la lógica actual de Métricas."
+    "Ctrl + doble click mantiene la respuesta local inmediata y sincroniza la nueva referencia en METRICAS_SYNC.",
+    "La escritura global guarda nodo, total, problema y usuario mediante UPSERT.",
+    "Si falla el backend, la logica local sigue funcionando."
   ]
 }
