@@ -1,15 +1,16 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.38",
+  "latest": "1.3.39",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Se corrigió la detección de la RELEASE vigente para que el estado de actualización coincida con la versión publicada.",
-    "El historial visible mantiene únicamente información útil para el operador."
+    "Métricas comparte la referencia de seguimiento entre operadores para usar el mismo punto de partida.",
+    "Si los valores aumentan después de la marca, el nodo se muestra violeta y Ctrl + doble click reconoce los nuevos valores.",
+    "El estado de sincronización se muestra en la cabecera y, si no está disponible, Métricas continúa en modo local."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.38-release-status-history-fix54-candidate1-package.json",
-  "package_sha256": "e4ab0ba55fd6f7538e149d733a745aa91ce808ba464ce2793d57e814ea83e3e7",
-  "source_package": "release/v1.3.38-release-status-history-fix54-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.39-metricas-sync-global-candidate1-package.json",
+  "package_sha256": "78ce7e619aa7c0f70ecef4a6784115e6f83c310dff6ff45565bc33d1e2e1a2c6",
+  "source_package": "release/v1.3.39-metricas-sync-global-candidate1-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
