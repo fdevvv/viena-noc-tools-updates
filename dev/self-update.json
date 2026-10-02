@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-icon-csp-template-viewport-fix71",
+  "build": "1.3.26-dev-state-ring-icon-fix72",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-icon-csp-template-viewport-fix71.json",
-  "package_sha256": "694a607f42ee473d6802bd2c756c8afca0fa79682c73eb7630d6094939e38d3c",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-state-ring-icon-fix72.json",
+  "package_sha256": "4dbf86b43659ba52c126e8aea56aab36bcf39241f6b6467efe298d03e10ad1dc",
   "notes": [
-    "Se elimina el error CSP al cambiar/restaurar el icono de la extensión: los iconos embebidos ya no usan fetch sobre data: URLs.",
-    "Al desplegar una plantilla se conserva primero la posición de la fila elegida y luego se ajusta automáticamente el scroll mínimo para mostrar la plantilla completa dentro del viewport.",
-    "El cierre de una plantilla mantiene estable la posición de su encabezado y no fuerza scroll adicional."
+    "El icono de la extensión incorpora un borde/anillo del color del estado actual sin perder la variante de icono elegida.",
+    "Activa usa borde verde; actualización disponible naranja; recarga de extensión rojo; recarga de pestaña ámbar.",
+    "El estado normal fuera de las páginas operativas mantiene el icono sin borde especial."
   ]
 }
