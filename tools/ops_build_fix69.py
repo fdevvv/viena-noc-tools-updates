@@ -124,10 +124,10 @@ HIST.write_text(json.dumps(hist,ensure_ascii=False,indent=2)+"\n",encoding="utf-
 assert len(pkg["files"])==28
 h=files["js/97-home-ui.js"].decode("utf-8")
 checks={
-  "update gap":'.view[data-view="updates"] .stats.two{margin-bottom:10px!important}' in h,
+  "update gap":'margin-bottom:10px!important' in h and 'fix69 — update spacing' in h,
   "no global flip":'fix68BaseRenderEditorForm' not in h,
   "anchor toggle":"window.scrollBy(0,delta)" in h,
-  "preserve expanded":"preserveExpanded=true" in h and "const openIndex=expandedTemplateIndex" in h,
+  "preserve expanded":"preserveExpanded:true" in h and "const openIndex=expandedTemplateIndex" in h,
   "direct icon":"applyExtensionIconFromPage" in h and "chrome.action.setIcon({imageData})" in h,
   "system name visible":"nameWrap.hidden=false" in h and "nameInput.readOnly=isSystem" in h,
   "stale loading hidden":"empty.style.display='none'" in h,
