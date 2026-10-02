@@ -124,3 +124,5 @@ jobs:
           assert not any(x.get('nodo')==node for x in d.get('states',[])), (node,d)
           print('cleanup verified')
           PY
+
+# redeploy verification
