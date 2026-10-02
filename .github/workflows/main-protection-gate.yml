@@ -46,6 +46,38 @@ jobs:
               echo 'A RELEASE promotion PR must change release/latest.json only.'
               exit 1
             fi
+
+            # Never allow a pointer-only promotion to swap the RELEASE package
+            # while keeping the same semantic version. The updater decides
+            # RELEASE availability by semver, so same-version swaps are invisible
+            # to already-installed operators.
+            python3 - "$BASE_SHA" "$HEAD_SHA" <<'PY'
+          import json, subprocess, sys
+          base_sha, head_sha = sys.argv[1], sys.argv[2]
+
+          def load_at(sha):
+              raw = subprocess.check_output(["git", "show", f"{sha}:release/latest.json"])
+              return json.loads(raw.decode("utf-8"))
+
+          def semver(value):
+              parts = tuple(int(x) for x in str(value).split("."))
+              if len(parts) != 3:
+                  raise SystemExit(f"Invalid RELEASE semver: {value}")
+              return parts
+
+          base = load_at(base_sha)
+          head = load_at(head_sha)
+          before = semver(base.get("latest"))
+          after = semver(head.get("latest"))
+
+          if after <= before:
+              raise SystemExit(
+                  f"release/latest.json must advance semver on every package promotion: "
+                  f"{base.get('latest')} -> {head.get('latest')}"
+              )
+
+          print(f"PASS RELEASE semver advancement: {base.get('latest')} -> {head.get('latest')}")
+          PY
           fi
 
       - name: Validate frozen legacy bootstrap
