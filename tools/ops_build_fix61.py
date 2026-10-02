@@ -30,11 +30,11 @@ replacements = [
         "const ASSIGN_KEY='viena_asignar_multiple_filtro';"
     ),
     (
-        '<button class="nav-item" data-section="tools"><span>▦</span>Herramientas</button>\\n',
+        '<button class="nav-item" data-section="tools"><span>▦</span>Herramientas</button>',
         ''
     ),
     (
-        '<button class="nav-item" data-section="diagnostics"><span>⚙</span>Configuración / Diagnóstico</button>\\n',
+        '<button class="nav-item" data-section="diagnostics"><span>⚙</span>Configuración / Diagnóstico</button>',
         ''
     ),
     (
@@ -46,7 +46,7 @@ replacements = [
         '<div class="panel-head"><h2>Operador</h2><span class="muted">Datos compartidos</span></div>'
     ),
     (
-        '<article class="panel"><div class="panel-head"><h2>Pestañas operativas</h2><span class="muted">Acceso rápido</span></div><div id="quickTabs" class="quick-tabs"></div></article>\\n',
+        '<article class="panel"><div class="panel-head"><h2>Pestañas operativas</h2><span class="muted">Acceso rápido</span></div><div id="quickTabs" class="quick-tabs"></div></article>',
         ''
     ),
     (
