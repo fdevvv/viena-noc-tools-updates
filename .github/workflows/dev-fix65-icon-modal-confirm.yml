@@ -1,0 +1,57 @@
+name: DEV fix65 icon modal confirm
+
+on:
+  push:
+    branches:
+      - dev/icon-modal-confirm-fix65
+    paths:
+      - tools/ops_build_fix65.py
+      - .github/workflows/dev-fix65-icon-modal-confirm.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/icon-modal-confirm-fix65
+          fetch-depth: 0
+      - name: Build candidate
+        run: python3 tools/ops_build_fix65.py
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate JS syntax
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-icon-modal-confirm-fix65.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              path=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              path.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(path)],check=True)
+          PY
+      - name: Validate targeted fixes
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,re
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-icon-modal-confirm-fix65.json').read_text())
+          h=next(base64.b64decode(f['content_base64']).decode('utf-8') for f in p['files'] if f['path']=='js/97-home-ui.js')
+          assert 'personalization-block-label' in h
+          assert 'Apariencia' in h
+          assert 'uiConfirmOverlay' in h and 'requestUiConfirm' in h
+          assert not re.search(r'\bconfirm\s*\(',h)
+          assert not re.search(r'\balert\s*\(',h)
+          assert "Plantilla quitada del borrador" in h
+          print('PASS fix65 targeted checks')
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-icon-modal-confirm-fix65.json dev/self-update.json dev/history.json
+          git commit -m "dev: build icon modal confirm fix65"
+          git push origin HEAD:dev/icon-modal-confirm-fix65
