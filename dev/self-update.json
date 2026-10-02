@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-metricas-sync-daily-reset-phase7-fix78",
+  "build": "1.3.26-dev-metricas-sync-resilience-phase8-fix79",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-daily-reset-phase7-fix78.json",
-  "package_sha256": "f4c934eccf67ec5add91e280e07da4d7a8e55e028d5b8f3f7d6715e545808d58",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-resilience-phase8-fix79.json",
+  "package_sha256": "42535944cd90c264f129f7a5384f273111d11808cea2e931d29b618ef0a37b86",
   "notes": [
-    "Métricas detecta el cambio de fecha operativa informado por METRICAS_SYNC y limpia las referencias del día anterior sin requerir F5.",
-    "La primera instalación de esta fase conserva el historial actual y lo etiqueta con la fecha del servidor para no perder el seguimiento en curso.",
-    "Al comenzar un nuevo día también se limpian referencias pendientes y marcas visuales de violeta/global antes de reprocesar la tabla."
+    "Se evita que una lectura remota antigua pise un reconocimiento más nuevo ya confirmado por el backend.",
+    "Si falla un UPSERT, la referencia optimista se descarta y la tabla vuelve a la última referencia global/local válida.",
+    "El reset diario limpia también los marcadores de escritura reciente para no mezclar estados entre días operativos."
   ]
 }
