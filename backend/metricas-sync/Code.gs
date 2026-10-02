@@ -40,6 +40,9 @@ function doPost(e) {
     if (op === 'UPSERT_STATE') {
       return json_(upsertState_(body));
     }
+    if (op === 'INIT_STATE') {
+      return json_(initStateIfAbsent_(body));
+    }
     if (op === 'DELETE_STATE') {
       return json_(deleteState_(body));
     }
@@ -87,6 +90,115 @@ function getTodayStates_() {
   });
 
   return Array.from(latest.values());
+}
+
+
+function initStateIfAbsent_(body) {
+  const node = normalizeNode_(body.nodo);
+  if (!node) return { ok:false, error:'invalid_node' };
+
+  const total = toNonNegativeInt_(body.total_marcado);
+  const problem = toNonNegativeInt_(body.problema_marcado);
+  const user = normalizeUser_(body.usuario);
+  const today = operationalDate_();
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(METRICAS_SYNC.lockWaitMs);
+  try {
+    const sheet = getSheet_();
+    const lastRow = sheet.getLastRow();
+
+    let existing = null;
+    let keepRow = 0;
+    const duplicates = [];
+
+    if (lastRow >= 2) {
+      const values = sheet.getRange(
+        2,
+        1,
+        lastRow - 1,
+        METRICAS_SYNC.headers.length
+      ).getValues();
+
+      values.forEach((row, i) => {
+        const rowNumber = i + 2;
+        const rowNode = normalizeNode_(row[0]);
+        const rowDate = normalizeOperationalDateCell_(row[4]);
+
+        if (rowNode !== node || rowDate !== today) return;
+
+        const state = {
+          nodo: rowNode,
+          total_marcado: toNonNegativeInt_(row[1]),
+          problema_marcado: toNonNegativeInt_(row[2]),
+          usuario: normalizeUser_(row[3]),
+          fecha_operativa: rowDate,
+          updated_at: String(row[5] || ''),
+          updated_at_ms: Number(row[6] || 0)
+        };
+
+        if (
+          !existing ||
+          state.updated_at_ms >= existing.updated_at_ms
+        ) {
+          if (keepRow) duplicates.push(keepRow);
+          existing = state;
+          keepRow = rowNumber;
+        } else {
+          duplicates.push(rowNumber);
+        }
+      });
+    }
+
+    if (existing) {
+      duplicates
+        .filter(r => r !== keepRow)
+        .sort((a,b)=>b-a)
+        .forEach(r => sheet.deleteRow(r));
+
+      return {
+        ok:true,
+        created:false,
+        state:existing
+      };
+    }
+
+    const now = new Date();
+    const nowIso = Utilities.formatDate(
+      now,
+      METRICAS_SYNC.timezone,
+      "yyyy-MM-dd'T'HH:mm:ssXXX"
+    );
+    const nowMs = now.getTime();
+
+    const row = [
+      node,
+      total,
+      problem,
+      user,
+      today,
+      nowIso,
+      nowMs
+    ];
+
+    sheet.appendRow(row);
+
+    return {
+      ok:true,
+      created:true,
+      state:{
+        nodo:node,
+        total_marcado:total,
+        problema_marcado:problem,
+        usuario:user,
+        fecha_operativa:today,
+        updated_at:nowIso,
+        updated_at_ms:nowMs
+      }
+    };
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function upsertState_(body) {
