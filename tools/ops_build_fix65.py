@@ -57,7 +57,7 @@ modal_markup = '''<div id=\\"uiConfirmOverlay\\" class=\\"ui-confirm-overlay\\" 
 toast_marker = '<div id=\\"toast\\" class=\\"toast\\"></div>'
 if toast_marker not in home:
     raise SystemExit("toast markup marker not found")
-home = home.replace(toast_marker, modal_markup + toast_marker, 1)
+home = home.replace(toast_marker, modal_markup.replace('\\n','\\\\n') + toast_marker, 1)
 
 show_toast = "function showToast(text,type=''){const el=$('toast');if(!el)return;el.textContent=text;el.className='toast show'+(type?` ${type}`:'');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='toast',2500)}"
 if show_toast not in home:
