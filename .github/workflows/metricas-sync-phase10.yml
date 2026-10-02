@@ -1,0 +1,119 @@
+name: METRICAS_SYNC phase10 validation
+on:
+  push:
+    branches: [test/metricas-sync-phase10]
+    paths:
+      - .github/workflows/metricas-sync-phase10.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate current DEV package
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,urllib.request
+          ptr=json.loads(pathlib.Path('dev/self-update.json').read_text())
+          assert ptr['build']=='1.3.26-dev-metricas-sync-ui-phase9-fix80', ptr['build']
+          pkg=json.loads(urllib.request.urlopen(ptr['package_url'],timeout=20).read().decode())
+          m=base64.b64decode(next(f['content_base64'] for f in pkg['files'] if f['path']=='js/50-metrics.js')).decode(errors='replace')
+          checks={
+            'poll': 'METRICAS_SYNC_POLL_MS = 10000' in m,
+            'read': 'GET_TODAY_STATES' in m,
+            'write': "'UPSERT_STATE'" in m,
+            'apply remote': 'metricasSyncEstados.get(nodoSync)' in m,
+            'violet global': 'valores.total > base.total' in m and 'valores.problema > base.problema' in m,
+            'daily reset': 'asegurarFechaOperativaLocal' in m,
+            'resilience': 'metricasSyncUltimoWriteMs' in m,
+            'sync UI': '● Sincronizado' in m and '○ Modo local' in m,
+            'violet help': 'Ctrl + doble click para volver a marcarla en verde.' in m,
+          }
+          print(json.dumps(checks,ensure_ascii=False,indent=2))
+          bad=[k for k,v in checks.items() if not v]
+          if bad: raise SystemExit('FAILED: '+', '.join(bad))
+          PY
+
+      - name: Live backend health/read
+        env:
+          ENDPOINT: https://script.google.com/macros/s/AKfycbxLKOhNj2nW8IQUVbxJK_i9j2xnIMYZQpDaecGpqhxWdB3Zld5Vi_ERWKqLsnFKdkVCFw/exec
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 --retry-delay 2 "$ENDPOINT?op=HEALTH" | tee /tmp/health.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/health.json'))
+          assert d.get('ok') is True, d
+          assert d.get('service')=='METRICAS_SYNC', d
+          print('HEALTH OK', d.get('date'), d.get('timezone'))
+          PY
+          curl -fsSL --retry 3 --retry-delay 2 "$ENDPOINT?op=GET_TODAY_STATES" | tee /tmp/read.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/read.json'))
+          assert d.get('ok') is True and isinstance(d.get('states'),list), d
+          print('READ OK states=',len(d['states']))
+          PY
+
+      - name: Simulate two operators and cleanup
+        env:
+          ENDPOINT: https://script.google.com/macros/s/AKfycbxLKOhNj2nW8IQUVbxJK_i9j2xnIMYZQpDaecGpqhxWdB3Zld5Vi_ERWKqLsnFKdkVCFw/exec
+        run: |
+          set -euo pipefail
+          NODE="PHASE10TEST$(date +%s)"
+          echo "$NODE" > /tmp/node
+
+          post() {
+            curl -fsSL --retry 3 --retry-delay 2               -H 'Content-Type: text/plain;charset=UTF-8'               --data "$1"               "$ENDPOINT"
+          }
+
+          post "{"op":"UPSERT_STATE","nodo":"$NODE","total_marcado":4,"problema_marcado":3,"usuario":"operador_a"}" > /tmp/a.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/a.json'))
+          assert d.get('ok') is True and d.get('state'), d
+          assert d['state']['total_marcado']==4 and d['state']['problema_marcado']==3, d
+          print('operator A write OK')
+          PY
+
+          post "{"op":"UPSERT_STATE","nodo":"$NODE","total_marcado":6,"problema_marcado":5,"usuario":"operador_b"}" > /tmp/b.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/b.json'))
+          assert d.get('ok') is True and d.get('state'), d
+          assert d['state']['total_marcado']==6 and d['state']['problema_marcado']==5, d
+          print('operator B write OK')
+          PY
+
+          curl -fsSL --retry 3 --retry-delay 2 "$ENDPOINT?op=GET_TODAY_STATES" > /tmp/read2.json
+          python3 - <<'PY'
+          import json
+          node=open('/tmp/node').read().strip()
+          d=json.load(open('/tmp/read2.json'))
+          rows=[x for x in d.get('states',[]) if x.get('nodo')==node]
+          assert len(rows)==1, (node,rows)
+          r=rows[0]
+          assert r['total_marcado']==6 and r['problema_marcado']==5, r
+          assert r['usuario']=='operador_b', r
+          print('cross-operator latest-state OK')
+          PY
+
+          post "{"op":"DELETE_STATE","nodo":"$NODE"}" > /tmp/delete.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/delete.json'))
+          assert d.get('ok') is True, d
+          print('cleanup request OK')
+          PY
+
+          curl -fsSL --retry 3 --retry-delay 2 "$ENDPOINT?op=GET_TODAY_STATES" > /tmp/read3.json
+          python3 - <<'PY'
+          import json
+          node=open('/tmp/node').read().strip()
+          d=json.load(open('/tmp/read3.json'))
+          assert not any(x.get('nodo')==node for x in d.get('states',[])), (node,d)
+          print('cleanup verified')
+          PY
