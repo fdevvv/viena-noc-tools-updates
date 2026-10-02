@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-metricas-sync-flag-replacement-guard-fix82",
+  "build": "1.3.26-dev-metricas-sync-header-status-fix83",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-flag-replacement-guard-fix82.json",
-  "package_sha256": "1b04ebd4ddb2c36b9d37b19c7faf8e10128268835166cbd81fe18805f1f1f0ea",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-header-status-fix83.json",
+  "package_sha256": "c041ee45a838db64e5748568a8b9001091bfcd668db5985871470638faaa2082",
   "notes": [
-    "Se protege el baseline cuando la bandera desaparece temporalmente durante una reasignación entre operadores.",
-    "Si ya existe baseline global, un reemplazo visual de bandera no borra ni reinicializa la referencia.",
-    "Sin baseline global, se conserva el comportamiento anterior pero con una ventana de gracia de 12 segundos para evitar falsos reinicios por cambios transitorios del DOM."
+    "El estado de sincronización de Métricas se muestra ahora centrado en la cabecera superior.",
+    "Se elimina su posición flotante inferior para no interferir con los controles operativos.",
+    "La lógica de METRICAS_SYNC, colores y reconocimiento de baseline no cambia."
   ]
 }
