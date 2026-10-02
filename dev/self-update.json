@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-registry-device-identity-fix86",
+  "build": "1.3.26-dev-update-ui-manual-zip-fix87",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-registry-device-identity-fix86.json",
-  "package_sha256": "49aad9dc35e20fe2032476063974ce734fc5fc4fa6010af91a65f7fc31a59c46",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-ui-manual-zip-fix87.json",
+  "package_sha256": "eb3cc137f2b90ee9d3520867b091047c138ec640b2ff0a9f6a1b5b9392e2bf75",
   "notes": [
-    "El registro de instalación conserva el mismo ID al reinstalar manualmente la extensión en la misma PC/perfil.",
-    "La identidad se ancla en el almacenamiento del dominio VIENA y se recupera aunque cambie el ID local de la extensión.",
-    "Una PC/perfil nuevo genera una identidad distinta, evitando mezclar instalaciones reales del mismo usuario."
+    "Se corrige la distribución de los botones de actualización del popup.",
+    "La descarga ZIP manual consulta la RELEASE vigente y usa una apertura segura desde páginas de la extensión.",
+    "La vista completa incorpora actualización directa, gestión de carpeta y descarga ZIP manual para el usuario habilitado."
   ]
 }
