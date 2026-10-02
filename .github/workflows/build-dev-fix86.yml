@@ -41,3 +41,5 @@ jobs:
           git rm .github/workflows/build-dev-fix86.yml
           git commit -m "DEV fix86: persist registry identity per PC"
           git push origin HEAD:dev/fix86-registry-device-identity
+
+# rerun after content-script target fix
