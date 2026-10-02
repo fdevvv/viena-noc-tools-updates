@@ -1,0 +1,58 @@
+name: DEV fix64 editor entry cleanup
+
+on:
+  push:
+    branches:
+      - dev/editor-entry-cleanup-fix64
+    paths:
+      - tools/ops_build_fix64.py
+      - .github/workflows/dev-fix64-editor-entry-cleanup.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/editor-entry-cleanup-fix64
+          fetch-depth: 0
+      - name: Build candidate
+        run: python3 tools/ops_build_fix64.py
+      - name: Validate DEV matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate JS syntax
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-editor-entry-cleanup-fix64.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              path=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              path.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(path)],check=True)
+          PY
+      - name: Validate targeted fixes
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-editor-entry-cleanup-fix64.json').read_text())
+          wanted={'popup.js','js/97-home-ui.js'}
+          files={f['path']:base64.b64decode(f['content_base64']).decode('utf-8') for f in p['files'] if f['path'] in wanted}
+          assert "popup.html?full=1#personalization" in files['popup.js']
+          assert "VIENA_OPEN_BUTTON_EDITOR" not in files['popup.js']
+          assert "window.close();" in files['popup.js']
+          assert "Buscar entre mis botones" in files['js/97-home-ui.js']
+          assert "Filtra únicamente tus botones personales" in files['js/97-home-ui.js']
+          assert "min-height:84px" in files['js/97-home-ui.js']
+          print('PASS fix64 targeted checks')
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-editor-entry-cleanup-fix64.json dev/self-update.json dev/history.json
+          git commit -m "dev: build editor entry cleanup fix64"
+          git push origin HEAD:dev/editor-entry-cleanup-fix64
