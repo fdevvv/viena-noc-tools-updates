@@ -46,7 +46,7 @@ jobs:
             'new editor entry':'popup.html?full=1#personalization' in pop and 'VIENA_OPEN_BUTTON_EDITOR' not in pop,
             'editor cleanup':'Buscar entre mis botones' in h,
             'icon visible':'personalization-block-label' in h and 'Apariencia' in h,
-            'no native confirm':not re.search(r'\\b(?:alert|confirm)\\s*\\(',h),
+            'no native confirm':'alert(' not in h and 'confirm(' not in h,
             'actions':'editor-main-actions' in h and 'editorIsDirty' in h and 'Descartar cambios' in h
           }
           bad=[k for k,v in checks.items() if not v]
