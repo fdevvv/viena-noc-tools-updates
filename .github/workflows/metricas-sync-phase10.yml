@@ -49,7 +49,8 @@ jobs:
           assert d.get('ok') is True and d.get('service')=='METRICAS_SYNC', d
           print('HEALTH OK',d.get('date'),d.get('timezone'))
           PY
-          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 "$ENDPOINT?op=GET_TODAY_STATES" > /tmp/read.json
+          printf '%s' '{"op":"GET_TODAY_STATES"}' > /tmp/read_payload.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 -H 'Content-Type: text/plain;charset=UTF-8' --data-binary @/tmp/read_payload.json "$ENDPOINT" > /tmp/read.json
           python3 - <<'PY'
           import json
           d=json.load(open('/tmp/read.json'))
@@ -95,7 +96,7 @@ jobs:
           print('operator B write OK')
           PY
 
-          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 "$ENDPOINT?op=GET_TODAY_STATES&_=$(date +%s%N)" > /tmp/read2.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 -H 'Content-Type: text/plain;charset=UTF-8' --data-binary @/tmp/read_payload.json "$ENDPOINT" > /tmp/read2.json
           python3 - <<'PY'
           import json
           node=open('/tmp/node').read().strip()
@@ -116,7 +117,7 @@ jobs:
           print('cleanup request OK')
           PY
 
-          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 "$ENDPOINT?op=GET_TODAY_STATES&_=$(date +%s%N)" > /tmp/read3.json
+          curl -fsSL --max-time 20 --retry 2 --retry-delay 1 -H 'Content-Type: text/plain;charset=UTF-8' --data-binary @/tmp/read_payload.json "$ENDPOINT" > /tmp/read3.json
           python3 - <<'PY'
           import json
           node=open('/tmp/node').read().strip()
