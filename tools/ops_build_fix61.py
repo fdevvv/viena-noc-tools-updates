@@ -30,32 +30,12 @@ replacements = [
         "const ASSIGN_KEY='viena_asignar_multiple_filtro';"
     ),
     (
-        '<button class="nav-item" data-section="tools"><span>▦</span>Herramientas</button>',
-        ''
+        "function setSection(name){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===name));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===name));history.replaceState(null,'',\`#\${name}\`)}",
+        "function setSection(name){if(name==='tools'||name==='diagnostics')name='general';document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===name));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===name));history.replaceState(null,'',\`#\${name}\`)}"
     ),
     (
-        '<button class="nav-item" data-section="diagnostics"><span>⚙</span>Configuración / Diagnóstico</button>',
-        ''
-    ),
-    (
-        '<div class="panel-head"><h2>Herramientas</h2><button class="link-btn" data-go="tools">Acceso rápido ›</button></div>',
-        '<div class="panel-head"><h2>Herramientas</h2><span class="muted">Accesos operativos</span></div>'
-    ),
-    (
-        '<div class="panel-head"><h2>Operador</h2><button class="link-btn" data-go="diagnostics">Configurar ›</button></div>',
-        '<div class="panel-head"><h2>Operador</h2><span class="muted">Datos compartidos</span></div>'
-    ),
-    (
-        '<article class="panel"><div class="panel-head"><h2>Pestañas operativas</h2><span class="muted">Acceso rápido</span></div><div id="quickTabs" class="quick-tabs"></div></article>',
-        ''
-    ),
-    (
-        "function setSection(name){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===name));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===name));history.replaceState(null,'',`#${name}`)}",
-        "function setSection(name){if(name==='tools'||name==='diagnostics')name='general';document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===name));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===name));history.replaceState(null,'',`#${name}`)}"
-    ),
-    (
-        "function renderToolScaffolds(){const html=Object.keys(PLATFORM_LABELS).map(toolMarkup).join('');$('toolGridGeneral').innerHTML=html;$('toolGridFull').innerHTML=html;$('quickTabs').innerHTML=Object.entries(PLATFORM_LABELS).filter(([k])=>k!=='viena').map(([k,v])=>`<button class=\"chip\" data-quick=\"${k}\">${v}</button>`).join('');document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>runPlatformAction(b.dataset.quick,'open',b)));document.querySelectorAll('.tool-row').forEach(row=>row.querySelector('[data-action]').addEventListener('click',e=>runPlatformAction(row.dataset.tool,e.currentTarget.dataset.action,e.currentTarget)))}",
-        "function renderToolScaffolds(){const html=Object.keys(PLATFORM_LABELS).map(toolMarkup).join('');$('toolGridGeneral').innerHTML=html;if($('toolGridFull'))$('toolGridFull').innerHTML=html;const quick=$('quickTabs');if(quick){quick.innerHTML=Object.entries(PLATFORM_LABELS).filter(([k])=>k!=='viena').map(([k,v])=>`<button class=\"chip\" data-quick=\"${k}\">${v}</button>`).join('');document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>runPlatformAction(b.dataset.quick,'open',b)))}document.querySelectorAll('.tool-row').forEach(row=>row.querySelector('[data-action]').addEventListener('click',e=>runPlatformAction(row.dataset.tool,e.currentTarget.dataset.action,e.currentTarget)))}"
+        "function renderToolScaffolds(){const html=Object.keys(PLATFORM_LABELS).map(toolMarkup).join('');$('toolGridGeneral').innerHTML=html;$('toolGridFull').innerHTML=html;$('quickTabs').innerHTML=Object.entries(PLATFORM_LABELS).filter(([k])=>k!=='viena').map(([k,v])=>\`<button class=\\\"chip\\\" data-quick=\\\"\${k}\\\">\${v}</button>\`).join('');document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>runPlatformAction(b.dataset.quick,'open',b)));document.querySelectorAll('.tool-row').forEach(row=>row.querySelector('[data-action]').addEventListener('click',e=>runPlatformAction(row.dataset.tool,e.currentTarget.dataset.action,e.currentTarget)))}",
+        "function renderToolScaffolds(){const html=Object.keys(PLATFORM_LABELS).map(toolMarkup).join('');$('toolGridGeneral').innerHTML=html;if($('toolGridFull'))$('toolGridFull').innerHTML=html;const quick=$('quickTabs');if(quick){quick.innerHTML=Object.entries(PLATFORM_LABELS).filter(([k])=>k!=='viena').map(([k,v])=>\`<button class=\\\"chip\\\" data-quick=\\\"\${k}\\\">\${v}</button>\`).join('');document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>runPlatformAction(b.dataset.quick,'open',b)))}document.querySelectorAll('.tool-row').forEach(row=>row.querySelector('[data-action]').addEventListener('click',e=>runPlatformAction(row.dataset.tool,e.currentTarget.dataset.action,e.currentTarget)))}"
     ),
     (
         "if(['general','tools','personalization','updates','diagnostics'].includes(start))setSection(start);",
@@ -67,6 +47,20 @@ for old, new in replacements:
     if old not in home:
         raise SystemExit(f"expected fragment not found: {old[:120]!r}")
     home = home.replace(old, new, 1)
+
+# HOME_BODY is embedded as a JavaScript string, so its quotes/unicode are escaped.
+markup_subs = [
+    (r'<button class=\\\"nav-item\\\" data-section=\\\"tools\\\">.*?</button>', ''),
+    (r'<button class=\\\"nav-item\\\" data-section=\\\"diagnostics\\\">.*?</button>', ''),
+    (r'<button class=\\\"link-btn\\\" data-go=\\\"tools\\\">.*?</button>', '<span class=\\\"muted\\\">Accesos operativos</span>'),
+    (r'<button class=\\\"link-btn\\\" data-go=\\\"diagnostics\\\">.*?</button>', '<span class=\\\"muted\\\">Datos compartidos</span>'),
+    (r'<article class=\\\"panel\\\"><div class=\\\"panel-head\\\"><h2>Pesta\\u00f1as operativas</h2>.*?</article>', ''),
+]
+for pattern, repl in markup_subs:
+    home2, n = re.subn(pattern, repl, home, count=1)
+    if n != 1:
+        raise SystemExit(f"embedded markup fragment not found: {pattern}")
+    home = home2
 
 css_marker = '/* fix61 — shared state + navigation cleanup + responsive foundation */'
 if css_marker not in home:
