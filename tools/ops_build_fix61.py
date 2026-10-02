@@ -112,10 +112,11 @@ if css_marker not in home:
   .nav-item span{font-size:17px}
 }
 '''
-    home = home.replace('";
-  const HOME_BODY', inject.replace("\","\\").replace('"','\"').replace("
-","\\n") + '";
-  const HOME_BODY', 1)
+    marker = '\";\\n  const HOME_BODY'
+    escaped = inject.replace('\\\\','\\\\\\\\').replace('\"','\\\\"').replace('\\n','\\\\n')
+    if marker not in home:
+        raise SystemExit("HOME_CSS marker not found")
+    home = home.replace(marker, escaped + marker, 1)
 
 files["js/97-home-ui.js"] = home.encode("utf-8")
 
