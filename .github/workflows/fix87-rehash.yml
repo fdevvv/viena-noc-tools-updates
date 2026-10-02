@@ -35,6 +35,18 @@ jobs:
           item['size'] = len(raw)
           package_path.write_text(json.dumps(pkg, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           print('repaired js/97-home-ui.js')
+          popup_item = next(x for x in pkg['files'] if x['path'] == 'popup.js')
+          popup_src = base64.b64decode(popup_item['content_base64'], validate=True).decode('utf-8')
+          popup_bad = "const VIENA_DEV_LOCAL_UPDATE_MANIFEST_URL = 'https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update.json';\\nconst VIENA_RELEASE_MANIFEST_URL = 'https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/latest.json';"
+          popup_good = "const VIENA_DEV_LOCAL_UPDATE_MANIFEST_URL = 'https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/self-update.json';\nconst VIENA_RELEASE_MANIFEST_URL = 'https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/latest.json';"
+          if popup_bad not in popup_src:
+              raise SystemExit('popup literal-newline block not found')
+          popup_src = popup_src.replace(popup_bad, popup_good, 1)
+          popup_raw = popup_src.encode('utf-8')
+          popup_item['content_base64'] = base64.b64encode(popup_raw).decode('ascii')
+          popup_item['size'] = len(popup_raw)
+          package_path.write_text(json.dumps(pkg, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print('repaired popup.js')
           PY
       - name: Rebuild package integrity and pointer SHA
         run: |
