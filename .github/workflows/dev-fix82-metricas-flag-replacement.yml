@@ -1,0 +1,59 @@
+name: DEV fix82 metricas flag replacement guard
+on:
+  push:
+    branches: [dev/metricas-sync-flag-replacement-guard-fix82]
+    paths:
+      - tools/ops_build_fix82.py
+      - .github/workflows/dev-fix82-metricas-flag-replacement.yml
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/metricas-sync-flag-replacement-guard-fix82
+          fetch-depth: 0
+      - name: Build candidate
+        run: python3 tools/ops_build_fix82.py
+      - name: Validate DEV updater matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate packaged JavaScript
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-metricas-sync-flag-replacement-guard-fix82.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              x=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              x.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(x)],check=True)
+          PY
+      - name: Validate flag replacement behavior
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-metricas-sync-flag-replacement-guard-fix82.json').read_text())
+          m=base64.b64decode(next(f['content_base64'] for f in p['files'] if f['path']=='js/50-metrics.js')).decode(errors='replace')
+          checks={
+            'grace window':'METRICAS_FLAG_REPLACEMENT_GRACE_MS = 12000' in m,
+            'missing flag tracker':'metricasFlagAusenteDesde = new Map()' in m,
+            'global baseline survives flag replacement':'metricasSyncEstados.has(' in m,
+            'timer cancelled when flag returns':'metricasFlagAusenteDesde.delete(' in m,
+            'old local cleanup retained':'delete historial[nodo]' in m,
+            'violet logic preserved':'valores.total > base.total' in m and 'valores.problema > base.problema' in m,
+            'init state preserved':"'INIT_STATE'" in m,
+            'manual recognition preserved':"'UPSERT_STATE'" in m,
+          }
+          print(json.dumps(checks,ensure_ascii=False,indent=2))
+          bad=[k for k,v in checks.items() if not v]
+          if bad: raise SystemExit('FAILED: '+', '.join(bad))
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-metricas-sync-flag-replacement-guard-fix82.json dev/self-update.json dev/history.json
+          git commit -m "dev: build metricas flag replacement guard fix82"
+          git push origin HEAD:dev/metricas-sync-flag-replacement-guard-fix82
