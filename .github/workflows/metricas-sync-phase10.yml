@@ -63,7 +63,7 @@ jobs:
           ENDPOINT: https://script.google.com/macros/s/AKfycbxLKOhNj2nW8IQUVbxJK_i9j2xnIMYZQpDaecGpqhxWdB3Zld5Vi_ERWKqLsnFKdkVCFw/exec
         run: |
           set -euo pipefail
-          NODE="PHASE10TEST$(date +%s)"
+          export NODE="PHASE10TEST$(date +%s)"
           echo "$NODE" > /tmp/node
 
           post() {
