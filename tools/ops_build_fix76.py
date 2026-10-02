@@ -14,34 +14,10 @@ for x in p["files"]:
  b=base64.b64decode(x["content_base64"]); assert h(b)==x["sha256"]; F[x["path"]]=b
 m=F["js/50-metrics.js"].decode()
 
-old_block="""        // Primera vez que esta versiÃ³n detecta la bandera
-        if (!historial[nodo]) {
-
-            historial[nodo] = {
-                total: valores.total,
-                problema: valores.problema
-            };
-
-            cambioHistorial = true;
-
-            delete fila.dataset.nuevosVts;
-
-            // ð© seguimiento normal
-            aplicarColorFila(
-                fila,
-                COLOR_VERDE
-            );
-        }
-
-        else {
-
-            const base =
-                historial[nodo];
-"""
-new_block="""        // Fase 5: si existe una referencia compartida para este nodo,
-        // usarla como fuente de verdad para el historial local. No se
-        // sincroniza un color: se sincronizan los valores de referencia
-        // y la misma lÃ³gica existente decide verde/violeta.
+anchor = "        if (!historial[nodo]) {"
+pos = m.index(anchor, m.index("// CON BANDERA"))
+insert = """        // Fase 5: si existe una referencia compartida para este nodo,
+        // usarla como fuente de verdad para el historial local.
         const nodoSync =
             normalizarNodoSync(nodo);
 
@@ -82,44 +58,16 @@ new_block="""        // Fase 5: si existe una referencia compartida para este no
             delete fila.dataset.vienaSyncBase;
         }
 
-        // Primera vez que esta versiÃ³n detecta la bandera y todavÃ­a
-        // no existe referencia local/global.
-        if (!historial[nodo]) {
-
-            historial[nodo] = {
-                total: valores.total,
-                problema: valores.problema
-            };
-
-            cambioHistorial = true;
-
-            delete fila.dataset.nuevosVts;
-
-            // ð© seguimiento normal
-            aplicarColorFila(
-                fila,
-                COLOR_VERDE
-            );
-        }
-
-        else {
-
-            const base =
-                historial[nodo];
 """
-if old_block not in m: raise SystemExit("phase5 insertion point missing")
-m=m.replace(old_block,new_block,1)
+m = m[:pos] + insert + m[pos:]
 
-# Clear diagnostic source marker when row has no flag.
-old_no_flag="""            delete fila.dataset.nuevosVts;
-
-            const maximo ="""
-new_no_flag="""            delete fila.dataset.nuevosVts;
-            delete fila.dataset.vienaSyncBase;
-
-            const maximo ="""
-if old_no_flag not in m: raise SystemExit("no-flag marker missing")
-m=m.replace(old_no_flag,new_no_flag,1)
+no_flag = "            delete fila.dataset.nuevosVts;\n\n            const maximo ="
+if no_flag not in m: raise SystemExit("no-flag marker missing")
+m = m.replace(
+    no_flag,
+    "            delete fila.dataset.nuevosVts;\n            delete fila.dataset.vienaSyncBase;\n\n            const maximo =",
+    1
+)
 
 F["js/50-metrics.js"]=m.encode()
 for q in ("background.js","js/80-update-banner.js","js/90-runtime-status.js"):
