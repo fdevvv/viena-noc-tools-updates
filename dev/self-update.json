@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-metricas-sync-violet-phase6-fix77",
+  "build": "1.3.26-dev-metricas-sync-daily-reset-phase7-fix78",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-violet-phase6-fix77.json",
-  "package_sha256": "1ffaa8193cd693b79960eb1dd0b697ddb9a3f99a6280c9f497b732ccaadc4363",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-daily-reset-phase7-fix78.json",
+  "package_sha256": "f4c934eccf67ec5add91e280e07da4d7a8e55e028d5b8f3f7d6715e545808d58",
   "notes": [
-    "El estado violeta ya se calcula para todos contra la misma referencia global de total/problema.",
-    "Un Ctrl + doble click crea una referencia optimista local para evitar que un estado remoto viejo vuelva a poner la fila violeta mientras se confirma el UPSERT.",
-    "Las lecturas y escrituras exitosas reprocesan inmediatamente las filas visibles para reducir la latencia entre operadores."
+    "Métricas detecta el cambio de fecha operativa informado por METRICAS_SYNC y limpia las referencias del día anterior sin requerir F5.",
+    "La primera instalación de esta fase conserva el historial actual y lo etiqueta con la fecha del servidor para no perder el seguimiento en curso.",
+    "Al comenzar un nuevo día también se limpian referencias pendientes y marcas visuales de violeta/global antes de reprocesar la tabla."
   ]
 }
