@@ -38,10 +38,10 @@ jobs:
           fs={f['path']:base64.b64decode(f['content_base64']) for f in p['files']}
           h=fs['js/97-home-ui.js'].decode()
           checks={
-            'update gap':'.view[data-view="updates"] .stats.two{margin-bottom:10px!important}' in h,
+            'update gap':'margin-bottom:10px!important' in h and 'fix69 — update spacing' in h,
             'global rebound removed':'fix68BaseRenderEditorForm' not in h,
             'accordion anchor':'window.scrollBy(0,delta)' in h,
-            'expanded preserved':'preserveExpanded=true' in h,
+            'expanded preserved':'preserveExpanded:true' in h and 'const openIndex=expandedTemplateIndex' in h,
             'direct toolbar icon':'applyExtensionIconFromPage' in h and 'chrome.action.setIcon({imageData})' in h,
             'system name visible':'nameInput.readOnly=isSystem' in h,
             'loading hidden':"empty.style.display='none'" in h,
