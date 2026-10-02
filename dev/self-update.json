@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-ui-motion-toast-fix62",
+  "build": "1.3.26-dev-folder-popup-polish-fix63",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ui-motion-toast-fix62.json",
-  "package_sha256": "62b0ddf527355459ae56e9b78438934bd07a98654067e9f919274f6a5b9c6888",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-folder-popup-polish-fix63.json",
+  "package_sha256": "3e2c60b9d115867f15e3a7c5221ae0b4fbad784db0b6443ed35a72061b1ad041",
   "notes": [
-    "Se agregan transiciones breves y feedback visual consistente al navegar y accionar botones.",
-    "La vista completa anima cambios de sección y expansiones sin afectar usuarios con reducción de movimiento.",
-    "Los avisos emergentes del popup, vista completa y VIENA pasan a un formato compacto para no cubrir contenido operativo."
+    "Administrar carpeta y la selección estable de carpeta se abren junto a la pestaña actual, no al final de Chrome.",
+    "El popup se compacta a 448 px y adopta tipografía Segoe UI/system con jerarquía, alineación y espaciado revisados.",
+    "La paleta se desplaza a un azul marino más corporativo y la sección Operador queda más compacta y legible."
   ]
 }
