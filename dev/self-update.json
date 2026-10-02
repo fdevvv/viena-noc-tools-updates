@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-metricas-sync-apply-phase5-fix76",
+  "build": "1.3.26-dev-metricas-sync-violet-phase6-fix77",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-apply-phase5-fix76.json",
-  "package_sha256": "7be0c58a081753e3a997dd291295548bdcd7fbab192f21415526626880543041",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-violet-phase6-fix77.json",
+  "package_sha256": "1ffaa8193cd693b79960eb1dd0b697ddb9a3f99a6280c9f497b732ccaadc4363",
   "notes": [
-    "MÃ©tricas aplica las referencias recibidas desde METRICAS_SYNC al historial local por nodo.",
-    "Se sincronizan total/problema de referencia; la lÃ³gica de colores existente sigue decidiendo el estado visual.",
-    "Si no existe referencia global, el comportamiento local previo se conserva."
+    "El estado violeta ya se calcula para todos contra la misma referencia global de total/problema.",
+    "Un Ctrl + doble click crea una referencia optimista local para evitar que un estado remoto viejo vuelva a poner la fila violeta mientras se confirma el UPSERT.",
+    "Las lecturas y escrituras exitosas reprocesan inmediatamente las filas visibles para reducir la latencia entre operadores."
   ]
 }
