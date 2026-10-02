@@ -256,7 +256,7 @@ files["js/50-metrics.js"]=metrics.encode("utf-8")
 # Runtime identity
 for path,const_name in [("background.js","VIENA_BUILD_ID"),("js/80-update-banner.js","CONTENT_BUILD_ID"),("js/90-runtime-status.js","BUILD_ID")]:
     txt=files[path].decode("utf-8")
-    pattern = r"(const\\s+" + re.escape(const_name) + r"\\s*=\\s*['\\\"])([^'\\\"]+)(['\\\"])"
+    pattern = r"(const\s+" + re.escape(const_name) + r"\s*=\s*['\"])([^'\"]+)(['\"])"
     txt,n=re.subn(pattern,lambda m: m.group(1)+NEW_BUILD+m.group(3),txt,count=1)
     if n!=1: raise SystemExit(f"identity missing: {path}")
     files[path]=txt.encode("utf-8")
