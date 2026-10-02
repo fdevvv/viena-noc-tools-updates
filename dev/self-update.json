@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-icon-personalization-polish-fix60",
+  "build": "1.3.26-dev-ui-foundation-fix61",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-icon-personalization-polish-fix60.json",
-  "package_sha256": "afc990d4f912a45cfc1e7ec417aac7d25e6d1f79e3f36759a06116e15756e95b",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ui-foundation-fix61.json",
+  "package_sha256": "68827ca895cef6c90bb7e95cc2dcb4fe4cc1a74270d8681d6b21c16a3f5ee830",
   "notes": [
-    "Nuevo popup corporativo compacto con acceso a la vista completa de VIENA NOC Tools.",
-    "Nueva vista completa con herramientas, personalización, actualizaciones y diagnóstico reutilizando el estado existente.",
-    "Editor de botones integrado y personalización del icono con tres variantes, preservando storage, plantillas y updater actuales."
+    "Se unifica el apellido para asignación entre popup y vista completa usando la misma clave persistente.",
+    "La vista completa simplifica el navbar a General, Personalización y Actualizaciones, eliminando accesos duplicados.",
+    "General concentra estado, herramientas, operador y actualización con una base responsive para resoluciones de escritorio y ventanas reducidas."
   ]
 }
