@@ -7,10 +7,11 @@
   "notes": [
     "Métricas comparte la referencia de seguimiento entre operadores para usar el mismo punto de partida.",
     "Si los valores aumentan después de la marca, el nodo se muestra violeta y Ctrl + doble click reconoce los nuevos valores.",
-    "El estado de sincronización se muestra en la cabecera y, si no está disponible, Métricas continúa en modo local."
+    "El estado de sincronización se muestra en la cabecera y, si no está disponible, Métricas continúa en modo local.",
+    "Asignar e Iniciar usa el ticket marcado cuando hay exactamente un checkbox seleccionado; sin selección mantiene el comportamiento anterior."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.39-metricas-sync-global-candidate1-package.json",
-  "package_sha256": "78ce7e619aa7c0f70ecef4a6784115e6f83c310dff6ff45565bc33d1e2e1a2c6",
-  "source_package": "release/v1.3.39-metricas-sync-global-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.39-metricas-sync-global-assign-start-candidate2-package.json",
+  "package_sha256": "7e69a63ce413c657974605e001ccbf3bc8fa39d58fa8b4e6bb800ddda65f4cea",
+  "source_package": "release/v1.3.39-metricas-sync-global-assign-start-candidate2-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
