@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-page-manifest-icon-fix73",
+  "build": "1.3.26-dev-metricas-sync-read-phase3-fix74",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-page-manifest-icon-fix73.json",
-  "package_sha256": "76df823de7292bde8d2c8b2a3be01e932a9473ae9ec9dd434d290d49531d9389",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-metricas-sync-read-phase3-fix74.json",
+  "package_sha256": "c009687a6eacc32763c78aa77e2cecc89249786f1cc35461b7b8622095c6c779",
   "notes": [
-    "La extensión incorpora iconos PNG propios en el manifest para reemplazar el icono genérico del navegador en la ficha de la extensión.",
-    "Cuando VIENA NOC Tools se abre en una pestaña, el favicon usa la variante de icono seleccionada en Personalización.",
-    "El icono de la barra del navegador y su borde de estado continúan funcionando de forma independiente."
+    "Métricas incorpora lectura de METRICAS_SYNC cada 10 segundos en modo observación.",
+    "Los estados remotos se normalizan por el valor literal del nodo y se validan contra la fecha operativa informada por el servidor.",
+    "Esta fase no modifica colores, banderas ni la lógica actual de Métricas."
   ]
 }
