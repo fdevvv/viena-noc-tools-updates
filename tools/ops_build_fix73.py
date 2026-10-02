@@ -26,19 +26,19 @@ assets_js=files["js/96-ui-assets.js"].decode("utf-8")
 m=re.search(r"globalThis\.VIENA_ICON_VARIANTS\s*=\s*Object\.freeze\((\{.*?\})\);", assets_js, re.S)
 if not m: raise SystemExit("VIENA_ICON_VARIANTS not found")
 variants=json.loads(m.group(1))
-for size in ("16","32","48","128"):
-    data=variants["1"][size]
-    prefix="data:image/png;base64,"
-    if not data.startswith(prefix): raise SystemExit(f"invalid icon data {size}")
-    files[f"icons/viena-{size}.png"]=base64.b64decode(data[len(prefix):])
+data=variants["1"]["128"]
+prefix="data:image/png;base64,"
+if not data.startswith(prefix): raise SystemExit("invalid icon data 128")
+files["icon128.png"]=base64.b64decode(data[len(prefix):])
 
-# Add manifest icons so extension details no longer shows Chrome's generic gray V.
+# Reuse the already-authorized portable root icon path for all manifest sizes.
+# Chrome scales the packaged PNG for browser-owned surfaces.
 manifest=json.loads(files["manifest.json"].decode("utf-8"))
 manifest["icons"]={
-  "16":"icons/viena-16.png",
-  "32":"icons/viena-32.png",
-  "48":"icons/viena-48.png",
-  "128":"icons/viena-128.png"
+  "16":"icon128.png",
+  "32":"icon128.png",
+  "48":"icon128.png",
+  "128":"icon128.png"
 }
 files["manifest.json"]=(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n").encode("utf-8")
 
@@ -46,7 +46,7 @@ files["manifest.json"]=(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n").e
 # This affects chrome-extension://.../popup.html when opened in a tab.
 ph=files["popup.html"].decode("utf-8")
 if 'id="vienaPageFavicon"' not in ph:
-    ph=ph.replace("<title>VIENA NOC Tools</title>","<title>VIENA NOC Tools</title>\n<link id=\"vienaPageFavicon\" rel=\"icon\" type=\"image/png\" href=\"icons/viena-32.png\">",1)
+    ph=ph.replace("<title>VIENA NOC Tools</title>","<title>VIENA NOC Tools</title>\n<link id=\"vienaPageFavicon\" rel=\"icon\" type=\"image/png\" href=\"icon128.png\">",1)
 files["popup.html"]=ph.encode("utf-8")
 
 home=files["js/97-home-ui.js"].decode("utf-8")
@@ -84,9 +84,6 @@ integrity["files"]={p:sha(b) for p,b in files.items() if p!="integrity-manifest.
 files["integrity-manifest.json"]=(json.dumps(integrity,ensure_ascii=False,indent=2)+"\n").encode("utf-8")
 
 order=[i["path"] for i in pkg["files"]]
-for p in ["icons/viena-16.png","icons/viena-32.png","icons/viena-48.png","icons/viena-128.png"]:
-    if p not in order: order.append(p)
-
 pkg["build"]=NEW_BUILD
 pkg["generated_at"]=datetime.now(timezone.utc).isoformat().replace("+00:00","Z")
 pkg["files"]=[]
@@ -118,8 +115,8 @@ if note not in hist.get("notes",[]): hist.setdefault("notes",[]).append(note)
 HIST.write_text(json.dumps(hist,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 
 checks={
-  "manifest icons": all(f"icons/viena-{s}.png" in files for s in ("16","32","48","128")),
-  "manifest mapping": '"icons"' in files["manifest.json"].decode("utf-8"),
+  "manifest icon updated": files["icon128.png"][:8]==b"\x89PNG\r\n\x1a\n",
+  "manifest mapping": all(v=="icon128.png" for v in json.loads(files["manifest.json"].decode("utf-8"))["icons"].values()),
   "page favicon": 'id="vienaPageFavicon"' in files["popup.html"].decode("utf-8"),
   "dynamic favicon":"applyPageFavicon(v)" in files["js/97-home-ui.js"].decode("utf-8"),
 }
