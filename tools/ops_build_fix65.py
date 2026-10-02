@@ -46,18 +46,11 @@ if mount_marker not in home:
     raise SystemExit("HOME mount marker not found")
 home = home.replace(mount_marker, mount_insert, 1)
 
-modal_markup = '''<div id=\\"uiConfirmOverlay\\" class=\\"ui-confirm-overlay\\" hidden aria-hidden=\\"true\\">
-  <div class=\\"ui-confirm-dialog\\" role=\\"dialog\\" aria-modal=\\"true\\" aria-labelledby=\\"uiConfirmTitle\\" aria-describedby=\\"uiConfirmMessage\\">
-    <div class=\\"ui-confirm-icon\\" aria-hidden=\\"true\\">!</div>
-    <div class=\\"ui-confirm-copy\\"><h3 id=\\"uiConfirmTitle\\">Confirmar acción</h3><p id=\\"uiConfirmMessage\\"></p></div>
-    <div class=\\"ui-confirm-actions\\"><button id=\\"uiConfirmCancel\\" class=\\"btn secondary\\" type=\\"button\\">Cancelar</button><button id=\\"uiConfirmAccept\\" class=\\"btn danger solid-danger\\" type=\\"button\\">Eliminar</button></div>
-  </div>
-</div>
-'''
+modal_markup = '<div id=\\\"uiConfirmOverlay\\\" class=\\\"ui-confirm-overlay\\\" hidden aria-hidden=\\\"true\\\"><div class=\\\"ui-confirm-dialog\\\" role=\\\"dialog\\\" aria-modal=\\\"true\\\" aria-labelledby=\\\"uiConfirmTitle\\\" aria-describedby=\\\"uiConfirmMessage\\\"><div class=\\\"ui-confirm-icon\\\" aria-hidden=\\\"true\\\">!</div><div class=\\\"ui-confirm-copy\\\"><h3 id=\\\"uiConfirmTitle\\\">Confirmar acción</h3><p id=\\\"uiConfirmMessage\\\"></p></div><div class=\\\"ui-confirm-actions\\\"><button id=\\\"uiConfirmCancel\\\" class=\\\"btn secondary\\\" type=\\\"button\\\">Cancelar</button><button id=\\\"uiConfirmAccept\\\" class=\\\"btn danger solid-danger\\\" type=\\\"button\\\">Eliminar</button></div></div></div>'
 toast_marker = '<div id=\\"toast\\" class=\\"toast\\"></div>'
 if toast_marker not in home:
     raise SystemExit("toast markup marker not found")
-home = home.replace(toast_marker, modal_markup.replace('\\n','\\\\n') + toast_marker, 1)
+home = home.replace(toast_marker, modal_markup + toast_marker, 1)
 
 show_toast = "function showToast(text,type=''){const el=$('toast');if(!el)return;el.textContent=text;el.className='toast show'+(type?` ${type}`:'');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='toast',2500)}"
 if show_toast not in home:
