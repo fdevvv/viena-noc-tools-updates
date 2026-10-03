@@ -26,7 +26,13 @@ popup = files["popup.js"].decode("utf-8")
 
 # Mark the existing "Buscar actualización" button without changing its behavior.
 m = re.search(r'(<button\\b[^>]*>)(.*?Buscar actualización.*?)(</button>)', html, re.I | re.S)
-assert m, "Buscar actualización button not found"
+if not m:
+    labels=[]
+    for bm in re.finditer(r'<button\\b[^>]*>(.*?)</button>', html, re.I|re.S):
+        label=re.sub(r'<[^>]+>',' ',bm.group(1))
+        label=' '.join(label.split())
+        labels.append(label[:140])
+    raise AssertionError("Buscar actualización button not found. Buttons="+repr(labels))
 open_tag = m.group(1)
 if 'class=' in open_tag:
     open_tag = re.sub(r"class=([\"'])(.*?)\\1",
