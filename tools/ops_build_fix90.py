@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import base64, hashlib, json, pathlib, re
+import base64, hashlib, json, pathlib
 from datetime import datetime, timezone
 
 R = pathlib.Path(__file__).resolve().parents[1]
@@ -21,71 +21,58 @@ for item in pkg["files"]:
     files[item["path"]] = b
     order.append(item["path"])
 
-html = files["popup.html"].decode("utf-8")
 popup = files["popup.js"].decode("utf-8")
+assert "VIENA_EQUAL_UPDATE_ACTION_SIZE_FIX90" not in popup
 
-# Mark the existing "Buscar actualización" button without changing its behavior.
-m = re.search(r'(<button\\b[^>]*>)(.*?Buscar actualización.*?)(</button>)', html, re.I | re.S)
-if not m:
-    labels=[]
-    for bm in re.finditer(r'<button\\b[^>]*>(.*?)</button>', html, re.I|re.S):
-        label=re.sub(r'<[^>]+>',' ',bm.group(1))
-        label=' '.join(label.split())
-        labels.append(label[:140])
-    raise AssertionError("Buscar actualización button not found. Buttons="+repr(labels))
-open_tag = m.group(1)
-if 'class=' in open_tag:
-    open_tag = re.sub(r"class=([\"'])(.*?)\\1",
-                      lambda mm: f'class={mm.group(1)}{mm.group(2)} viena-update-equal-size{mm.group(1)}',
-                      open_tag, count=1)
-else:
-    open_tag = open_tag[:-1] + ' class="viena-update-equal-size">'
-html = html[:m.start()] + open_tag + m.group(2) + m.group(3) + html[m.end():]
+runtime_fix = r'''
+// VIENA_EQUAL_UPDATE_ACTION_SIZE_FIX90
+(() => {
+  const TARGET_RE = /^(Buscar actualización(?: DEV)?|Actualizar DEV\b|Descargar ZIP\b)/i;
 
-# Mark current update/install and manual ZIP buttons. Logic/ids stay intact.
-for button_id in ("openUpdate", "manualReleaseZip"):
-    pattern = rf"(<button\\b[^>]*\\bid=[\"']{button_id}[\"'][^>]*>)"
-    mm = re.search(pattern, html, re.I)
-    assert mm, f"{button_id} not found"
-    tag = mm.group(1)
-    if 'class=' in tag:
-        tag2 = re.sub(r"class=([\"'])(.*?)\\1",
-                      lambda x: f'class={x.group(1)}{x.group(2)} viena-update-equal-size{x.group(1)}',
-                      tag, count=1)
-    else:
-        tag2 = tag[:-1] + ' class="viena-update-equal-size">'
-    html = html[:mm.start()] + tag2 + html[mm.end():]
+  function normalizeUpdateActionButton(btn) {
+    if (!(btn instanceof HTMLButtonElement)) return;
+    const label = String(btn.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!TARGET_RE.test(label)) return;
 
-css = r"""
-<style id="viena-update-button-size-fix90">
-  .viena-update-equal-size{
-    box-sizing:border-box!important;
-    width:100%!important;
-    min-width:0!important;
-    height:52px!important;
-    min-height:52px!important;
-    max-height:52px!important;
-    padding:8px 10px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    text-align:center!important;
-    line-height:1.15!important;
-    white-space:normal!important;
-    overflow:hidden!important;
+    btn.style.setProperty('box-sizing', 'border-box', 'important');
+    btn.style.setProperty('width', '100%', 'important');
+    btn.style.setProperty('min-width', '0', 'important');
+    btn.style.setProperty('height', '52px', 'important');
+    btn.style.setProperty('min-height', '52px', 'important');
+    btn.style.setProperty('max-height', '52px', 'important');
+    btn.style.setProperty('padding', '8px 10px', 'important');
+    btn.style.setProperty('display', 'flex', 'important');
+    btn.style.setProperty('align-items', 'center', 'important');
+    btn.style.setProperty('justify-content', 'center', 'important');
+    btn.style.setProperty('align-self', 'start', 'important');
+    btn.style.setProperty('text-align', 'center', 'important');
+    btn.style.setProperty('line-height', '1.15', 'important');
+    btn.style.setProperty('overflow', 'hidden', 'important');
   }
-  .viena-update-actions{
-    align-items:start!important;
-  }
-  .viena-update-actions > .viena-update-equal-size{
-    align-self:start!important;
-  }
-</style>
-"""
-assert "</head>" in html
-html = html.replace("</head>", css + "\n</head>", 1)
 
-files["popup.html"] = html.encode("utf-8")
+  function equalizeUpdateActionButtons() {
+    document.querySelectorAll('button').forEach(normalizeUpdateActionButton);
+  }
+
+  const observer = new MutationObserver(equalizeUpdateActionButtons);
+  const start = () => {
+    equalizeUpdateActionButtons();
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
+})();
+'''
+
+popup += "\n" + runtime_fix
 files["popup.js"] = popup.encode("utf-8")
 
 for path in ("background.js", "js/80-update-banner.js", "js/90-runtime-status.js"):
@@ -99,7 +86,7 @@ files["build.json"] = (json.dumps(build, ensure_ascii=False, indent=2) + "\n").e
 
 integ = json.loads(files["integrity-manifest.json"].decode("utf-8"))
 integ["build"] = NEW
-integ["files"] = {p: h(b) for p,b in files.items() if p != "integrity-manifest.json"}
+integ["files"] = {p:h(b) for p,b in files.items() if p!="integrity-manifest.json"}
 files["integrity-manifest.json"] = (json.dumps(integ, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
 
 pkg["build"] = NEW
@@ -123,9 +110,9 @@ ptr.update({
     "package_url":"https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/"+DST_REL,
     "package_sha256":h(raw),
     "notes":[
-        "Se iguala el alto visual de Buscar actualización, Actualizar y Descargar ZIP en el popup.",
-        "Se evita que Buscar actualización se estire verticalmente cuando aparecen dos acciones en la columna contigua.",
-        "No se modifica ninguna lógica de actualización, descarga manual ni elegibilidad por usuario."
+        "Se iguala a 52 px el alto de Buscar actualización DEV, Actualizar DEV y Descargar ZIP.",
+        "El ajuste se aplica también cuando los botones cambian de texto o se renderizan dinámicamente.",
+        "No se modifica la lógica de actualización, descarga manual ni elegibilidad por usuario."
     ]
 })
 (R/"dev/self-update.json").write_text(json.dumps(ptr,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
@@ -135,12 +122,9 @@ hist["current_build"] = NEW
 hist["current_package"] = DST_REL
 (R/"dev/history.json").write_text(json.dumps(hist,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 
-# Regression checks
-out = files["popup.html"].decode("utf-8")
-assert out.count("viena-update-equal-size") >= 4  # 3 buttons + CSS selector
-assert 'height:52px!important;' in out
-assert 'id="manualReleaseZip"' in out
-assert 'id="openUpdate"' in out
+assert "VIENA_EQUAL_UPDATE_ACTION_SIZE_FIX90" in popup
+assert "MutationObserver(equalizeUpdateActionButtons)" in popup
+assert "height', '52px'" in popup
 assert "new Set(['efoschi'])" in popup
 assert "new Set(['mbruno'])" in popup
 assert "VIENA_NOC_Tools_RELEASE_v${latest}.zip" in popup
