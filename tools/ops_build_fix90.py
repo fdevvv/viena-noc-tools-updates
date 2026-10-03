@@ -29,7 +29,7 @@ m = re.search(r'(<button\\b[^>]*>)(\\s*Buscar actualización(?: DEV)?\\s*)(</but
 assert m, "Buscar actualización button not found"
 open_tag = m.group(1)
 if 'class=' in open_tag:
-    open_tag = re.sub(r'class=(["\\'])(.*?)\\1',
+    open_tag = re.sub(r"class=([\"'])(.*?)\\1",
                       lambda mm: f'class={mm.group(1)}{mm.group(2)} viena-update-equal-size{mm.group(1)}',
                       open_tag, count=1)
 else:
@@ -38,12 +38,12 @@ html = html[:m.start()] + open_tag + m.group(2) + m.group(3) + html[m.end():]
 
 # Mark current update/install and manual ZIP buttons. Logic/ids stay intact.
 for button_id in ("openUpdate", "manualReleaseZip"):
-    pattern = rf'(<button\\b[^>]*\\bid=["\\']{button_id}["\\'][^>]*>)'
+    pattern = rf"(<button\\b[^>]*\\bid=[\"']{button_id}[\"'][^>]*>)"
     mm = re.search(pattern, html, re.I)
     assert mm, f"{button_id} not found"
     tag = mm.group(1)
     if 'class=' in tag:
-        tag2 = re.sub(r'class=(["\\'])(.*?)\\1',
+        tag2 = re.sub(r"class=([\"'])(.*?)\\1",
                       lambda x: f'class={x.group(1)}{x.group(2)} viena-update-equal-size{x.group(1)}',
                       tag, count=1)
     else:
