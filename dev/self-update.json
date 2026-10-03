@@ -1,13 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-fictitious-update-test-fix115",
+  "build": "1.3.26-dev-popup-update-isolation-fix116",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-fictitious-update-test-fix115.json",
-  "package_sha256": "581b072656598be19ed05d45a6f9d2bba866574429fda874d2cb066c14e06cf6",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-popup-update-isolation-fix116.json",
+  "package_sha256": "e6808ce8368d53425cd2e328eb7dfea846da660603ff8965df4a64319f0caf7c",
   "notes": [
-    "FIX115 FICTICIO: build de prueba para validar el flujo de actualización desde FIX114.",
-    "No agrega cambios funcionales nuevos: conserva FIX114 y sólo avanza la identidad del build.",
-    "Usar para comprobar Buscar actualización DEV, carpeta Vinculada y CTA Actualizar DEV sin falsos 'Vincular y actualizar'."
+    "FIX116: desacopla la búsqueda DEV del service worker; el popup consulta el manifest directamente con timeout duro de 5 s.",
+    "El popup hidrata DISPONIBLE desde cache local y además hace una comprobación silenciosa al abrir, sin quedar en '—' hasta que el operador pulse Buscar.",
+    "Buscar actualización DEV tiene watchdog de UI, guard de doble click y restauración garantizada; no puede permanecer indefinidamente en 'Buscando…'.",
+    "Se preserva FIX114: carpeta vinculada y permiso son estados separados; no aparece 'Vincular y actualizar DEV' por una carrera de hidratación."
   ]
 }
