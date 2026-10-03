@@ -1,0 +1,58 @@
+name: DEV fix88 update actions layout
+on:
+  push:
+    branches: [dev/update-actions-layout-fix88]
+    paths:
+      - tools/ops_build_fix88.py
+      - .github/workflows/dev-fix88-update-actions-layout.yml
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/update-actions-layout-fix88
+          fetch-depth: 0
+      - name: Build DEV fix88
+        run: python3 tools/ops_build_fix88.py
+      - name: Validate DEV updater matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate packaged JavaScript
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-update-actions-layout-fix88.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              x=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              x.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(x)],check=True)
+          PY
+      - name: Validate popup layout regression
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-update-actions-layout-fix88.json').read_text())
+          files={f['path']:base64.b64decode(f['content_base64']).decode(errors='replace') for f in p['files']}
+          h=files['popup.html']; j=files['popup.js']
+          checks={
+            'actions wrapper':'class="viena-update-actions"' in h,
+            'two controls':'id="openUpdate"' in h and 'id="manualReleaseZip"' in h,
+            'responsive single column':'@media (max-width:340px)' in h,
+            'manual eligible DEV':"new Set(['efoschi'])" in j,
+            'manual eligible RELEASE':"new Set(['mbruno'])" in j,
+            'manual zip target':'VIENA_NOC_Tools_RELEASE_v${latest}.zip' in j,
+          }
+          print(json.dumps(checks,ensure_ascii=False,indent=2))
+          bad=[k for k,v in checks.items() if not v]
+          if bad: raise SystemExit('FAILED: '+', '.join(bad))
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-update-actions-layout-fix88.json dev/self-update.json dev/history.json
+          git commit -m "dev: align update actions in popup fix88"
+          git push origin HEAD:dev/update-actions-layout-fix88
