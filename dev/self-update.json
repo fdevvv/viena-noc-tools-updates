@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-manual-zip-label-fix89",
+  "build": "1.3.26-dev-update-button-size-fix90",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-manual-zip-label-fix89.json",
-  "package_sha256": "2a91fa85b1bb33f90cb1b9f5c974be28f9bee882cc9bfdd62426546bfa9061fe",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-button-size-fix90.json",
+  "package_sha256": "8882f42a9a8ca0d6a9252d196d007a8357f5d3a90e9ce0705d9e6b5ce16b72d1",
   "notes": [
-    "Se acorta el texto del botón de descarga manual para evitar el salto de línea en el popup.",
-    "Buscar actualización DEV y Descargar ZIP quedan alineados, con la misma altura y en una sola línea.",
-    "No se modifica la lógica de actualización ni la disponibilidad exclusiva del ZIP manual."
+    "Se iguala a 52 px el alto de Buscar actualización DEV, Actualizar DEV y Descargar ZIP.",
+    "El ajuste se aplica también cuando los botones cambian de texto o se renderizan dinámicamente.",
+    "No se modifica la lógica de actualización, descarga manual ni elegibilidad por usuario."
   ]
 }
