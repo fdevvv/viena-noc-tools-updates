@@ -192,8 +192,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-update-layout-info-coherence-fix93",
-  "current_package": "dev/builds/1.3.26-dev-update-layout-info-coherence-fix93.json",
+  "current_build": "1.3.26-dev-dark-theme-isolated-fix95",
+  "current_package": "dev/builds/1.3.26-dev-dark-theme-isolated-fix95.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -253,6 +253,7 @@
     "fix71 removes data-URL fetch from icon decoding to satisfy extension CSP and makes template accordion expansion viewport-aware with minimal automatic scrolling.",
     "fix72 adds a state-colored ring to the selected toolbar icon while keeping existing badges and icon personalization.",
     "fix73 adds packaged manifest icons and makes the full-tab page favicon follow the selected extension icon variant.",
-    "fix74 / phase3: metrics shared backend polling is active in read-only observation mode; existing row colors and local flag logic are untouched."
+    "fix74 / phase3: metrics shared backend polling is active in read-only observation mode; existing row colors and local flag logic are untouched.",
+    "fix95 adds an isolated Claro/Oscuro extension theme in js/98-theme.js, synchronized between popup and full view without changing popup.js, updater, overlays or operational logic."
   ]
 }
