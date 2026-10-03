@@ -39,29 +39,31 @@ assert general_i >= 0, "General updates card marker not found"
 general_a = home.rfind('<article class=\\\"panel\\\">', 0, general_i)
 general_b = home.find('</article>', general_i)
 assert general_a >= 0 and general_b >= 0, "General updates card bounds not found"
-general_update_replacement = r'''<article class=\"panel update-overview-panel\">
-            <div class=\"panel-head\"><h2>Actualizaciones</h2><span class=\"status ok\">Resumen</span></div>
-            <div class=\"update-summary\"><div><span>Instalada</span><b id=\"summaryInstalled\">—</b></div><div><span>Disponible</span><b id=\"summaryAvailable\">Comprobando…</b></div></div>
-            <div id=\"summaryFolder\" class=\"info-line\">Carpeta vinculada: comprobando…</div>
-            <div class=\"minor-status update-overview-note\">La instalación, búsqueda de actualizaciones y vinculación de carpeta se administran desde el popup.</div>
+general_update_html = '''<article class="panel update-overview-panel">
+            <div class="panel-head"><h2>Actualizaciones</h2><span class="status ok">Resumen</span></div>
+            <div class="update-summary"><div><span>Instalada</span><b id="summaryInstalled">—</b></div><div><span>Disponible</span><b id="summaryAvailable">Comprobando…</b></div></div>
+            <div id="summaryFolder" class="info-line">Carpeta vinculada: comprobando…</div>
+            <div class="minor-status update-overview-note">La instalación, búsqueda de actualizaciones y vinculación de carpeta se administran desde el popup.</div>
           </article>'''
+general_update_replacement = general_update_html.replace('\\','\\\\').replace('"','\\\"').replace('\n','\\n')
 home = home[:general_a] + general_update_replacement + home[general_b + len('</article>'):]
 
 # 3) Remove the visible full-page Updates section. Keep its DOM IDs hidden for
 # compatibility with the already-working updater bindings and event listeners.
-compat = r'''<div id=\"fullViewUpdateCompat\" hidden aria-hidden=\"true\">
-        <button id=\"checkUpdates\" type=\"button\"></button>
-        <span id=\"updateStateBadge\"></span>
-        <span id=\"updatesInstalled\"></span>
-        <span id=\"updatesAvailable\"></span>
-        <div id=\"updateMessage\"></div>
-        <button id=\"runUpdateNow\" type=\"button\" hidden></button>
-        <button id=\"manualReleaseZipFull\" type=\"button\" hidden></button>
-        <div id=\"fullUpdateProgress\"></div>
-        <span id=\"folderBadge\"></span>
-        <div id=\"folderDetail\"></div>
-        <button id=\"openFolderManager\" type=\"button\"></button>
+compat_html = '''<div id="fullViewUpdateCompat" hidden aria-hidden="true">
+        <button id="checkUpdates" type="button"></button>
+        <span id="updateStateBadge"></span>
+        <span id="updatesInstalled"></span>
+        <span id="updatesAvailable"></span>
+        <div id="updateMessage"></div>
+        <button id="runUpdateNow" type="button" hidden></button>
+        <button id="manualReleaseZipFull" type="button" hidden></button>
+        <div id="fullUpdateProgress"></div>
+        <span id="folderBadge"></span>
+        <div id="folderDetail"></div>
+        <button id="openFolderManager" type="button"></button>
       </div>'''
+compat = compat_html.replace('\\','\\\\').replace('"','\\\"').replace('\n','\\n')
 
 updates_marker = '<section class=\\\"view\\\" data-view=\\\"updates\\\">'
 updates_a = home.find(updates_marker)
