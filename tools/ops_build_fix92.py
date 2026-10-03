@@ -155,7 +155,7 @@ hist["current_package"] = DST_REL
 # Regression assertions.
 out = files["js/97-home-ui.js"].decode("utf-8")
 assert 'data-section=\\\"updates\\\"' not in out
-assert 'data-view=\\\"updates\\\"' not in out
+assert '<section class=\\\"view\\\" data-view=\\\"updates\\\">' not in out
 assert 'data-section=\\\"general\\\"' in out
 assert 'data-section=\\\"personalization\\\"' in out
 assert 'id=\\\"summaryInstalled\\\"' in out
