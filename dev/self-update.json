@@ -1,13 +1,13 @@
 {
-  "schema": 1,
-  "version": "1.3.26",
-  "build": "1.3.26-dev-popup-update-button-mutation-loop-fix118",
-  "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-popup-update-button-mutation-loop-fix118.json",
-  "package_sha256": "7166b224055f81fd81454eb9d2ebf695e207e4b21bf449d47daee24883138601",
-  "notes": [
-    "FIX118: evita que el MutationObserver del botón de actualización reescriba su propio texto indefinidamente.",
-    "La corrección hace idempotente la normalización de la etiqueta Actualizar DEV.",
-    "Build DEV basado en FIX117; sin cambios funcionales ajenos al popup."
-  ]
+    "schema": 1,
+    "version": "1.3.26",
+    "build": "1.3.26-dev-mira5-split-no-downgrade-fix120",
+    "channel": "DEV",
+    "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-mira5-split-no-downgrade-fix120.json",
+    "package_sha256": "a861f2efed23301acf12fe1d0e9e981f705f2508afe9e59e39a9023387c7984e",
+    "notes": [
+          "FIX120: evita ofrecer una build DEV publicada con numero FIX inferior al build local activo.",
+          "Actualiza la base DEV del modo opcional de vista dividida VIENA + MIRA 5; MIRA real sigue pendiente de validar autenticacion embebida.",
+          "Build DEV local; RELEASE no modificada."
+    ]
 }
