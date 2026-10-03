@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-popup-sw-stability-fix101",
+  "build": "1.3.26-dev-popup-open-safe-boot-fix102",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-popup-sw-stability-fix101.json",
-  "package_sha256": "dd57e7a60df817ddc2b2c1a513b10a4dee2f2e5750444602b5d364e0c890d0f9",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-popup-open-safe-boot-fix102.json",
+  "package_sha256": "3fa66d81cdef8d03f7df9afd28712120205a80601327d965f171a512f0e2f06f",
   "notes": [
-    "FIX101 crítico: Buscar actualización ya no espera la comprobación de la carpeta vinculada.",
-    "La comprobación del vínculo tiene timeout y no puede dejar el popup bloqueado en Buscando.",
-    "Desactivado el auto-reload periódico del build DEV; el runtime sólo se recarga tras una actualización explícita.",
-    "Errores de teardown del Service Worker (No SW) quedan contenidos y no generan rechazos no manejados."
+    "FIX102 crítico: el popup pinta primero y difiere las tareas asíncronas de runtime/registro/actualización.",
+    "Eliminada la referencia a theme.css que no existe en los paquetes DEV y afectaba instalaciones limpias por ZIP.",
+    "Restaurado el flujo de búsqueda sin el guard updateCheckInFlight introducido después de fix97.",
+    "Conserva las protecciones de Service Worker y No SW de fix101."
   ]
 }
