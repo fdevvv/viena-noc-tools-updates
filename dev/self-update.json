@@ -1,13 +1,13 @@
 {
-    "schema": 1,
-    "version": "1.3.26",
-    "build": "1.3.26-dev-mira5-split-no-downgrade-fix120",
-    "channel": "DEV",
-    "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-mira5-split-no-downgrade-fix120.json",
-    "package_sha256": "a861f2efed23301acf12fe1d0e9e981f705f2508afe9e59e39a9023387c7984e",
-    "notes": [
-          "FIX120: evita ofrecer una build DEV publicada con numero FIX inferior al build local activo.",
-          "Actualiza la base DEV del modo opcional de vista dividida VIENA + MIRA 5; MIRA real sigue pendiente de validar autenticacion embebida.",
-          "Build DEV local; RELEASE no modificada."
-    ]
+  "schema": 1,
+  "version": "1.3.26",
+  "build": "1.3.26-dev-remove-mira-split-fix121",
+  "channel": "DEV",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-remove-mira-split-fix121.json",
+  "package_sha256": "20cf0e99d1a796b182ec1df38d45e67ed03dcdd47373f91c34ed537de1ffd43a",
+  "notes": [
+    "FIX121: retira la base experimental de vista dividida VIENA + MIRA 5 y conserva el acceso habitual a MIRA 5.",
+    "Conserva FIX120: no ofrece builds DEV con sufijo FIX numéricamente menor que el instalado.",
+    "Build DEV; RELEASE no modificada."
+  ]
 }
