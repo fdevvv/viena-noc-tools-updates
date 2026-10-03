@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-update-found-nonblocking-fix110",
+  "build": "1.3.26-dev-update-found-nonblocking-fix111",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-found-nonblocking-fix110.json",
-  "package_sha256": "b1291b4af28f8e656240179353048d63fdbe3106f83ab7e192bf4649badf6097",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-found-nonblocking-fix111.json",
+  "package_sha256": "3ffbc926931fcd35ea059219b550373559c64b0ad5394e84a44c64df75c32119",
   "notes": [
-    "FIX110 crítico: cuando se encuentra una actualización DEV, el service worker responde al popup inmediatamente después de guardar el estado.",
-    "Badge, banner en VIENA y notificaciones se ejecutan desacoplados y ya no pueden dejar el botón en Buscando.",
-    "Se conserva FIX109: la red sigue fuera del popup y el popup mantiene timeout de seguridad."
+    "FIX111 de prueba: no contiene cambios funcionales respecto de FIX110.",
+    "Se publica únicamente para validar que Buscar actualización detecte una actualización nueva sin quedar en Buscando.",
+    "Objetivo: comprobar Fix110 → Fix111 y la reapertura repetida del popup."
   ]
 }
