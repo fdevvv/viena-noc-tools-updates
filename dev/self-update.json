@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-dark-polish-fix103",
+  "build": "1.3.26-dev-dark-responsive-fix104",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-dark-polish-fix103.json",
-  "package_sha256": "32d0e34afc26d4c403457e194787031ff13c919e879d02b172c8f1c45b4b896e",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-dark-responsive-fix104.json",
+  "package_sha256": "57100ff0c4d2db7c0a91887f7231e77c610d8304c2670f5f3d3895586762c521",
   "notes": [
-    "Fase 1: se aclara 'Actualizar estado' en Herramientas y se elimina el falso 'Ver detalles' sin acción del bloque Actualizaciones.",
-    "Fase 2: se corrigen restos claros del dark mode en la vista completa: Crear botón, búsqueda, chips, footer del editor, campos y superficies secundarias.",
-    "Cambio visual aislado: no se modifica popup.js, updater, Service Worker, IndexedDB, vinculación de carpeta ni lógica de actualización."
+    "Fase 3: se completan estados hover/focus/disabled y badges del dark mode en popup y vista completa usando sólo CSS.",
+    "Fase 4: se endurece el responsive del editor para notebook, tablet y ventanas angostas, evitando desbordes y superposiciones.",
+    "Se conserva intacta la lógica crítica: popup.js, updater, Service Worker, IndexedDB y carpeta vinculada no se modifican."
   ]
 }
