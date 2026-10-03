@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-update-buttons-final-align-fix91",
+  "build": "1.3.26-dev-fullview-general-updates-fix92",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-buttons-final-align-fix91.json",
-  "package_sha256": "e0ae1edaa87e088f9e31e2f833c2b0b5fd31accfa5def09e12d32078a9c3e62d",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-fullview-general-updates-fix92.json",
+  "package_sha256": "d2cb856b39476ce198ce9e2e9dc4bad75491077cfac38d36fa40ba70fa1fa6d7",
   "notes": [
-    "Se corrige definitivamente la alineación vertical entre Buscar actualización DEV y Descargar ZIP.",
-    "Se elimina el margen superior residual del contenedor derecho que desplazaba el botón azul 8 px hacia abajo.",
-    "Se preservan tamaños, lógica de actualización, descarga manual y permisos por usuario."
+    "La vista completa queda simplificada a General y Personalización; se elimina la pestaña redundante de Actualizaciones.",
+    "General mantiene un resumen compacto con versión instalada, versión disponible y estado de la carpeta vinculada.",
+    "Las acciones de actualizar, descargar ZIP y vincular carpeta continúan administrándose desde el popup sin modificar su lógica."
   ]
 }
