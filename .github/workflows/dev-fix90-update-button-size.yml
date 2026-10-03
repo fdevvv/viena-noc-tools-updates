@@ -38,8 +38,9 @@ jobs:
           files={f['path']:base64.b64decode(f['content_base64']).decode(errors='replace') for f in p['files']}
           h=files['popup.html']; j=files['popup.js']
           checks={
-            'equal size class':'viena-update-equal-size' in h,
-            'fixed equal height':'height:52px!important;' in h,
+            'runtime equalizer':'VIENA_EQUAL_UPDATE_ACTION_SIZE_FIX90' in j,
+            'dynamic buttons observed':'MutationObserver(equalizeUpdateActionButtons)' in j,
+            'fixed equal height':"height', '52px'" in j,
             'manual button preserved':'id="manualReleaseZip"' in h,
             'update button preserved':'id="openUpdate"' in h,
             'DEV eligibility preserved':"new Set(['efoschi'])" in j,
