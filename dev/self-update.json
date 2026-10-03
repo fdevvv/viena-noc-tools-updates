@@ -8,6 +8,6 @@
   "notes": [
     "Se corrige la distribución de los botones de actualización del popup.",
     "La descarga ZIP manual consulta la RELEASE vigente y usa una apertura segura desde páginas de la extensión.",
-    "La vista completa incorpora actualización directa, gestión de carpeta y descarga ZIP manual para el usuario habilitado."
+    "La vista completa incorpora actualización directa, gestión de carpeta y descarga ZIP manual para el usuario habilitado en este canal."
   ]
 }
