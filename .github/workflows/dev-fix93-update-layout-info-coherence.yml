@@ -1,0 +1,62 @@
+name: DEV fix93 update layout and info coherence
+on:
+  push:
+    branches: [dev/update-layout-info-coherence-fix93]
+    paths:
+      - tools/ops_build_fix93.py
+      - .github/workflows/dev-fix93-update-layout-info-coherence.yml
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/update-layout-info-coherence-fix93
+          fetch-depth: 0
+      - name: Build DEV fix93
+        run: python3 tools/ops_build_fix93.py
+      - name: Validate DEV updater matrix
+        run: python3 tools/validate_dev_matrix.py
+      - name: Validate packaged JavaScript
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib,subprocess
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-update-layout-info-coherence-fix93.json').read_text())
+          for f in p['files']:
+            if f['path'].endswith('.js'):
+              x=pathlib.Path('/tmp')/f['path'].replace('/','__')
+              x.write_bytes(base64.b64decode(f['content_base64']))
+              subprocess.run(['node','--check',str(x)],check=True)
+          PY
+      - name: Validate update UI coherence
+        run: |
+          python3 - <<'PY'
+          import base64,json,pathlib
+          p=json.loads(pathlib.Path('dev/builds/1.3.26-dev-update-layout-info-coherence-fix93.json').read_text())
+          files={f['path']:base64.b64decode(f['content_base64']).decode(errors='replace') for f in p['files']}
+          h=files['popup.html']; j=files['popup.js']; home=files['js/97-home-ui.js']
+          checks={
+            'final popup grid':'viena-update-actions-final-fix93' in h,
+            'search first':h.index('id="checkUpdate"') < h.index('id="manualReleaseZip"'),
+            'zip second':h.index('id="manualReleaseZip"') < h.index('id="openUpdate"'),
+            'update full width':'grid-column:1/-1!important' in h,
+            'old runtime sizer removed':'VIENA_EQUAL_UPDATE_ACTION_SIZE_FIX90' not in j,
+            'short DEV update label':'VIENA_UPDATE_BUTTON_LABEL_FIX93' in j,
+            'summary badge':'summaryUpdateBadge' in home,
+            'installed semantic version':"$('summaryInstalled').textContent=manifest.version" in home,
+            'available semantic channel':"availableVersion+' DEV'" in home,
+            'folder saved-link semantics':'acceso guardado · se verificará al actualizar' in home,
+          }
+          print(json.dumps(checks,ensure_ascii=False,indent=2))
+          bad=[k for k,v in checks.items() if not v]
+          if bad: raise SystemExit('FAILED: '+', '.join(bad))
+          PY
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dev/builds/1.3.26-dev-update-layout-info-coherence-fix93.json dev/self-update.json dev/history.json
+          git commit -m "dev: update layout and info coherence fix93"
+          git push origin HEAD:dev/update-layout-info-coherence-fix93
