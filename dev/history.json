@@ -192,8 +192,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-popup-pretheme-stability-fix98",
-  "current_package": "dev/builds/1.3.26-dev-popup-pretheme-stability-fix98.json",
+  "current_build": "1.3.26-dev-popup-folder-isolation-fix99",
+  "current_package": "dev/builds/1.3.26-dev-popup-folder-isolation-fix99.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -256,6 +256,7 @@
     "fix74 / phase3: metrics shared backend polling is active in read-only observation mode; existing row colors and local flag logic are untouched.",
     "fix96 refines dark mode to a neutral corporate navy/charcoal palette, removes the literal popup newline artifact, and restores the intended two-up update action layout without changing popup.js or updater logic.",
     "fix97 is a popup-open rescue build: it removes js/98-theme.js from popup startup while preserving update UX fixes, to restore repeatable popup opening before dark-theme work resumes.",
-    "fix98 removes the literal popup newline artifact, prevents concurrent manual update checks, and normalizes the update action grid while keeping fix97 popup startup unchanged."
+    "fix98 removes the literal popup newline artifact, prevents concurrent manual update checks, and normalizes the update action grid while keeping fix97 popup startup unchanged.",
+    "fix99 isolates standalone folder linking from normal popup startup, serializes folder status refreshes, and only resumes genuinely recoverable update journals."
   ]
 }
