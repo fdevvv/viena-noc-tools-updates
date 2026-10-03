@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-dark-theme-fix94",
+  "build": "1.3.26-dev-update-layout-info-coherence-fix93",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-dark-theme-fix94.json",
-  "package_sha256": "0510e701edffa08dbbd6ca9a828bad08455976397503bb483ccec776b2b2e3cf",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-layout-info-coherence-fix93.json",
+  "package_sha256": "2b58e5e6cb02655a0cbb4f037dd1052efe2549169657244bd9ff330ff914aec3",
   "notes": [
-    "Se agrega tema Claro / Oscuro en Personalización del popup y de la vista completa.",
-    "La preferencia queda guardada y sincronizada entre ambas vistas.",
-    "El tema oscuro cubre paneles, cards, inputs, editor de botones, estados y controles sin modificar la lógica operativa."
+    "En el popup, Buscar actualización DEV y Descargar ZIP quedan juntos arriba; Actualizar DEV aparece debajo a todo el ancho sólo cuando hay una actualización.",
+    "La vista General y el popup muestran la misma versión instalada, versión disponible y estado de carpeta vinculada.",
+    "El build interno continúa visible en Estado general para diagnóstico, pero deja de usarse como etiqueta de versión disponible."
   ]
 }
