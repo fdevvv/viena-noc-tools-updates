@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-dark-popup-polish-fix106",
+  "build": "1.3.26-dev-update-found-freeze-fix107",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-dark-popup-polish-fix106.json",
-  "package_sha256": "4de536fcb2dad71865beb436bc43cd451bbce75272b5f40ab8e5bf1b2bc69fd2",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-found-freeze-fix107.json",
+  "package_sha256": "1c7587a2502a0ebe7dc0df5081e27fff54b2fb4426f24603421ef4e4b46df18f",
   "notes": [
-    "Dark mode: Actualizar estado pasa a un botón secundario real, coherente con el resto del popup.",
-    "Se pulen pills Abrir, badge Detectado, focus de inputs, botones Guardar, runtime strip y scrollbar en tema oscuro.",
-    "Cambio exclusivamente visual sobre fix105: no se modifica popup.js ni se reintroduce la búsqueda automática al abrir."
+    "FIX107 crítico: al detectar una actualización, el popup ya no consulta File System Access/IndexedDB para renderizar el botón.",
+    "La disponibilidad de la actualización ahora sólo modifica el DOM; la carpeta se valida recién con el click explícito en Actualizar DEV.",
+    "Se desacopla además el render del botón de actualización del evento focus del popup. Se conserva el check manual-only de fix105 y el dark mode de fix106."
   ]
 }
