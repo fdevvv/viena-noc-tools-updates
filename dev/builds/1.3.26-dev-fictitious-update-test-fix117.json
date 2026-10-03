@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "app": "VIENA NOC Tools",
+  "version": "1.3.26",
+  "build": "1.3.26-dev-fictitious-update-test-fix117",
+  "channel": "DEV",
+  "generated_at": "2026-10-03T18:30:00Z",
+  "mode": "dev-delta",
+  "profile": "fictitious-test-delta-v1",
+  "files": [
+    {
+      "path": "build.json",
+      "size": 255,
+      "sha256": "735eb7f6f04827ea2c7ef23a20d7ae61b319f5081df552a18d1825262442540f",
+      "content_base64": "ewogICJ2ZXJzaW9uIjogIjEuMy4yNiIsCiAgImJ1aWxkIjogIjEuMy4yNi1kZXYtZmljdGl0aW91cy11cGRhdGUtdGVzdC1maXgxMTciLAogICJjaGFubmVsIjogIkRFViIsCiAgImdlbmVyYXRlZF9hdCI6ICIyMDI2LTEwLTAzVDE4OjMwOjAwWiIsCiAgInVwZGF0ZXJfY29udHJhY3QiOiAyLAogICJyZWxlYXNlX2NvbXBhdGliaWxpdHlfZmxvb3IiOiAiMS4zLjI0IiwKICAidXBkYXRlX2NoYW5uZWwiOiAiZGV2L3NlbGYtdXBkYXRlLmpzb24iCn0K"
+    },
+    {
+      "path": "integrity-manifest.json",
+      "size": 589,
+      "sha256": "c1a94b1a6209b0c6a5763b684c4c2a6cddf914c958e0f56a52c1737c619510b8",
+      "content_base64": "ewogICJzY2hlbWEiOiAxLAogICJ2ZXJzaW9uIjogIjEuMy4yNiIsCiAgImNoYW5uZWwiOiAiREVWIiwKICAiYnVpbGQiOiAiMS4zLjI2LWRldi1maWN0aXRpb3VzLXVwZGF0ZS10ZXN0LWZpeDExNyIsCiAgImZpbGVzIjogewogICAgInBvcHVwLmpzIjogImM0YWY2NmFhMzM1NWY5M2U5ZmY2MzgyNTQxMzY0YmE2ZDRjMTVkMjlkYjdiYTU4N2RkZjVmMjlmOTMxMjUwZTIiLAogICAgImJhY2tncm91bmQuanMiOiAiNDNiMDBmNWNjMGEwY2VmMDRmODg5ZjRmMTkxNWEzNmFlYjFiZDQ0MDE4MTkwMjgxMWM0YTJjMzk1YmQxYWIxNSIsCiAgICAianMvODAtdXBkYXRlLWJhbm5lci5qcyI6ICJlMDlmZGRiMmVjYjgzZmYwMDM2YjgzZTFjOTg0NDllMjk2YzQ1YmZmNDY1YTllM2RiYWUyMWYwMDJiNzVlZDE2IiwKICAgICJqcy85MC1ydW50aW1lLXN0YXR1cy5qcyI6ICIxM2UzODI2N2VkNDMyMjRhMjM4ZjBjOTNjOTY5NmYwMjYyMDhkMzIwOTAwZTZlZDM1ZTQzNTcyOGZkYjA2ZDA2IiwKICAgICJidWlsZC5qc29uIjogIjczNWViN2Y2ZjA0ODI3ZWEyYzdlZjIzYTIwZDdhZTYxYjMxOWY1MDgxZGY1NTJhMThkMTgyNTI2MjQ0MjU0MGYiCiAgfQp9Cg=="
+    }
+  ],
+  "patches": [
+    {
+      "path": "popup.js",
+      "find": "1.3.26-dev-popup-update-isolation-fix116",
+      "replace": "1.3.26-dev-fictitious-update-test-fix117",
+      "old_sha256": "33811007ea538033a10ed3dcdf919b037d0cb34494432c5d6b4f988d21d05226",
+      "new_sha256": "c4af66aa3355f93e9ff6382541364ba6d4c15d29db7ba587ddf5f29f931250e2"
+    },
+    {
+      "path": "background.js",
+      "find": "1.3.26-dev-popup-update-isolation-fix116",
+      "replace": "1.3.26-dev-fictitious-update-test-fix117",
+      "old_sha256": "1bf751e040498baaacba2495f7399de2e0dedc8c8b60f6dde19e30400c115868",
+      "new_sha256": "43b00f5cc0a0cef04f889f4f1915a36aeb1bd440181902811c4a2c395bd1ab15"
+    },
+    {
+      "path": "js/80-update-banner.js",
+      "find": "1.3.26-dev-popup-update-isolation-fix116",
+      "replace": "1.3.26-dev-fictitious-update-test-fix117",
+      "old_sha256": "bd3460042aa981aba7625417005744378df6c57f1f3f3f456c7edfd5bf8284a4",
+      "new_sha256": "e09fddb2ecb83ff0036b83e1c98449e296c45bff465a9e3dbae21f002b75ed16"
+    },
+    {
+      "path": "js/90-runtime-status.js",
+      "find": "1.3.26-dev-popup-update-isolation-fix116",
+      "replace": "1.3.26-dev-fictitious-update-test-fix117",
+      "old_sha256": "f41c53c686cd4ffa9d728aedb1b76d9dd2f0f608f649549d90ba799b19a20581",
+      "new_sha256": "13e38267ed43224a238f0c93c9696f026208d320900e6ed35e435728fdb06d06"
+    }
+  ],
+  "remove": []
+}
