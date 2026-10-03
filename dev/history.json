@@ -192,8 +192,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-popup-worker-update-check-fix109",
-  "current_package": "dev/builds/1.3.26-dev-popup-worker-update-check-fix109.json",
+  "current_build": "1.3.26-dev-update-found-nonblocking-fix110",
+  "current_package": "dev/builds/1.3.26-dev-update-found-nonblocking-fix110.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -260,6 +260,7 @@
     "fix99 isolates standalone folder linking from normal popup startup, serializes folder status refreshes, and only resumes genuinely recoverable update journals.",
     "fix100 restores dark mode with static CSS and a minimal storage-backed controller while preserving fix99 folder isolation.",
     "fix108 is a no-op DEV updater smoke test built from fix107; only coherent build identity metadata changed so the update path can be validated without functional changes.",
-    "fix109 moves manual DEV update discovery entirely out of the toolbar popup: the popup now asks the service worker with a bounded 7.5-second wait, so a stalled network/worker request cannot leave the popup stuck in Buscando or poison the next popup open."
+    "fix109 moves manual DEV update discovery entirely out of the toolbar popup: the popup now asks the service worker with a bounded 7.5-second wait, so a stalled network/worker request cannot leave the popup stuck in Buscando or poison the next popup open.",
+    "fix110 makes the update-found branch non-blocking: after persisting a valid available update, the service worker returns immediately while badge, banner and notification side effects run detached and cannot hold the popup in Buscando. Publication prepared through the protected PR gate."
   ]
 }

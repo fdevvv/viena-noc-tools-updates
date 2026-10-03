@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-popup-worker-update-check-fix109",
+  "build": "1.3.26-dev-update-found-nonblocking-fix110",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-popup-worker-update-check-fix109.json",
-  "package_sha256": "38e321b250d2a793b6eca9a2990c40d11d9b4f646c442f09b449f98097717347",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-found-nonblocking-fix110.json",
+  "package_sha256": "b1291b4af28f8e656240179353048d63fdbe3106f83ab7e192bf4649badf6097",
   "notes": [
-    "FIX109 crítico: Buscar actualización DEV ya no hace fetch de red desde el popup.",
-    "La consulta se ejecuta en el service worker y el popup impone un timeout propio de 7,5 s para recuperar siempre la interfaz.",
-    "Se preserva el resto de FIX107/108: carpeta vinculada, updater en segundo plano, dark mode y lógica operativa sin cambios."
+    "FIX110 crítico: cuando se encuentra una actualización DEV, el service worker responde al popup inmediatamente después de guardar el estado.",
+    "Badge, banner en VIENA y notificaciones se ejecutan desacoplados y ya no pueden dejar el botón en Buscando.",
+    "Se conserva FIX109: la red sigue fuera del popup y el popup mantiene timeout de seguridad."
   ]
 }
