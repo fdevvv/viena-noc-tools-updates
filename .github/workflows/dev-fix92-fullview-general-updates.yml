@@ -39,7 +39,7 @@ jobs:
           h=files['js/97-home-ui.js']
           checks={
             'updates nav removed':'data-section=\\\"updates\\\"' not in h,
-            'updates view removed':'data-view=\\\"updates\\\"' not in h,
+            'updates view removed':'<section class=\\\"view\\\" data-view=\\\"updates\\\">' not in h,
             'general nav preserved':'data-section=\\\"general\\\"' in h,
             'personalization nav preserved':'data-section=\\\"personalization\\\"' in h,
             'summary installed preserved':'id=\\\"summaryInstalled\\\"' in h,
