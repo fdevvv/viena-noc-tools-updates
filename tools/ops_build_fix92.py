@@ -24,33 +24,28 @@ for item in pkg["files"]:
 home = files["js/97-home-ui.js"].decode("utf-8")
 
 # 1) Full-view navigation: only General + Personalización.
-home2, n = re.subn(
-    r'\n\s*<button class=\\"nav-item\\" data-section=\\"updates\\">.*?</button>',
-    '',
-    home,
-    count=1,
-    flags=re.S
-)
-assert n == 1, "updates nav item not found"
-home = home2
+nav_marker = 'data-section=\\\"updates\\\"'
+nav_i = home.find(nav_marker)
+assert nav_i >= 0, "updates nav marker not found"
+nav_a = home.rfind('<button', 0, nav_i)
+nav_b = home.find('</button>', nav_i)
+assert nav_a >= 0 and nav_b >= 0, "updates nav button bounds not found"
+home = home[:nav_a] + home[nav_b + len('</button>'):]
 
 # 2) General: keep an optimized read-only update summary; management stays in popup.
-general_update_pattern = (
-    r'<article class=\\"panel\\">\n'
-    r'\s*<div class=\\"panel-head\\"><h2>Actualizaciones</h2>.*?</div>\n'
-    r'\s*<div class=\\"update-summary\\">.*?</div>\n'
-    r'\s*<div id=\\"summaryFolder\\" class=\\"info-line\\">.*?</div>\n'
-    r'\s*</article>'
-)
+general_marker = '<h2>Actualizaciones</h2>'
+general_i = home.find(general_marker)
+assert general_i >= 0, "General updates card marker not found"
+general_a = home.rfind('<article class=\\\"panel\\\">', 0, general_i)
+general_b = home.find('</article>', general_i)
+assert general_a >= 0 and general_b >= 0, "General updates card bounds not found"
 general_update_replacement = r'''<article class=\"panel update-overview-panel\">
             <div class=\"panel-head\"><h2>Actualizaciones</h2><span class=\"status ok\">Resumen</span></div>
             <div class=\"update-summary\"><div><span>Instalada</span><b id=\"summaryInstalled\">—</b></div><div><span>Disponible</span><b id=\"summaryAvailable\">Comprobando…</b></div></div>
             <div id=\"summaryFolder\" class=\"info-line\">Carpeta vinculada: comprobando…</div>
             <div class=\"minor-status update-overview-note\">La instalación, búsqueda de actualizaciones y vinculación de carpeta se administran desde el popup.</div>
           </article>'''
-home2, n = re.subn(general_update_pattern, general_update_replacement, home, count=1, flags=re.S)
-assert n == 1, "General update summary card not found"
-home = home2
+home = home[:general_a] + general_update_replacement + home[general_b + len('</article>'):]
 
 # 3) Remove the visible full-page Updates section. Keep its DOM IDs hidden for
 # compatibility with the already-working updater bindings and event listeners.
