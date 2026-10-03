@@ -192,8 +192,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-update-found-freeze-fix107",
-  "current_package": "dev/builds/1.3.26-dev-update-found-freeze-fix107.json",
+  "current_build": "1.3.26-dev-update-found-freeze-fix108",
+  "current_package": "dev/builds/1.3.26-dev-update-found-freeze-fix108.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -258,6 +258,7 @@
     "fix97 is a popup-open rescue build: it removes js/98-theme.js from popup startup while preserving update UX fixes, to restore repeatable popup opening before dark-theme work resumes.",
     "fix98 removes the literal popup newline artifact, prevents concurrent manual update checks, and normalizes the update action grid while keeping fix97 popup startup unchanged.",
     "fix99 isolates standalone folder linking from normal popup startup, serializes folder status refreshes, and only resumes genuinely recoverable update journals.",
-    "fix100 restores dark mode with static CSS and a minimal storage-backed controller while preserving fix99 folder isolation."
+    "fix100 restores dark mode with static CSS and a minimal storage-backed controller while preserving fix99 folder isolation.",
+    "fix108 is a no-op DEV updater smoke test built from fix107; only coherent build identity metadata changed so the update path can be validated without functional changes."
   ]
 }
