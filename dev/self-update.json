@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-dark-theme-corporate-fix96",
+  "build": "1.3.26-dev-popup-open-rescue-fix97",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-dark-theme-corporate-fix96.json",
-  "package_sha256": "085bf33fa9fd57c608b39a3271189b0962aeb03e0dcbcb3ded9d15b78e5ad54a",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-popup-open-rescue-fix97.json",
+  "package_sha256": "31315243da2c2f3c8026b692c3bb178dde642f0d1a8a404cdb8ee0a5b1cc2d47",
   "notes": [
-    "Dark mode refinado con paleta corporativa navy/charcoal coherente en popup, vista completa y editor.",
-    "Buscar actualizaciÃ³n DEV mantiene estable la geometrÃ­a del popup durante la consulta y evita saltos visuales al repetir la acciÃ³n.",
-    "Se elimina el texto literal \\\\n del popup y se mantiene el layout Buscar + Descargar ZIP arriba; Actualizar debajo a todo el ancho."
+    "Rescate de estabilidad del popup: se retira el modulo de tema del arranque hasta aislar la causa del bloqueo de apertura.",
+    "Se conservan los fixes funcionales de actualizacion y la estabilidad del boton Buscar actualizacion DEV.",
+    "No se modifica el updater ni la logica operativa de VIENA."
   ]
 }
