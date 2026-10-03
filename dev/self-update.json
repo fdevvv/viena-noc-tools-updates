@@ -1,14 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-popup-open-safe-boot-fix102",
+  "build": "1.3.26-dev-dark-polish-fix103",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-popup-open-safe-boot-fix102.json",
-  "package_sha256": "3fa66d81cdef8d03f7df9afd28712120205a80601327d965f171a512f0e2f06f",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-dark-polish-fix103.json",
+  "package_sha256": "32d0e34afc26d4c403457e194787031ff13c919e879d02b172c8f1c45b4b896e",
   "notes": [
-    "FIX102 crítico: el popup pinta primero y difiere las tareas asíncronas de runtime/registro/actualización.",
-    "Eliminada la referencia a theme.css que no existe en los paquetes DEV y afectaba instalaciones limpias por ZIP.",
-    "Restaurado el flujo de búsqueda sin el guard updateCheckInFlight introducido después de fix97.",
-    "Conserva las protecciones de Service Worker y No SW de fix101."
+    "Fase 1: se aclara 'Actualizar estado' en Herramientas y se elimina el falso 'Ver detalles' sin acción del bloque Actualizaciones.",
+    "Fase 2: se corrigen restos claros del dark mode en la vista completa: Crear botón, búsqueda, chips, footer del editor, campos y superficies secundarias.",
+    "Cambio visual aislado: no se modifica popup.js, updater, Service Worker, IndexedDB, vinculación de carpeta ni lógica de actualización."
   ]
 }
