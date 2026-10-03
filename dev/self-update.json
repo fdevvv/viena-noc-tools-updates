@@ -1,13 +1,14 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-dark-theme-css-safe-fix100",
+  "build": "1.3.26-dev-popup-sw-stability-fix101",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-dark-theme-css-safe-fix100.json",
-  "package_sha256": "9e768d1460ec89c235ad64d1f5231e366f690a7732cf9f8a3d8ca6516f2b9860",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-popup-sw-stability-fix101.json",
+  "package_sha256": "dd57e7a60df817ddc2b2c1a513b10a4dee2f2e5750444602b5d364e0c890d0f9",
   "notes": [
-    "Dark mode reimplementado como CSS estatico con preferencia minima en chrome.storage.local.",
-    "Selector Claro/Oscuro en popup y Personalizacion sin montar ni reescribir el DOM desde el tema.",
-    "La pagina standalone de vinculacion queda excluida y conserva el aislamiento de fix99."
+    "FIX101 crítico: Buscar actualización ya no espera la comprobación de la carpeta vinculada.",
+    "La comprobación del vínculo tiene timeout y no puede dejar el popup bloqueado en Buscando.",
+    "Desactivado el auto-reload periódico del build DEV; el runtime sólo se recarga tras una actualización explícita.",
+    "Errores de teardown del Service Worker (No SW) quedan contenidos y no generan rechazos no manejados."
   ]
 }
