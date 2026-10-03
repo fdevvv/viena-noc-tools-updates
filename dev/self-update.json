@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-update-actions-layout-fix88",
+  "build": "1.3.26-dev-manual-zip-label-fix89",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-actions-layout-fix88.json",
-  "package_sha256": "b5798b940811e11027f63f5664c98918d4475f01a01a2cdffa530f1a4c50562d",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-manual-zip-label-fix89.json",
+  "package_sha256": "2a91fa85b1bb33f90cb1b9f5c974be28f9bee882cc9bfdd62426546bfa9061fe",
   "notes": [
-    "Se reorganizan las acciones de actualización del popup para que Buscar actualización y Descargar ZIP manual queden alineadas y con la misma jerarquía visual.",
-    "La descarga manual queda destacada como acción principal y Buscar actualización conserva un estilo secundario.",
-    "El popup mantiene comportamiento responsive y, cuando la descarga manual no está habilitada para el usuario, Buscar actualización vuelve a ocupar todo el ancho."
+    "Se acorta el texto del botón de descarga manual para evitar el salto de línea en el popup.",
+    "Buscar actualización DEV y Descargar ZIP quedan alineados, con la misma altura y en una sola línea.",
+    "No se modifica la lógica de actualización ni la disponibilidad exclusiva del ZIP manual."
   ]
 }
