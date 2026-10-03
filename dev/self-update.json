@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-runtimebuild-always-fix113",
+  "build": "1.3.26-dev-folder-cta-search-guard-fix114",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-runtimebuild-always-fix113.json",
-  "package_sha256": "fb3ce572e7324880984317394c1da2119e28482bc8d2ce35b8b6e0c39dfc7b3f",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-folder-cta-search-guard-fix114.json",
+  "package_sha256": "43680317db87208f736d61c868e728430a271333c005ce652c10cb21cc0f17a4",
   "notes": [
-    "FIX113: el service worker devuelve runtimeBuild siempre, haya o no una actualización disponible.",
-    "El estado sin actualización ya no puede provocar 'No se pudo identificar el build DEV activo'.",
-    "La limpieza de badge/banner/notificaciones del estado actualizado corre desacoplada y no bloquea el popup."
+    "FIX114: corrige el CTA para que una carpeta ya vinculada no aparezca como 'Vincular y actualizar DEV' por una carrera de hidratación.",
+    "Buscar actualización DEV ahora tiene guard de concurrencia y siempre vuelve a su texto normal; no puede quedar persistido en 'Buscando…'.",
+    "Incluye FIX113 completo: runtimeBuild sigue viniendo del service worker y la búsqueda no vuelve a depender de getRuntimeIdentity/IndexedDB."
   ]
 }
