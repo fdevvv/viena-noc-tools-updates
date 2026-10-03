@@ -192,8 +192,8 @@
       "historical updater contracts must all accept the exact candidate"
     ]
   },
-  "current_build": "1.3.26-dev-popup-runtime-state-fix112",
-  "current_package": "dev/builds/1.3.26-dev-popup-runtime-state-fix112.json",
+  "current_build": "1.3.26-dev-runtimebuild-always-fix113",
+  "current_package": "dev/builds/1.3.26-dev-runtimebuild-always-fix113.json",
   "notes": [
     "DEV fix13 remains the oldest supported DEV updater contract.",
     "DEV fix15 introduced an incompatible path fork by rejecting updater.html/updater.js.",
@@ -263,6 +263,7 @@
     "fix109 moves manual DEV update discovery entirely out of the toolbar popup: the popup now asks the service worker with a bounded 7.5-second wait, so a stalled network/worker request cannot leave the popup stuck in Buscando or poison the next popup open.",
     "fix110 makes the update-found branch non-blocking: after persisting a valid available update, the service worker returns immediately while badge, banner and notification side effects run detached and cannot hold the popup in Buscando. Publication prepared through the protected PR gate.",
     "fix111 is a no-op DEV smoke test published from fix110 to validate the repaired update-found path. Only coherent build identity metadata changed.",
-    "fix112 removes the remaining popup-side getRuntimeIdentity wait from DEV update discovery. The service worker now supplies runtimeBuild, cached available state is hydrated on popup open without network or IndexedDB, and update confirmation no longer queries runtime identity."
+    "fix112 removes the remaining popup-side getRuntimeIdentity wait from DEV update discovery. The service worker now supplies runtimeBuild, cached available state is hydrated on popup open without network or IndexedDB, and update confirmation no longer queries runtime identity.",
+    "fix113 always returns runtimeBuild from DEV update checks, including the no-update path, and detaches no-update badge/banner cleanup so the popup never waits on secondary side effects."
   ]
 }
