@@ -63,10 +63,12 @@ compat = r'''<div id=\"fullViewUpdateCompat\" hidden aria-hidden=\"true\">
         <button id=\"openFolderManager\" type=\"button\"></button>
       </div>'''
 
-updates_view_pattern = r'<section class=\\"view\\" data-view=\\"updates\\">.*?</section>'
-home2, n = re.subn(updates_view_pattern, compat, home, count=1, flags=re.S)
-assert n == 1, "visible updates view not found"
-home = home2
+updates_marker = '<section class=\\\"view\\\" data-view=\\\"updates\\\">'
+updates_a = home.find(updates_marker)
+assert updates_a >= 0, "visible updates view marker not found"
+updates_b = home.find('</section>', updates_a)
+assert updates_b >= 0, "visible updates view end not found"
+home = home[:updates_a] + compat + home[updates_b + len('</section>'):]
 
 # 4) Any stale #updates route now resolves to General.
 old_set = "function setSection(name){if(!['general','personalization','updates'].includes(name))name='general';"
