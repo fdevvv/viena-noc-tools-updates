@@ -1,12 +1,15 @@
 {
   "schema": 1,
   "version": "1.3.26",
-  "build": "1.3.26-dev-update-smoke-fix122",
+  "build": "1.3.26-dev-ticket-macros-fix123",
   "channel": "DEV",
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-update-smoke-fix122.json",
-  "package_sha256": "a703f8b5634623f5cdf8a9fad7ca28f3914b448b5b9739b0909e7081bf376d82",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/dev/builds/1.3.26-dev-ticket-macros-fix123.json",
+  "package_sha256": "0826e11476c67c4327a1996e630e0457496792b6030e0d42b2fbd40e2bde9c76",
   "notes": [
-    "FIX122 ficticio para probar la actualizaci?n DEV desde el popup.",
-    "Sin cambios funcionales; no es una versi?n RELEASE."
+    "FIX123: Macros Tareas permite grabar, guardar y reproducir tareas en tickets INICIADA.",
+    "Reproducción directa, menú cerrado y corrección de pasos cuando cambian opciones de VIENA.",
+    "Evento del ticket actual y Nodo/Nodo CMTS contextual, con lados R/L; conserva las macros locales.",
+    "Conserva el acceso habitual a MIRA 5 y la protección DEV contra downgrade.",
+    "Build DEV; RELEASE no modificada."
   ]
 }
