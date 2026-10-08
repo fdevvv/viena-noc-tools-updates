@@ -1,21 +1,21 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.41",
+  "latest": "1.3.42",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Nueva interfaz del panel y los editores, con modo claro y oscuro en Personalización.",
-    "Macros en VIENA y tareas manuales de MOICA: grabar, reproducir, detener y corregir pasos.",
-    "Bibliotecas con búsqueda, carpetas, renombrado y orden por arrastre; elegí la carpeta antes de grabar.",
-    "Respaldo e importación de macros VIENA/MOICA y de botones personales con sus plantillas.",
-    "Plantillas editables: mensajes y motivos propios, traslado entre botones y orden por arrastre.",
-    "Asignaciones: crear, editar, sumar tipificaciones, quitar códigos y eliminar plantillas.",
-    "MOICA reemplaza los problemas y el mensaje anteriores al ejecutar otra macro; revisá el resultado.",
-    "Anuncio de novedades deslizable al entrar a VIENA, una vez por actualización."
+    "Personalizá la vista del ticket: elegí qué campos y botones mostrar y ordenalos a tu gusto.",
+    "Vista previa en el mismo ticket: revisá el resultado antes de aplicar o cancelar los cambios.",
+    "Distribución adaptable al ancho de la pantalla, también en tickets completados.",
+    "Popup más ancho para consultar las herramientas con mayor comodidad.",
+    "Incluye las macros VIENA/MOICA, sus bibliotecas y el respaldo de macros de la 1.3.41.",
+    "Incluye el editor, traslado y respaldo de botones personales y plantillas.",
+    "Incluye la edición de Asignaciones y las mejoras de reemplazo de macros MOICA.",
+    "Incluye la interfaz renovada y el modo claro y oscuro de la 1.3.41."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.41-news-macros-ui-candidate2-package.json",
-  "package_sha256": "42d053181deb45d36ff2bd0bf29b71d403977389bcff6b8323509aa7631107ff",
-  "source_package": "release/v1.3.41-news-macros-ui-candidate2-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.42-news-macros-ui-candidate2-package.json",
+  "package_sha256": "326569c0517a838e65016597b23928baf962baae6eaed6afcfb78f3637d02f82",
+  "source_package": "release/v1.3.42-news-macros-ui-candidate2-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
