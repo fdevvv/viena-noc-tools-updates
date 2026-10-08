@@ -1,17 +1,21 @@
 {
   "schema": 2,
   "role": "modern-release",
-  "latest": "1.3.40",
+  "latest": "1.3.41",
   "minimum": "1.3.25",
   "mandatory": false,
   "notes": [
-    "Métricas comparte la referencia de seguimiento entre operadores para usar el mismo punto de partida.",
-    "Si los valores aumentan después de la marca, el nodo se muestra violeta y Ctrl + doble click reconoce los nuevos valores.",
-    "El estado de sincronización se muestra en la cabecera y, si no está disponible, Métricas continúa en modo local.",
-    "Asignar e Iniciar usa el ticket marcado cuando hay exactamente un checkbox seleccionado; sin selección mantiene el comportamiento anterior."
+    "Nueva interfaz del panel y los editores, con modo claro y oscuro en Personalización.",
+    "Macros en VIENA y tareas manuales de MOICA: grabar, reproducir, detener y corregir pasos.",
+    "Bibliotecas con búsqueda, carpetas, renombrado y orden por arrastre; elegí la carpeta antes de grabar.",
+    "Respaldo e importación de macros VIENA/MOICA y de botones personales con sus plantillas.",
+    "Plantillas editables: mensajes y motivos propios, traslado entre botones y orden por arrastre.",
+    "Asignaciones: crear, editar, sumar tipificaciones, quitar códigos y eliminar plantillas.",
+    "MOICA reemplaza los problemas y el mensaje anteriores al ejecutar otra macro; revisá el resultado.",
+    "Anuncio de novedades deslizable al entrar a VIENA, una vez por actualización."
   ],
-  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.40-metricas-sync-assign-start-candidate1-package.json",
-  "package_sha256": "6b8a17a8ca64f837ec2b52c4c75fde73807284a40efeaf61e988c4a9858f6c13",
-  "source_package": "release/v1.3.40-metricas-sync-assign-start-candidate1-package.json",
+  "package_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/v1.3.41-news-macros-ui-candidate2-package.json",
+  "package_sha256": "42d053181deb45d36ff2bd0bf29b71d403977389bcff6b8323509aa7631107ff",
+  "source_package": "release/v1.3.41-news-macros-ui-candidate2-package.json",
   "promotion_gate": "release-update-safety-v2"
 }
