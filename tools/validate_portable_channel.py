@@ -7,6 +7,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import zipfile
 
 ROOT = pathlib.Path.cwd()
 CHANNEL = "release/portable/"
@@ -14,14 +15,15 @@ POINTER = CHANNEL + "latest.json"
 URL = "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/" + CHANNEL
 EXTENSION_ID = "kncbbeclddielngolalkmlclfljgaoje"
 PACKAGE = re.compile(r"release/portable/v(\d+\.\d+\.\d+)-package\.json")
+ZIP = re.compile(r"release/portable/VIENA_NOC_Tools_PORTABLE_v(\d+\.\d+\.\d+)\.zip")
 ROOT_FILES = set("""build.json cws-migration.html icon128.png installation-transfer.html
 macro-transfer.html manifest.json popup.html background.js popup.js integrity-manifest.json
 permission.html building-capture-permission.html node-background.html updater.html updater.js
-onmsi-viewer.html js/55-mira-fec-analysis.css js/98-native-search-highlight.css
+onmsi-viewer.html manual-update.html js/55-mira-fec-analysis.css js/98-native-search-highlight.css
 js/70-html2canvas.LICENSE.txt""".split())
-REQUIRED = {"manifest.json", "build.json", "background.js", "integrity-manifest.json",
-            "popup.html", "popup.js", "updater.html", "updater.js",
-            "js/95-local-updater.js", "js/102-portable-updater.js"}
+REQUIRED = {"manifest.json", "build.json", "background.js", "integrity-manifest.json", "popup.html", "popup.js"}
+SELF_INSTALL = {"updater.html", "updater.js", "js/95-local-updater.js", "js/102-portable-updater.js"}
+MANUAL_INSTALL = {"manual-update.html", "js/102-portable-download.js", "js/102-portable-download-page.js"}
 EXCLUDED = re.compile(rb"VienaLupa|VienaTicketRecording|VienaHfcDegradation|VienaHfcSupervised|66-site-themes")
 DESTRUCTIVE = re.compile(rb"chrome\.storage\.local\.clear\s*\(|indexedDB\.deleteDatabase\s*\(")
 
@@ -73,9 +75,32 @@ def package(path):
     for identity in (build, declared):
         require(identity["version"] == identity["build"] == version and identity["channel"] == "RELEASE", "Invalid runtime identity")
     require(build["distribution"] == "portable" and declared["files"] == inventory, "Invalid portable inventory")
-    require((URL + "latest.json").encode() in files["js/102-portable-updater.js"], "Wrong feed URL")
+    manual = "manual-update.html" in files
+    if manual:
+        require(MANUAL_INSTALL <= files.keys() and not SELF_INSTALL & files.keys(), "Invalid manual runtime")
+        require(URL.encode() in files["js/102-portable-download.js"], "Wrong manual feed URL")
+    else:
+        require(SELF_INSTALL <= files.keys(), "Missing self-install runtime")
+        require((URL + "latest.json").encode() in files["js/102-portable-updater.js"], "Wrong feed URL")
     print(f"PASS {path}: {len(files)} entries")
-    return version, sha(raw)
+    return version, sha(raw), files, manual
+
+
+def archive(path, validated=None):
+    match = ZIP.fullmatch(path)
+    require(match, f"Invalid portable ZIP path: {path}")
+    version = match.group(1)
+    checked = validated or package(CHANNEL + f"v{version}-package.json")
+    require(checked[0] == version and checked[3], "ZIP must match a manual runtime")
+    raw = ROOT / path
+    with zipfile.ZipFile(raw) as zipped:
+        names = [entry.filename.replace("\\", "/") for entry in zipped.infolist() if not entry.is_dir()]
+        require(len(names) == len(set(names)) and set(names) == set(checked[2]), "ZIP inventory differs")
+        for entry, name in ((e, e.filename.replace("\\", "/")) for e in zipped.infolist() if not e.is_dir()):
+            expected = checked[2][name]
+            require(entry.file_size == len(expected) and zipped.read(entry) == expected, f"ZIP bytes differ: {name}")
+    print(f"PASS {path}: {len(names)} files match the package")
+    return sha(raw.read_bytes())
 
 
 def pointer():
@@ -85,8 +110,16 @@ def pointer():
     package_path = CHANNEL + f"v{version}-package.json"
     require((value["schema"], value["channel"], value["distribution"], value["extension_id"]) ==
             (2, "RELEASE", "portable", EXTENSION_ID), "Invalid pointer identity")
-    require(value["build"] == version and value["package_url"] == URL + f"v{version}-package.json", "Invalid pointer route")
-    require(package(package_path) == (version, value["package_sha256"]), "Pointer SHA mismatch")
+    require(value["build"] == version, "Invalid pointer build")
+    checked = package(package_path)
+    if checked[3]:
+        name = f"VIENA_NOC_Tools_PORTABLE_v{version}.zip"
+        require(value["zip_url"] == URL + name, "Invalid ZIP route")
+        require("package_url" not in value and "package_sha256" not in value, "Manual feed cannot request self-install")
+        require(archive(CHANNEL + name, checked) == value["zip_sha256"], "ZIP pointer SHA mismatch")
+    else:
+        require(value["package_url"] == URL + f"v{version}-package.json", "Invalid pointer route")
+        require(checked[:2] == (version, value["package_sha256"]), "Pointer SHA mismatch")
     print(f"PASS {POINTER}: {version}")
     return tuple(map(int, version.split(".")))
 
@@ -109,8 +142,11 @@ def review(base, head, branch):
                 require(current > before, "Portable version must advance")
             require(status in {"A", "M"}, "Portable pointer cannot be removed")
         else:
-            require(status == "A" and PACKAGE.fullmatch(path), "Portable packages are immutable")
-            package(path)
+            require(status == "A", "Portable files are immutable")
+            if ZIP.fullmatch(path):
+                archive(path)
+            else:
+                package(path)
 
 
 if __name__ == "__main__":
@@ -119,4 +155,7 @@ if __name__ == "__main__":
     elif sys.argv[1:2] == ["--pointer"]:
         pointer()
     else:
-        package(sys.argv[1])
+        if ZIP.fullmatch(sys.argv[1]):
+            archive(sys.argv[1])
+        else:
+            package(sys.argv[1])
