@@ -3,8 +3,9 @@
   "channel": "RELEASE",
   "distribution": "portable",
   "extension_id": "kncbbeclddielngolalkmlclfljgaoje",
-  "latest": "1.3.61",
-  "build": "1.3.61",
-  "zip_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/portable/VIENA_NOC_Tools_PORTABLE_v1.3.61.zip",
-  "zip_sha256": "e4436329b58923508b69304000db0c3510bf9319bdcac6826d0d631d87bd4ff7"
+  "latest": "1.3.64",
+  "build": "1.3.64",
+  "install_mode": "automatic-zip",
+  "zip_url": "https://raw.githubusercontent.com/fdevvv/viena-noc-tools-updates/refs/heads/main/release/portable/VIENA_NOC_Tools_PORTABLE_v1.3.64.zip",
+  "zip_sha256": "d260209bfd1f0a019a7bab4ff4fd149fb8a6f827788b010580b6540d350834c7"
 }
