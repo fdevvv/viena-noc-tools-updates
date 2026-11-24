@@ -24,6 +24,7 @@ js/70-html2canvas.LICENSE.txt""".split())
 REQUIRED = {"manifest.json", "build.json", "background.js", "integrity-manifest.json", "popup.html", "popup.js"}
 SELF_INSTALL = {"updater.html", "updater.js", "js/95-local-updater.js", "js/102-portable-updater.js"}
 MANUAL_INSTALL = {"manual-update.html", "js/102-portable-download.js", "js/102-portable-download-page.js"}
+ZIP_INSTALL = {"js/95-local-updater.js", "js/102-portable-archive.js"}
 EXCLUDED = re.compile(rb"VienaLupa|VienaTicketRecording|VienaHfcDegradation|VienaHfcSupervised|66-site-themes")
 DESTRUCTIVE = re.compile(rb"chrome\.storage\.local\.clear\s*\(|indexedDB\.deleteDatabase\s*\(")
 
@@ -75,15 +76,21 @@ def package(path):
     for identity in (build, declared):
         require(identity["version"] == identity["build"] == version and identity["channel"] == "RELEASE", "Invalid runtime identity")
     require(build["distribution"] == "portable" and declared["files"] == inventory, "Invalid portable inventory")
-    manual = "manual-update.html" in files
-    if manual:
-        require(MANUAL_INSTALL <= files.keys() and not SELF_INSTALL & files.keys(), "Invalid manual runtime")
+    is_zip = "manual-update.html" in files
+    auto_zip = "js/102-portable-archive.js" in files
+    if is_zip:
+        require(MANUAL_INSTALL <= files.keys(), "Invalid ZIP runtime")
         require(URL.encode() in files["js/102-portable-download.js"], "Wrong manual feed URL")
+        require(not (SELF_INSTALL - ZIP_INSTALL) & files.keys(), "Legacy installer found in ZIP runtime")
+        if auto_zip:
+            require(ZIP_INSTALL <= files.keys(), "Automatic ZIP installer files missing")
+        else:
+            require(not ZIP_INSTALL & files.keys(), "Unexpected ZIP installer")
     else:
         require(SELF_INSTALL <= files.keys(), "Missing self-install runtime")
         require((URL + "latest.json").encode() in files["js/102-portable-updater.js"], "Wrong feed URL")
     print(f"PASS {path}: {len(files)} entries")
-    return version, sha(raw), files, manual
+    return version, sha(raw), files, is_zip, auto_zip
 
 
 def archive(path, validated=None):
@@ -91,7 +98,7 @@ def archive(path, validated=None):
     require(match, f"Invalid portable ZIP path: {path}")
     version = match.group(1)
     checked = validated or package(CHANNEL + f"v{version}-package.json")
-    require(checked[0] == version and checked[3], "ZIP must match a manual runtime")
+    require(checked[0] == version and checked[3], "ZIP must match a portable ZIP runtime")
     raw = ROOT / path
     with zipfile.ZipFile(raw) as zipped:
         names = [entry.filename.replace("\\", "/") for entry in zipped.infolist() if not entry.is_dir()]
@@ -115,7 +122,8 @@ def pointer():
     if checked[3]:
         name = f"VIENA_NOC_Tools_PORTABLE_v{version}.zip"
         require(value["zip_url"] == URL + name, "Invalid ZIP route")
-        require("package_url" not in value and "package_sha256" not in value, "Manual feed cannot request self-install")
+        require("package_url" not in value and "package_sha256" not in value, "ZIP feed cannot request JSON self-install")
+        require(value.get("install_mode") == ("automatic-zip" if checked[4] else None), "ZIP mode differs from package capability")
         require(archive(CHANNEL + name, checked) == value["zip_sha256"], "ZIP pointer SHA mismatch")
     else:
         require(value["package_url"] == URL + f"v{version}-package.json", "Invalid pointer route")
