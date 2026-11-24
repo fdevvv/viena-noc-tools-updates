@@ -42,6 +42,7 @@ def changed_candidates():
         ROOT / line.strip()
         for line in proc.stdout.splitlines()
         if re.fullmatch(r"release/.+package\.json", line.strip())
+        and not re.fullmatch(r"release/portable/v\d+\.\d+\.\d+-package\.json", line.strip())
     ]
 
 def text_file(pkg, path):

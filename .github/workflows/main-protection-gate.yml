@@ -92,6 +92,13 @@ jobs:
           CURRENT_SHA: ${{ github.sha }}
         run: python3 tools/validate_changed_release_packages.py
 
+      - name: Validate isolated portable channel
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: python3 tools/validate_portable_channel.py --review "$BASE_SHA" "$HEAD_SHA" "$HEAD_REF"
+
       - name: Validate DEV historical updater matrix
         run: python3 tools/validate_dev_matrix.py
 
